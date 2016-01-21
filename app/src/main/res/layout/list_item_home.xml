@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/mf_body"
+    android:background="#ffffff"
+    android:descendantFocusability="blocksDescendants" >
+
+    <LinearLayout
+        android:id="@+id/minifeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="12dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="8dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <com.lingci.views.RoundImageView
+                android:id="@+id/user_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/userimg" />
+
+            <TextView
+                android:id="@+id/tv_uname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/user_img"
+                android:text="@string/app_name"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/pl_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_uname"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@id/user_img"
+                android:text="@string/app_name" />
+        </RelativeLayout>
+
+        <com.rockerhieu.emojicon.EmojiconTextView
+            android:id="@+id/lc_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="2dp"
+            android:text="@string/app_name"
+            emojicon:emojiconAlignment="baseline"
+            emojicon:emojiconSize="28sp"
+            android:textSize="16sp"
+            android:lineSpacingMultiplier="1.2"
+            android:lineSpacingExtra="3dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dcdcdc"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_h"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/minifeed"
+        android:background="#dcdcdc" />
+
+    <LinearLayout
+        android:id="@+id/btn_list"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/v_h"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="25dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:contentDescription="@string/main_mine"
+                android:focusable="false"
+                android:scaleType="centerInside"
+                android:src="@drawable/list_item_icon_see" />
+
+            <TextView
+                android:id="@+id/mf_see_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="@string/item_num"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mf_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="25dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:contentDescription="@string/main_mine"
+                android:focusable="false"
+                android:scaleType="centerInside"
+                android:src="@drawable/list_item_icon_comment" />
+
+            <TextView
+                android:id="@+id/mf_comment_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="@string/item_num"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mf_like"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="25dp" >
+
+            <ImageView
+                android:id="@+id/mf_like_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:contentDescription="@string/main_mine"
+                android:focusable="false"
+                android:scaleType="centerInside"
+                android:src="@drawable/list_item_icon_like_nor" />
+
+            <TextView
+                android:id="@+id/mf_like_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="@string/item_num"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/like_window"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_list"
+        android:background="@drawable/like_user_bg"
+        android:layout_marginTop="-7dp"
+        android:paddingTop="17dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="15dp" >
+
+        <TextView
+            android:id="@+id/like_feel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\u3000\u3000\u3000\u3000\u3000\u3000觉得很赞" />
+        <TextView
+            android:id="@+id/like_people"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="零次、十兵卫"
+            android:textColor="#4FC1E9" />
+    </RelativeLayout>
+
+</RelativeLayout>

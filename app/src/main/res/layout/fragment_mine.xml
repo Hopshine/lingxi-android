@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e8e8e8"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <com.lingci.views.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/mine_top_bc"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@drawable/mine_img_bc"
+                android:padding="5dp" >
+
+                <RelativeLayout
+                    android:id="@+id/mine_top"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true" >
+
+                    <com.lingci.views.RoundImageView
+                        android:id="@+id/mine_user_img"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginRight="15dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/userimg"
+                        imagecontrol:border_outside_color="#FEFEFE"
+                        imagecontrol:border_thickness="3dp" />
+
+                    <TextView
+                        android:id="@+id/mine_tv_uname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/mine_user_img"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/app_name"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/mine_like"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/mine_item_selector"
+                android:drawableLeft="@drawable/mine_item_like"
+                android:drawablePadding="15dp"
+                android:drawableRight="@drawable/mine_item_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="我的回复"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/mine_aet"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/mine_item_selector"
+                android:drawableLeft="@drawable/mine_item_aet"
+                android:drawablePadding="15dp"
+                android:drawableRight="@drawable/mine_item_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="与我相关"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/mine_set"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/mine_item_selector"
+                android:drawableLeft="@drawable/mine_item_setting"
+                android:drawablePadding="15dp"
+                android:drawableRight="@drawable/mine_item_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="设置"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/mine_appinfo"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/mine_item_selector"
+                android:drawableLeft="@drawable/mine_item_info"
+                android:drawablePadding="15dp"
+                android:drawableRight="@drawable/mine_item_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="关于lingci"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/mine_exit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/mine_item_selector"
+                android:drawableLeft="@drawable/mine_item_exit"
+                android:drawablePadding="15dp"
+                android:drawableRight="@drawable/mine_item_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="退出登录"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </com.lingci.views.MyScrollView>
+
+</LinearLayout>

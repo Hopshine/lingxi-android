@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".WelcomeActivity" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/id53565769" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/lingciabout" />
+
+</LinearLayout>

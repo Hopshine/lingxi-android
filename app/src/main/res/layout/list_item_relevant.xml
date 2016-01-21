@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:paddingLeft="5dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:descendantFocusability="blocksDescendants">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.lingci.views.RoundImageView
+            android:id="@+id/rluser_img"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/userimg" />
+
+        <TextView
+            android:id="@+id/rl_uname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@id/rluser_img"
+            android:text="@string/app_name"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/rl_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_uname"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/rluser_img"
+            android:text="@string/app_name"
+            android:textSize="10sp" />
+
+        <com.rockerhieu.emojicon.EmojiconTextView
+            android:id="@+id/rl_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_time"
+            android:textSize="15sp"
+            android:padding="5dp"
+            emojicon:emojiconAlignment="baseline"
+            emojicon:emojiconSize="28sp"
+            android:lineSpacingExtra="3dp"
+            android:layout_marginLeft="-3dp"
+            android:layout_marginTop="3dp"
+            android:text="母上养了一只狗，现在不养了，谁要？" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_lc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="10dp"
+        android:background="#f4f4f4"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/rl_lcuname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/aqua_bule" 
+            android:textSize="12sp"
+            android:text="零次"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="："/>
+
+        <com.rockerhieu.emojicon.EmojiconTextView
+            android:id="@+id/rl_minifeed"
+            android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+        	emojicon:emojiconAlignment="baseline"
+        	android:lineSpacingExtra="3dp"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="今天你想说什么梗？" />
+    </LinearLayout>
+
+</LinearLayout>

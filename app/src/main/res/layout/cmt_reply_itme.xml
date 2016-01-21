@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f5f5f5"
+    android:descendantFocusability="blocksDescendants"
+    android:padding="2dp" >
+
+    <com.rockerhieu.emojicon.EmojiconTextView
+        android:id="@+id/reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        emojicon:emojiconAlignment="baseline"
+        android:lineSpacingExtra="3dp"
+        android:text="\u3000\u3000 \u3000\u3000\u3000\u3000\u3000回复才是本体\ue32d，这个回复一定要高大上，比上面的评论一点要牛逼去了，不然都不好意思回复" />
+
+    <TextView
+        android:id="@+id/rp_uname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="零次"
+        android:textColor="#5D9CEC" />
+
+    <TextView
+        android:id="@+id/tv_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/rp_uname"
+        android:text="回复" />
+
+    <TextView
+        android:id="@+id/rp_touname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_reply"
+        android:text="十兵卫"
+        android:textColor="#5D9CEC" />
+
+    <TextView
+        android:id="@+id/tv_colon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/rp_touname"
+        android:text="：" />
+
+</RelativeLayout>
