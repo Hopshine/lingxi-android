@@ -47,6 +47,16 @@
                 android:layout_marginTop="3dp"
                 android:layout_toRightOf="@id/user_img"
                 android:text="@string/app_name" />
+
+            <ImageView
+                android:id="@+id/lc_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:src="@drawable/icon_home_chat"/>
         </RelativeLayout>
 
         <com.rockerhieu.emojicon.EmojiconTextView

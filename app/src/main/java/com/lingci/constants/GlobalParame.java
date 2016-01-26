@@ -1,6 +1,13 @@
 package com.lingci.constants;
 
-import java.io.File;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Environment;
 
 import com.lingci.R;
 import com.lingci.utils.MD5Util;
@@ -8,10 +15,11 @@ import com.lingci.views.RoundImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.rong.imlib.model.UserInfo;
 
 public class GlobalParame {
 
@@ -21,6 +29,9 @@ public class GlobalParame {
 	public static boolean isRead = true;
 	
 	public static final String UPDATE_USERIMG = "com.lingci.updateimg";
+
+	public static List<UserInfo> userList = new ArrayList<UserInfo>();
+	public static List<String> uidList = new ArrayList<String>();
 	
 	public static DisplayImageOptions getOptions(){
 		DisplayImageOptions options = new DisplayImageOptions.Builder()  
@@ -54,9 +65,30 @@ public class GlobalParame {
 		}else{
 			String url = URl+"/image/avatar/at_"+MD5Util.MD5(uname)+".jpg";
 			if (url!=null) {
-				ImageLoader.getInstance().displayImage(url,imgView, getOptionsUnDisc());
+				ImageLoader.getInstance().displayImage(url,imgView, getOptions());
 			}
 		}
+	}
+
+	/** 获取Manifest中meta值 */
+	public static String getMetaValue(Context context, String metaKey) {
+		Bundle metaData = null;
+		String metaValue = null;
+		if (context == null || metaKey == null) {
+			return null;
+		}
+		try {
+			ApplicationInfo ai = context.getPackageManager().getApplicationInfo(
+					context.getPackageName(), PackageManager.GET_META_DATA);
+			if (null != ai) {
+				metaData = ai.metaData;
+			}
+			if (null != metaData) {
+				metaValue = metaData.getString(metaKey);
+			}
+		} catch (PackageManager.NameNotFoundException e) {
+		}
+		return metaValue;
 	}
 	
 }

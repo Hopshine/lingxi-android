@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e8e8e8"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:id="@+id/dletec"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/dletec_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/rc_default_discussion_portrait"/>
+
+        <TextView
+            android:id="@+id/dletec_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/dletec_img"
+            android:textSize="17sp"
+            android:layout_marginTop="5dp"
+            android:text="大龄儿童二次同好"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/dletec_img"
+            android:layout_below="@id/dletec_name"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/dark_gray"
+            android:text="讨论组"/>
+    </RelativeLayout>
+</LinearLayout>

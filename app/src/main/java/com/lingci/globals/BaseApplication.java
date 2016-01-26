@@ -16,7 +16,12 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
 
+import io.rong.imkit.RongContext;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.widget.provider.CameraInputProvider;
+import io.rong.imkit.widget.provider.ImageInputProvider;
+import io.rong.imkit.widget.provider.InputProvider;
+import io.rong.imlib.model.Conversation;
 
 public class BaseApplication extends Application {
 	
@@ -38,6 +43,17 @@ public class BaseApplication extends Application {
 			 * IMKit SDK调用第一步 初始化
 			 */
 			RongIM.init(this);
+			//扩展功能自定义
+			InputProvider.ExtendProvider[] provider = {
+					new ImageInputProvider(RongContext.getInstance()),//图片
+					new CameraInputProvider(RongContext.getInstance()),//相机
+//                new LocationInputProvider(RongContext.getInstance()),//地理位置
+			};
+			RongIM.getInstance().resetInputExtensionProvider(Conversation.ConversationType.PRIVATE, provider);
+			RongIM.getInstance().resetInputExtensionProvider(Conversation.ConversationType.DISCUSSION, provider);
+			RongIM.getInstance().resetInputExtensionProvider(Conversation.ConversationType.GROUP, provider);
+			RongIM.getInstance().resetInputExtensionProvider(Conversation.ConversationType.CUSTOMER_SERVICE, provider);
+			RongIM.getInstance().resetInputExtensionProvider(Conversation.ConversationType.CHATROOM, provider);
 		}
 
 	}

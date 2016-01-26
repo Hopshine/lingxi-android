@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.lingci.R;
 import com.lingci.constants.GlobalParame;
 import com.lingci.constants.PreferencesManager;
+import com.lingci.globals.BaseApplication;
 import com.lingci.utils.DaHttpRequest;
 import com.lingci.utils.MoeToast;
 import com.lingci.views.CustomProgressDialog;
@@ -23,6 +24,9 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
 
 public class LoginActivity extends Activity {
 
@@ -88,10 +92,10 @@ public class LoginActivity extends Activity {
 
 			@Override
 			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
+								  Throwable arg3) {
 				// TODO Auto-generated method stub
 				loginProgress.dismiss();
-				Toast.makeText(LoginActivity.this,R.string.toast_login_error, Toast.LENGTH_SHORT).show();
+				Toast.makeText(LoginActivity.this, R.string.toast_login_error, Toast.LENGTH_SHORT).show();
 //				Log.i("TAG", "请求失败：" + new String(arg2));
 			}
 
@@ -101,7 +105,7 @@ public class LoginActivity extends Activity {
 				super.onStart();
 				loginProgress.show();
 			}
-			
+
 			@Override
 			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 				// TODO Auto-generated method stub
@@ -110,19 +114,21 @@ public class LoginActivity extends Activity {
 				try {
 					JSONObject json = new JSONObject(str);
 					int tag = json.getInt("ret");
-					loginProgress.dismiss();
+					String im_token = json.getString("data");
 					switch (tag) {
-					case 0:
-						PreferencesManager.getInstance().putBoolean("islogin", true);
-						PreferencesManager.getInstance().putString("username", saveuname);
-						Toast.makeText(LoginActivity.this,R.string.toast_login_ok, Toast.LENGTH_SHORT).show();
-						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-						startActivity(intent);
-						finish();
-						break;
-					case 2:
-						Toast.makeText(LoginActivity.this,R.string.toast_pwd_error, Toast.LENGTH_SHORT).show();
-						break;
+						case 0:
+							PreferencesManager.getInstance().putBoolean("islogin", true);
+							PreferencesManager.getInstance().putString("username", saveuname);
+							PreferencesManager.getInstance().putString("im_token", im_token);
+							connect(im_token);
+							break;
+						case 2:
+							loginProgress.dismiss();
+							Toast.makeText(LoginActivity.this, R.string.toast_pwd_error, Toast.LENGTH_SHORT).show();
+							break;
+						default:
+							loginProgress.dismiss();
+							break;
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -151,6 +157,61 @@ public class LoginActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	/**
+	 * 建立与融云服务器的连接
+	 *
+	 * @param token
+	 */
+	private void connect(String token) {
+
+		if (getApplicationInfo().packageName.equals(BaseApplication.getCurProcessName(getApplicationContext()))) {
+
+			/**
+			 * IMKit SDK调用第二步,建立与服务器的连接
+			 */
+			RongIM.connect(token, new RongIMClient.ConnectCallback() {
+
+				/**
+				 * Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的 Token
+				 */
+				@Override
+				public void onTokenIncorrect() {
+
+					Log.d("WelcomeActivity", "--onTokenIncorrect");
+				}
+
+				/**
+				 * 连接融云成功
+				 * @param userid 当前 token
+				 */
+				@Override
+				public void onSuccess(String userid) {
+
+					Log.d("WelcomeActivity", "--onSuccess" + userid);
+					loginProgress.dismiss();
+					Toast.makeText(LoginActivity.this, R.string.toast_login_ok, Toast.LENGTH_SHORT).show();
+					goHome();
+				}
+
+				/**
+				 * 连接融云失败
+				 * @param errorCode 错误码，可到官网 查看错误码对应的注释
+				 */
+				@Override
+				public void onError(RongIMClient.ErrorCode errorCode) {
+
+					Log.d("WelcomeActivity", "--onError" + errorCode);
+				}
+			});
+		}
+	}
+
+	private void goHome() {
+		Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+		startActivity(intent);
+		finish();
 	}
 
 }

@@ -15,10 +15,8 @@
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
+            android:layout_height="48dp"
+            android:paddingLeft="10dp"
             android:background="@null"
             android:gravity="center"
             android:onClick="ok"
@@ -45,13 +43,12 @@
         <Button
             android:id="@+id/btn_isOK"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_height="48dp"
             android:background="@null"
             android:gravity="center"
             android:onClick="ok"
             android:text="发送"
-            android:layout_marginLeft="5dp"
+            android:paddingLeft="10dp"
             android:textColor="#fff"
             android:textSize="14sp" />
 

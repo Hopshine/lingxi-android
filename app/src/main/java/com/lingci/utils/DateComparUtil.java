@@ -116,4 +116,21 @@ public class DateComparUtil {
 		}
 		return sb.toString();
 	}
+
+	public static String getDuration(String time){
+		String dayStr = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date= new Date();
+		String curTime = sdf.format(date);
+		try {
+			Date before = (Date) sdf.parse(time);
+			Date current = (Date) sdf.parse(curTime);
+			long daybetween = (current.getTime() - before.getTime()) / 1000;
+			int day= (int) (daybetween / (24 * 3600));
+			dayStr =String.valueOf(day);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return dayStr;
+	}
 }

@@ -1,6 +1,7 @@
 package com.lingci.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -48,8 +49,12 @@ import org.apache.http.Header;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.UserInfo;
+
 public class HomeFragment extends Fragment {
 
+	private TextView tv_top;
 	private PullToRefreshListView pullToRefresh;
 	private MiniFeeds minifeed;
 	private List<MiniFeed> minifeeds;
@@ -73,6 +78,8 @@ public class HomeFragment extends Fragment {
 	
 	private void init(View view) {
 		// TODO Auto-generated method stub
+		tv_top = (TextView) view.findViewById(R.id.tv_top);
+		tv_top.setText("普通的首页");
 		savename = PreferencesManager.getInstance().getString("username", "");
 		minifeeds = new ArrayList<MiniFeed>();
 		lcids = new ArrayList<String>();
@@ -288,6 +295,7 @@ public class HomeFragment extends Fragment {
 			RoundImageView user_img = ViewHolder.get(convertView, R.id.user_img);
 			TextView tv_uname = ViewHolder.get(convertView, R.id.tv_uname);
 			TextView pl_time = ViewHolder.get(convertView, R.id.pl_time);
+			ImageView lc_chat = ViewHolder.get(convertView,R.id.lc_chat);
 			EmojiconTextView lc_info = ViewHolder.get(convertView, R.id.lc_info);
 			LinearLayout mf_comment = ViewHolder.get(convertView,R.id.mf_comment);
 			LinearLayout mf_like = ViewHolder.get(convertView, R.id.mf_like);
@@ -302,12 +310,25 @@ public class HomeFragment extends Fragment {
 			if (minifeeds != null) {
 				final MiniFeed mf = minifeeds.get(position);
 				boolean isLike = mf.islike;
+				boolean im_ability = mf.im_ability;
 				tv_uname.setText(mf.uname);
 				pl_time.setText(DateComparUtil.getInterval(mf.pl_time));
 				lc_info.setText(mf.lc_info);
 				mf_see_num.setText(String.valueOf(mf.viewnum));
 				mf_comment_num.setText(String.valueOf(mf.cmtnum));
 				mf_like_num.setText(String.valueOf(mf.likenum));
+				if(im_ability){
+					lc_chat.setVisibility(View.VISIBLE);
+					String uid = String.valueOf(mf.uid);
+					String uname = mf.uname;
+					String img_url = GlobalParame.URl+ mf.url;
+					if(!GlobalParame.uidList.contains(uid)){
+						GlobalParame.uidList.add(uid);
+						GlobalParame.userList.add(new UserInfo(uid,uname, Uri.parse(img_url)));
+					}
+				}else{
+					lc_chat.setVisibility(View.GONE);
+				}
 				if (isLike) {
 					mf_like_icon.setImageResource(R.drawable.list_item_icon_like);
 					mf_like.setClickable(false);
@@ -379,6 +400,16 @@ public class HomeFragment extends Fragment {
 //						mf_like_icon.setImageResource(R.drawable.list_item_icon_like);
 //						v.setClickable(false);
 //						v.setEnabled(false);
+					}
+				});
+				lc_chat.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						MiniFeed mfd = minifeeds.get(index);
+						String uid = String.valueOf(mfd.uid);
+						String uname =mfd.uname;
+						if (RongIM.getInstance() != null)
+							RongIM.getInstance().startPrivateChat(getActivity(), uid,uname);
 					}
 				});
 			}

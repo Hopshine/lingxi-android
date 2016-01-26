@@ -6,6 +6,7 @@
     <color name="transparent">#00ffffff</color>
 	<color name="aqua_bule">#4FC1E9</color>
 	<color name="dark_gray">#656D78</color>
+    <color name="light_gray">#ffdbe4e7</color>
 	<color name="grapefruit">#ED5565</color>
     <color name="mine_select_black">#ffeeeeee</color>
 </resources>

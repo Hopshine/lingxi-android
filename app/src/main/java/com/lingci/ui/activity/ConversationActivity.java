@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lingci.R;
 
@@ -22,6 +25,8 @@ public class ConversationActivity extends FragmentActivity {
     private String mTargetIds;
     /** 会话类型 */
     private Conversation.ConversationType mConversationType;
+    private TextView tv_top;
+    private LinearLayout lc_ruturn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,22 @@ public class ConversationActivity extends FragmentActivity {
 
         Intent intent = getIntent();
         getIntentDate(intent);
+        init(intent);
+
+    }
+
+    private void init(Intent intent) {
+        tv_top = (TextView) this.findViewById(R.id.tv_top);
+        lc_ruturn = (LinearLayout) this.findViewById(R.id.lc_ruturn);
+        String title = intent.getData().getQueryParameter("title");
+        tv_top.setText(title);
+        lc_ruturn.setVisibility(View.VISIBLE);
+        lc_ruturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -84,4 +105,14 @@ public class ConversationActivity extends FragmentActivity {
         fragment.setUri(uri);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

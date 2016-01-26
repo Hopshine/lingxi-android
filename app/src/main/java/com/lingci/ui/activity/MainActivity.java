@@ -11,24 +11,27 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lingci.R;
 import com.lingci.constants.GlobalParame;
+import com.lingci.constants.PreferencesManager;
 import com.lingci.ui.fragment.HomeFragment;
 import com.lingci.ui.fragment.MessageFragment;
 import com.lingci.ui.fragment.MineFragment;
 import com.lingci.ui.fragment.ShareFragment;
 import com.lingci.utils.MoeToast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
 public class MainActivity extends FragmentActivity implements RongIM.UserInfoProvider {
 
-    private RelativeLayout rl_title;
-    private TextView tv_top;
+//    private RelativeLayout rl_title;
+//    private TextView tv_top;
     private long mExitTime = 0;
     private FragmentManager fragmentManager;
     private HomeFragment homefragment;
@@ -47,21 +50,20 @@ public class MainActivity extends FragmentActivity implements RongIM.UserInfoPro
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        RongIM.setUserInfoProvider(this,true);
+        RongIM.setUserInfoProvider(this, true);
+        //
+        RongIM.getInstance().setMessageAttachedUserInfo(true);
     }
 
     private void init() {
         // TODO Auto-generated method stub
         int num = this.getIntent().getFlags();
         fragmentManager = getSupportFragmentManager();
-        rl_title = (RelativeLayout) this.findViewById(R.id.rl_title);
-        tv_top = (TextView) this.findViewById(R.id.tv_top);
         unread_msg_number = (TextView) this.findViewById(R.id.unread_msg_number);
-        tv_top.setText(R.string.title_bar_index);
         if (num > 0) {
             GlobalParame.isRead = false;
-            unread_msg_number.setText("" + num);
-            unread_msg_number.setVisibility(View.VISIBLE);
+//            unread_msg_number.setText("" + num);
+//            unread_msg_number.setVisibility(View.VISIBLE);
         }
         imagebuttons = new ImageView[4];
         imagebuttons[0] = (ImageView) findViewById(R.id.ib_home);
@@ -98,26 +100,18 @@ public class MainActivity extends FragmentActivity implements RongIM.UserInfoPro
         switch (view.getId()) {
             case R.id.re_home:
                 index = 0;
-                rl_title.setVisibility(View.VISIBLE);
-                tv_top.setText(R.string.title_bar_index);
                 setTabSelection(index);
                 break;
             case R.id.re_share:
                 index = 1;
-                rl_title.setVisibility(View.VISIBLE);
-                tv_top.setText(R.string.title_bar_share);
                 setTabSelection(index);
                 break;
             case R.id.re_message:
                 index = 2;
-                rl_title.setVisibility(View.GONE);
-//                tv_top.setText(R.string.title_bar_mine);
                 setTabSelection(index);
                 break;
             case R.id.re_mine:
                 index = 3;
-                rl_title.setVisibility(View.VISIBLE);
-                tv_top.setText(R.string.title_bar_mine);
                 setTabSelection(index);
                 break;
         }
@@ -233,12 +227,31 @@ public class MainActivity extends FragmentActivity implements RongIM.UserInfoPro
     @Override
     public void onDestroy() {
         super.onDestroy();
-//    	ImageLoader.getInstance().clearMemoryCache();  
-//    	ImageLoader.getInstance().clearDiscCache();  
+//        String save_date = PreferencesManager.getInstance().getString("save_date",null);
+//        if(save_date == null || save_date.length() == 0){
+//            saveTiem();
+//            ToastUtil.showSingleton(this,DateComparUtil.getDuration(save_date));
+//        }else if(DateComparUtil.getDuration(save_date).equals("7")){
+//            ImageLoader.getInstance().clearMemoryCache();
+//            ImageLoader.getInstance().clearDiscCache();
+//            saveTiem();
+//        }
+    }
+
+    private void saveTiem(){
+        Date date= new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = sdf.format(date);
+        PreferencesManager.getInstance().putString("save_date", dateStr);
     }
 
     @Override
     public UserInfo getUserInfo(String s) {
+        for (UserInfo userInfo:GlobalParame.userList){
+            if(userInfo.getUserId().equals(s)){
+                return userInfo;
+            }
+        }
         if(s.equals("6")){
             return new UserInfo("6","命运的安排", Uri.parse("http://d.hiphotos.baidu.com/zhidao/wh%3D600%2C800/sign=295f784cb1de9c82a630f1895cb1ac32/faf2b2119313b07e7187cc7d0ed7912397dd8c89.jpg"));
         }else if(s.equals("7")){
