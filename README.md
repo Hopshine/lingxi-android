@@ -1,7 +1,8 @@
 # 关于lingci
 
 hobby project  
-个人兴趣项目
+
+个人兴趣项目，此代码为客户端代码
 
 
 ## lingci简介
