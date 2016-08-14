@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lingci.R;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 
 public class ShareFragment extends Fragment {
 
+	private TextView tv_top;
 	private EmojiconEditText lc_info;
 	private Button share;
 	private CustomProgressDialog shareProgress;
@@ -39,6 +41,8 @@ public class ShareFragment extends Fragment {
 
 	private void init(View view) {
 		// TODO Auto-generated method stub
+		tv_top = (TextView) view.findViewById(R.id.tv_top);
+		tv_top.setText("普通的分享");
 		shareProgress = new CustomProgressDialog(getActivity(), "发布中...",R.anim.frame_loadin);
 		lc_info = (EmojiconEditText) view.findViewById(R.id.share_lc_info);
 		share = (Button) view.findViewById(R.id.share_lc);

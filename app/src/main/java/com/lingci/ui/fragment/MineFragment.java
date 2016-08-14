@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 public class MineFragment extends Fragment implements OnClickListener {
 
+    private TextView tv_top;
     private TextView tv_uname, mine_aet, mine_exit, mine_appinfo;
     private RelativeLayout mine_top;
     private RoundImageView user_img;
@@ -77,6 +78,8 @@ public class MineFragment extends Fragment implements OnClickListener {
 
     private void init(View view) {
         // TODO Auto-generated method stub
+        tv_top = (TextView) view.findViewById(R.id.tv_top);
+        tv_top.setText("个人中心");
         uname = PreferencesManager.getInstance().getString("username", "");
         tv_uname = (TextView) view.findViewById(R.id.mine_tv_uname);
         mine_top = (RelativeLayout) view.findViewById(R.id.mine_top);

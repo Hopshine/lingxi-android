@@ -57,14 +57,14 @@ public class DateComparUtil {
 			case 0:
 				switch (minute) {
 				case 0:
-					return foematInteger(second) + "秒前";
+					return second + "秒前";
 				default:
-					return foematInteger(minute) + "分钟前";
+					return minute + "分钟前";
 				}
 			case 1:
 			case 2:
 			case 3:
-				return foematInteger(hour)+"小时前";
+				return hour+"小时前";
 			default:
 				return "今天"+time.substring(11, length - 5);
 			}
@@ -77,7 +77,7 @@ public class DateComparUtil {
 		case 5:
 		case 6:
 		case 7:
-			return foematInteger(day) + "天前"+time.substring(11, length - 5);
+			return day + "天前"+time.substring(11, length - 5);
 		default:
 			if (curYear == year) {
 				return time.substring(5, length - 5);
@@ -89,6 +89,7 @@ public class DateComparUtil {
 	
 	/**
 	 * 将阿拉伯数字转为汉字数
+	 * 当前时差可能存在负值，当前方法不可用
 	 * @param num
 	 * @return
 	 */

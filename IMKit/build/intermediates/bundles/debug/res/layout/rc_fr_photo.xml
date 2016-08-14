@@ -22,4 +22,4 @@
         android:textColor="@android:color/white"
         android:layout_gravity="center"
         android:visibility="gone"/>
-</FrameLayout><!-- From: file:/E:/Workspaces/Studio/LingCi/IMKit/src/main/res/layout/rc_fr_photo.xml -->
+</FrameLayout>

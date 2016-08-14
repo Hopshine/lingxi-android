@@ -71,4 +71,4 @@
         android:text="已读"
         android:visibility="gone"/>
 
-</RelativeLayout><!-- From: file:/E:/Workspaces/Studio/LingCi/IMKit/src/main/res/layout/rc_item_base_conversation.xml -->
+</RelativeLayout>

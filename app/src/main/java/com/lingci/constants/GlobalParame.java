@@ -23,7 +23,8 @@ import io.rong.imlib.model.UserInfo;
 
 public class GlobalParame {
 
-	public static String URl = "http://103.44.145.243:34922/lingci";
+	public static String URl = "http://cqyt.zicp.net:34922/lingci";
+	public static String OldURl = "http://103.44.145.243:34922/lingci";
 	public static Activity main;
 	
 	public static boolean isRead = true;
