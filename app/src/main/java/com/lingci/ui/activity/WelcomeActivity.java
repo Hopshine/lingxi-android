@@ -32,8 +32,7 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
 
 public class WelcomeActivity extends Activity {
-	
-	private int runCount;
+
 	private boolean islogin;
 
 	@Override
@@ -67,26 +66,17 @@ public class WelcomeActivity extends Activity {
 //			connect("YBoE5TbZRoxjyANO7PhPZmxxQZ3l7/ZMl8kUNMlzTysfsGEocvBjJ6uALHKWwrhkiemqgLCrNkE=");
 //			goHome();
 	    }else{
-	    	final Handler handler = new Handler();
-		    runCount = 0;
-		    Runnable runnable = new Runnable() {
-	
-		      @Override
-		      public void run() {
-		        // TODO Auto-generated method stub
-		        if (runCount == 1) {
-		    		if (islogin) {
-		    			goHome();
-		    		}else{
-		    			goLogin();
-		    		}
-		          handler.removeCallbacks(this);
-		        }
-		        handler.postDelayed(this, 150);
-		        runCount++;
-		      }
-		    };
-		    handler.postDelayed(runnable, 2000);
+	    	Handler handler = new Handler();
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (islogin) {
+						goHome();
+					}else{
+						goLogin();
+					}
+				}
+			},2000);
 	    }
 	}
 
