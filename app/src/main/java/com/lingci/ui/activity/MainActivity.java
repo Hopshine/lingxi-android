@@ -156,7 +156,7 @@ public class MainActivity extends FragmentActivity implements RongIM.UserInfoPro
             if (messagefragment == null) {
                 // 如果FragmentMine为空，则创建一个并添加到界面上
                 messagefragment = new MessageFragment();
-                transaction.add(R.id.fragment_container, messagefragment, "minefragment");
+                transaction.add(R.id.fragment_container, messagefragment, "messagefragment");
             } else {
                 // 如果FragmentMine不为空，则直接将它显示出来
                 transaction.show(messagefragment);

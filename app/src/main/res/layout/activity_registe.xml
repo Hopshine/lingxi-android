@@ -5,7 +5,7 @@
     android:background="#ffffff"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".RegisteActivity" >
+    tools:context=".ui.activity.RegisteActivity" >
 
     <include layout="@layout/base_app_title" />
 

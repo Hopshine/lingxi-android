@@ -4,8 +4,8 @@ import android.util.SparseArray;
 import android.view.View;
 
 public class ViewHolder {
-	// I added a generic return type to reduce the casting noise in client code
 
+	// I added a generic return type to reduce the casting noise in client code
 	@SuppressWarnings("unchecked")
 	public static <T extends View> T get(View view, int id) {
 

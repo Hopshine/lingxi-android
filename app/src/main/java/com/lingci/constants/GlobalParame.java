@@ -23,16 +23,16 @@ import io.rong.imlib.model.UserInfo;
 
 public class GlobalParame {
 
-	public static String URl = "http://cqyt.zicp.net:34922/lingci";
-	public static String OldURl = "http://103.44.145.243:34922/lingci";
+	public static String URl = "http://139.224.128.232:10660/lingci";
+	public static String OldURl = "http://cqyt.zicp.net:34922/lingci";
 	public static Activity main;
 	
 	public static boolean isRead = true;
 	
 	public static final String UPDATE_USERIMG = "com.lingci.updateimg";
 
-	public static List<UserInfo> userList = new ArrayList<UserInfo>();
-	public static List<String> uidList = new ArrayList<String>();
+	public static List<UserInfo> userList = new ArrayList<>();
+	public static List<String> uidList = new ArrayList<>();
 	
 	public static DisplayImageOptions getOptions(){
 		DisplayImageOptions options = new DisplayImageOptions.Builder()  

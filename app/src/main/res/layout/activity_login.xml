@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context=".LoginActivity" >
+    tools:context=".ui.activity.LoginActivity" >
 
     <include layout="@layout/base_app_title" />
 
