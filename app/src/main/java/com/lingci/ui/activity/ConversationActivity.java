@@ -3,21 +3,19 @@ package com.lingci.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lingci.R;
+import com.lingci.module.BaseActivity;
 
 import java.util.Locale;
 
 import io.rong.imkit.fragment.ConversationFragment;
 import io.rong.imlib.model.Conversation;
 
-public class ConversationActivity extends FragmentActivity {
+public class ConversationActivity extends BaseActivity {
 
     /** 目标 Id */
     private String mTargetId;
@@ -32,11 +30,9 @@ public class ConversationActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-
         Intent intent = getIntent();
         getIntentDate(intent);
         init(intent);
-
     }
 
     private void init(Intent intent) {
@@ -53,38 +49,14 @@ public class ConversationActivity extends FragmentActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_conversation, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * 展示如何从 Intent 中得到 融云会话页面传递的 Uri
      */
     private void getIntentDate(Intent intent) {
-
         mTargetId = intent.getData().getQueryParameter("targetId");
         mTargetIds = intent.getData().getQueryParameter("targetIds");
         //intent.getData().getLastPathSegment();//获得当前会话类型
         mConversationType = Conversation.ConversationType.valueOf(intent.getData().getLastPathSegment().toUpperCase(Locale.getDefault()));
-
         enterFragment(mConversationType, mTargetId);
     }
 
@@ -95,13 +67,10 @@ public class ConversationActivity extends FragmentActivity {
      * @param mTargetId 目标 Id
      */
     private void enterFragment(Conversation.ConversationType mConversationType, String mTargetId) {
-
         ConversationFragment fragment = (ConversationFragment) getSupportFragmentManager().findFragmentById(R.id.conversation);
-
         Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()
                 .appendPath("conversation").appendPath(mConversationType.getName().toLowerCase())
                 .appendQueryParameter("targetId", mTargetId).build();
-
         fragment.setUri(uri);
     }
 

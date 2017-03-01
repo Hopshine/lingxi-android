@@ -13,26 +13,24 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.annotate.InjectView;
-import com.google.annotate.Injector;
 import com.lingci.R;
-import com.lingci.constants.GlobalParame;
-import com.lingci.constants.PreferencesManager;
-import com.lingci.utils.DaHttpRequest;
-import com.lingci.utils.MD5Util;
-import com.lingci.utils.MoeToast;
-import com.lingci.views.CustomProgressDialog;
-import com.lingci.views.RoundImageView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.apache.http.Header;
+import com.lingci.common.Api;
+import com.lingci.common.Constants;
+import com.lingci.common.util.MD5Util;
+import com.lingci.common.util.MoeToast;
+import com.lingci.common.util.SPUtils;
+import com.lingci.common.util.Utils;
+import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.common.view.RoundImageView;
+import com.lingci.module.BaseActivity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,20 +38,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PersonalInfoActivity extends Activity implements OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import okhttp3.Call;
 
+public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 
     private static final int RESULT_REQUEST_CODE = 2;
     private static final int CAMRMA = 0X12;
     private static final int PIC = 0x01;
-    @InjectView(R.id.lc_ruturn)
-    private LinearLayout lc_ruturn;
-    @InjectView(R.id.tv_top)
-    private TextView tv_top;
-    @InjectView(R.id.person_img)
-    private RoundImageView person_img;
-    @InjectView(R.id.person_name)
-    private TextView person_name;
+    @BindView(R.id.lc_ruturn)
+    LinearLayout lc_ruturn;
+    @BindView(R.id.tv_top)
+    TextView tv_top;
+    @BindView(R.id.person_img)
+    RoundImageView person_img;
+    @BindView(R.id.person_name)
+    TextView person_name;
     private Bitmap bitmap;
     private String savename;
     private String imgStr;
@@ -64,14 +65,13 @@ public class PersonalInfoActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        // TODO Auto-generated method stub
 //		person_img = (RoundImageView) findViewById(R.id.person_img);
         loadingProgress = new CustomProgressDialog(this, "修改头像中...", R.anim.frame_loadin);
-        Injector.get(this).inject();
         lc_ruturn.setVisibility(View.VISIBLE);
         lc_ruturn.setOnClickListener(this);
         person_img.setOnClickListener(this);
@@ -82,18 +82,17 @@ public class PersonalInfoActivity extends Activity implements OnClickListener {
 //			ToastUtil.showSingleton(this, "是谁，是谁在哪里？");
             MoeToast.makeText(this, "是谁，是谁在那里？");
         }
-        savename = PreferencesManager.getInstance().getString("username", "");
+        savename = SPUtils.getInstance(PersonalInfoActivity.this).getString("username", "");
         person_name.setText(savename);
         fileDir = new File(Environment.getExternalStorageDirectory() + "/lingci/image/avatar");
         if (!fileDir.exists()) {
             fileDir.mkdirs(); // 如果该目录不存在,则创建一个这样的目录
         }
-        GlobalParame.setPersonImg(savename, person_img);
+        Utils.setPersonImg(savename, person_img);
     }
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch (v.getId()) {
             case R.id.lc_ruturn:
                 onBackPressed();
@@ -115,15 +114,7 @@ public class PersonalInfoActivity extends Activity implements OnClickListener {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.personal_info, menu);
-        return true;
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) {
             return;
@@ -230,46 +221,34 @@ public class PersonalInfoActivity extends Activity implements OnClickListener {
             person_img.setImageBitmap(bitmap);
             imgStr = Bitmap2StrByBase64(bitmap);
             Intent intent = new Intent();
-            intent.setAction(GlobalParame.UPDATE_USERIMG);
+            intent.setAction(Constants.UPDATE_USERIMG);
             sendBroadcast(intent);
         }
         upPhoto();
     }
 
     private void upPhoto() {
-        // TODO Auto-generated method stub
-        String path = GlobalParame.URl + "/uploadPrimg";
-        // MD5name uname imgStr
-        DaHttpRequest dr = new DaHttpRequest(this);
-        RequestParams params = new RequestParams();
-        params.put("MD5name", MD5Util.MD5(savename));
-        params.put("uname", savename);
-        params.put("imgStr", imgStr);
-        dr.post(path, params, new AsyncHttpResponseHandler() {
+        loadingProgress.show();
+        OkHttpUtils.post()
+                .url(Api.Url + "/uploadPrimg")
+                .addParams("MD5name", MD5Util.MD5(savename))
+                .addParams("uname", savename)
+                .addParams("imgStr", imgStr)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        loadingProgress.dismiss();
+                        Log.d(TAG, "onError: " + id);
+                    }
 
-            @Override
-            public void onStart() {
-                // TODO Auto-generated method stub
-                super.onStart();
-                loadingProgress.show();
-            }
-
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                // TODO Auto-generated method stub
-                Log.i("hello", "请求失败：");
-                loadingProgress.dismiss();
-            }
-
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                // TODO Auto-generated method stub
-                String str = new String(arg2);
-                Log.i("hello", "请求成功：" + str);
-                loadingProgress.dismiss();
-            }
-        });
+                    @Override
+                    public void onResponse(String response, int id) {
+                        loadingProgress.dismiss();
+                        Log.d(TAG, "onResponse: " + response);
+                        Toast.makeText(PersonalInfoActivity.this, "头像更新成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     /**

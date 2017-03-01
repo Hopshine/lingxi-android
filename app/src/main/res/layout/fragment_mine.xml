@@ -10,7 +10,7 @@
 
     <include layout="@layout/base_app_title"/>
 
-    <com.lingci.views.MyScrollView
+    <com.lingci.common.view.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -32,7 +32,7 @@
                     android:layout_height="100dp"
                     android:layout_centerInParent="true" >
 
-                    <com.lingci.views.RoundImageView
+                    <com.lingci.common.view.RoundImageView
                         android:id="@+id/mine_user_img"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
@@ -131,6 +131,6 @@
                 android:text="退出登录"
                 android:textSize="16sp" />
         </LinearLayout>
-    </com.lingci.views.MyScrollView>
+    </com.lingci.common.view.MyScrollView>
 
 </LinearLayout>

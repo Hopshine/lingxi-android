@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,20 +20,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lingci.R;
-import com.lingci.constants.GlobalParame;
-import com.lingci.constants.PreferencesManager;
+import com.lingci.common.Api;
+import com.lingci.common.Constants;
+import com.lingci.common.util.SPUtils;
+import com.lingci.common.util.Utils;
 import com.lingci.ui.activity.AboutActivity;
 import com.lingci.ui.activity.LoginActivity;
 import com.lingci.ui.activity.PersonalInfoActivity;
 import com.lingci.ui.activity.RelevantActivity;
-import com.lingci.utils.DaHttpRequest;
-import com.lingci.views.RoundImageView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.lingci.common.view.RoundImageView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import okhttp3.Call;
 
 public class MineFragment extends Fragment implements OnClickListener {
 
@@ -62,25 +63,23 @@ public class MineFragment extends Fragment implements OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (GlobalParame.UPDATE_USERIMG.equals(action)) {
-                GlobalParame.setPersonImg(uname, user_img);
+            if (Constants.UPDATE_USERIMG.equals(action)) {
+                Utils.setPersonImg(uname, user_img);
             }
         }
     }
 
     private void initReceiver() {
-        // TODO Auto-generated method stub
         receiver = new OperateBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(GlobalParame.UPDATE_USERIMG);
+        filter.addAction(Constants.UPDATE_USERIMG);
         getActivity().registerReceiver(receiver, filter);
     }
 
     private void init(View view) {
-        // TODO Auto-generated method stub
         tv_top = (TextView) view.findViewById(R.id.tv_top);
         tv_top.setText("个人中心");
-        uname = PreferencesManager.getInstance().getString("username", "");
+        uname = SPUtils.getInstance(getActivity()).getString("username", "");
         tv_uname = (TextView) view.findViewById(R.id.mine_tv_uname);
         mine_top = (RelativeLayout) view.findViewById(R.id.mine_top);
         user_img = (RoundImageView) view.findViewById(R.id.mine_user_img);
@@ -98,7 +97,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         mine_item_aet.setBounds(0, 0, mine_item_aet.getIntrinsicWidth(), mine_item_aet.getIntrinsicHeight());
         mine_item_right.setBounds(0, 0, mine_item_right.getIntrinsicWidth(), mine_item_right.getIntrinsicHeight());
         mine_unread_right.setBounds(0, 0, mine_unread_right.getIntrinsicWidth(), mine_unread_right.getIntrinsicHeight());
-        if (GlobalParame.isRead) {
+        if (Constants.isRead) {
             mine_aet.setCompoundDrawables(mine_item_aet, null, mine_item_right, null);
         } else {
             mine_aet.setCompoundDrawables(mine_item_aet, null, mine_unread_right, null);
@@ -109,13 +108,12 @@ public class MineFragment extends Fragment implements OnClickListener {
         } else {
             tv_uname.setText(uname);
         }
-        GlobalParame.setPersonImg(uname, user_img);
+        Utils.setPersonImg(uname, user_img);
     }
 
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch (v.getId()) {
             case R.id.mine_top:
                 Intent goPerson = new Intent(getActivity(), PersonalInfoActivity.class);
@@ -170,8 +168,7 @@ public class MineFragment extends Fragment implements OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        // TODO Auto-generated method stub
-                        PreferencesManager.getInstance().putBoolean("islogin", false);
+                        SPUtils.getInstance(getActivity()).putBoolean("islogin", false);
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
                         getActivity().finish();
@@ -181,7 +178,6 @@ public class MineFragment extends Fragment implements OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        // TODO Auto-generated method stub
                         dialog.dismiss();
                     }
                 });
@@ -193,50 +189,36 @@ public class MineFragment extends Fragment implements OnClickListener {
     }
 
     public void loadUserImage() {
-        String path = GlobalParame.URl + "/getImgbase";
-        DaHttpRequest dr = new DaHttpRequest(getActivity());
-        RequestParams params = new RequestParams();
-        params.put("imgid", "1");
-        dr.post(path, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                // TODO Auto-generated method stub
-                String result = new String(arg2);
-                Log.i("hello", result);
-            }
+        OkHttpUtils.post()
+                .url(Api.Url + "/getImgbase")
+                .addParams("imgid", "1")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
 
-            @Override
-            public void onStart() {
-                // TODO Auto-generated method stub
-                super.onStart();
-            }
+                    }
 
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                // TODO Auto-generated method stub
-                String imagesrc = new String(arg2);
-                JSONObject json = null;
-                String imgbase = null;
-                try {
-                    json = new JSONObject(imagesrc);
-                    imgbase = json.getString("data");
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                Bitmap userImage = stringtoBitmap(imgbase);
-                user_img.setImageBitmap(userImage);
-            }
-        });
+                    @Override
+                    public void onResponse(String response, int id) {
+                        String imgBase64 = null;
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            imgBase64 = json.getString("data");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Bitmap userImage = stringtoBitmap(imgBase64);
+                        user_img.setImageBitmap(userImage);
+                    }
+                });
     }
-
 
     /**
      * Base64字符串转换成Bitmap
      *
-     * @param string
-     * @return
+     * @param string imgBase64
+     * @return Bitmap
      */
     public Bitmap stringtoBitmap(String string) {
         // 将字符串转换成Bitmap类型

@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <com.lingci.views.RoundImageView
+        <com.lingci.common.view.RoundImageView
             android:id="@+id/rluser_img"
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -43,7 +43,7 @@
             android:text="@string/app_name"
             android:textSize="10sp" />
 
-        <com.rockerhieu.emojicon.EmojiconTextView
+        <com.lingci.emojicon.EmojiconTextView
             android:id="@+id/rl_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
             android:textSize="12sp"
             android:text="："/>
 
-        <com.rockerhieu.emojicon.EmojiconTextView
+        <com.lingci.emojicon.EmojiconTextView
             android:id="@+id/rl_minifeed"
             android:layout_width="wrap_content"
        		android:layout_height="wrap_content"

@@ -9,7 +9,7 @@
 
     <include layout="@layout/base_app_title" />
 
-    <com.lingci.views.MyScrollView
+    <com.lingci.common.view.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -33,7 +33,7 @@
                     android:layout_centerVertical="true"
                     android:text="头像" />
 
-                <com.lingci.views.RoundImageView
+                <com.lingci.common.view.RoundImageView
                     android:id="@+id/person_img"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -131,6 +131,6 @@
             </RelativeLayout>
             
         </LinearLayout>
-    </com.lingci.views.MyScrollView>
+    </com.lingci.common.view.MyScrollView>
 
 </LinearLayout>

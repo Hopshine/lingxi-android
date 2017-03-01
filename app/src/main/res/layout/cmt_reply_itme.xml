@@ -7,7 +7,7 @@
     android:descendantFocusability="blocksDescendants"
     android:padding="2dp" >
 
-    <com.rockerhieu.emojicon.EmojiconTextView
+    <com.lingci.emojicon.EmojiconTextView
         android:id="@+id/reply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -12,17 +12,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lingci.R;
-import com.lingci.constants.GlobalParame;
-import com.lingci.constants.PreferencesManager;
-import com.lingci.utils.DaHttpRequest;
-import com.lingci.views.CustomProgressDialog;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.rockerhieu.emojicon.EmojiconEditText;
+import com.lingci.common.Api;
+import com.lingci.common.util.SPUtils;
+import com.lingci.emojicon.EmojiconEditText;
+import com.lingci.common.view.CustomProgressDialog;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import okhttp3.Call;
 
 public class ShareFragment extends Fragment {
 
@@ -40,7 +40,6 @@ public class ShareFragment extends Fragment {
 	}
 
 	private void init(View view) {
-		// TODO Auto-generated method stub
 		tv_top = (TextView) view.findViewById(R.id.tv_top);
 		tv_top.setText("普通的分享");
 		shareProgress = new CustomProgressDialog(getActivity(), "发布中...",R.anim.frame_loadin);
@@ -50,67 +49,52 @@ public class ShareFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				String lcinfo = lc_info.getText().toString();
 				Log.i("TAG", "lcinfo：" + lcinfo);
 				if(lcinfo.equals(null)||lcinfo.length()==0){
 					Toast.makeText(getActivity(), "未填写任何内容", Toast.LENGTH_SHORT).show();
 				}else{
-					String uname = PreferencesManager.getInstance().getString("username", null);
+					String uname = SPUtils.getInstance(getActivity()).getString("username", null);
 					if(uname.equals(null)||uname.length()==0){
 						Toast.makeText(getActivity(), "请重新登陆", Toast.LENGTH_SHORT).show();
 					}else{
-						AddMFAsyncHttpPost(uname, lcinfo);
+						postAddMF(uname, lcinfo);
 					}
 				}
 			}
 		});
 	}
 	
-	public void AddMFAsyncHttpPost(String uname,
-			String lcinfo) {
-		String path = GlobalParame.URl + "/minifeedAdd";
-		DaHttpRequest dr = new DaHttpRequest(getActivity());
-		RequestParams params = new RequestParams();
-//		params.put("uid", uid);
-		params.put("uname", uname);
-		params.put("lcinfo", lcinfo);
-		dr.post(path, params, new AsyncHttpResponseHandler() {
-
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(), "发布失败", Toast.LENGTH_SHORT).show();
-//				Log.i("TAG", "请求失败：" + new String(arg2));
-			}
-
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-				shareProgress.show();
-			}
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				// TODO Auto-generated method stub
-				String str = new String(arg2);
-				Log.i("TAG", "请求成功：" + str);
-				try {
-					JSONObject json = new JSONObject(str);
-					int tag = json.getInt("ret");
-					shareProgress.dismiss();
-					switch (tag) {
-					case 0:
-						lc_info.setText(null);
-						Toast.makeText(getActivity(), "发布成功", Toast.LENGTH_SHORT).show();
-						break;
+	public void postAddMF(String uname, String lcinfo) {
+		shareProgress.show();
+		OkHttpUtils.post()
+				.url(Api.Url + "/minifeedAdd")
+				.addParams("uname", uname)
+				.addParams("lcinfo", lcinfo)
+				.build()
+				.execute(new StringCallback() {
+					@Override
+					public void onError(Call call, Exception e, int id) {
+						shareProgress.dismiss();
+						Toast.makeText(getActivity(), "发布失败", Toast.LENGTH_SHORT).show();
 					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
+
+					@Override
+					public void onResponse(String response, int id) {
+						shareProgress.dismiss();
+						try {
+							JSONObject json = new JSONObject(response);
+							int tag = json.getInt("ret");
+							switch (tag) {
+								case 0:
+									lc_info.setText(null);
+									Toast.makeText(getActivity(), "发布成功", Toast.LENGTH_SHORT).show();
+									break;
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+				});
 	}
 }

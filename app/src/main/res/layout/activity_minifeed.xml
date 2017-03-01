@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" >
 
-        <com.lingci.views.MyScrollView
+        <com.lingci.common.view.MyScrollView
             android:id="@+id/cmt_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,15 +27,15 @@
 
                 <include layout="@layout/list_item_home" />
 
-                <com.lingci.views.MyListView
+                <com.lingci.common.view.MyListView
                     android:id="@+id/cmt_lv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:divider="@null"
                     android:fadingEdge="none" >
-                </com.lingci.views.MyListView>
+                </com.lingci.common.view.MyListView>
             </LinearLayout>
-        </com.lingci.views.MyScrollView>
+        </com.lingci.common.view.MyScrollView>
 
         <View
             android:id="@+id/mf_mask"
@@ -52,7 +52,7 @@
         android:orientation="horizontal"
         android:padding="5dp" >
 
-        <com.rockerhieu.emojicon.EmojiconEditText
+        <com.lingci.emojicon.EmojiconEditText
             android:id="@+id/cmt_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

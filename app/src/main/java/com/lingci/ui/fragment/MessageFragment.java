@@ -42,7 +42,6 @@ public class MessageFragment extends Fragment implements ViewPager.OnPageChangeL
 
 
 	private void init(View view) {
-		// TODO Auto-generated method stub
 		DisplayMetrics dm = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm); // 获取屏幕信息
 		indicatorWidth = dm.widthPixels / 4;// 指示器宽度为屏幕宽度的4/1

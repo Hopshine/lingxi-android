@@ -10,7 +10,7 @@
 
     <include layout="@layout/base_app_title"/>
 
-    <com.rockerhieu.emojicon.EmojiconEditText
+    <com.lingci.emojicon.EmojiconEditText
         android:id="@+id/share_lc_info"
         android:layout_width="match_parent"
         android:layout_height="200dp"

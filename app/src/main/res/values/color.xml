@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--主题默认-->
+    <color name="colorPrimaryDark">#4FC1E9</color>
+    <color name="colorPrimary">#4FC1E9</color>
+    <color name="colorAccent">#4FC1E9</color>
+    <color name="textColorPrimary">#656D78</color>
+
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00ffffff</color>

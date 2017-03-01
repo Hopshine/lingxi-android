@@ -1,11 +1,9 @@
 package com.lingci.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -15,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -22,28 +21,27 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lingci.R;
-import com.lingci.constants.GlobalParame;
-import com.lingci.constants.PreferencesManager;
-import com.lingci.model.MiniFeeds.Data.MiniFeed;
-import com.lingci.model.UnReadMf;
-import com.lingci.model.UnReadMf.Data.Unread;
-import com.lingci.utils.DaHttpRequest;
-import com.lingci.utils.DateComparUtil;
-import com.lingci.utils.MoeToast;
-import com.lingci.utils.RepeatUtils;
-import com.lingci.utils.ViewHolder;
-import com.lingci.views.CustomProgressDialog;
-import com.lingci.views.RoundImageView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rockerhieu.emojicon.EmojiconTextView;
-
-import org.apache.http.Header;
+import com.lingci.common.Api;
+import com.lingci.common.util.DateComparUtil;
+import com.lingci.common.util.MoeToast;
+import com.lingci.common.util.SPUtils;
+import com.lingci.common.util.Utils;
+import com.lingci.common.util.ViewHolder;
+import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.common.view.RoundImageView;
+import com.lingci.emojicon.EmojiconTextView;
+import com.lingci.entity.MiniFeeds.Data.MiniFeed;
+import com.lingci.entity.UnReadMf;
+import com.lingci.entity.UnReadMf.Data.Unread;
+import com.lingci.module.BaseActivity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.List;
 
-public class RelevantActivity extends Activity {
+import okhttp3.Call;
+
+public class RelevantActivity extends BaseActivity {
 	
 	private TextView tv_top;
 	private LinearLayout lc_ruturn;
@@ -61,8 +59,7 @@ public class RelevantActivity extends Activity {
 	}
 
 	private void init() {
-		// TODO Auto-generated method stub
-		savename = PreferencesManager.getInstance().getString("username", "");
+		savename = SPUtils.getInstance(RelevantActivity.this).getString("username", "");
 		tv_top = (TextView) this.findViewById(R.id.tv_top);
 		lc_ruturn = (LinearLayout) this.findViewById(R.id.lc_ruturn);
 		pull_relevant_list = (PullToRefreshListView) findViewById(R.id.pull_relevant_list);
@@ -78,7 +75,6 @@ public class RelevantActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				onBackPressed();
 			}
 		});
@@ -92,20 +88,17 @@ public class RelevantActivity extends Activity {
 			
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				getRelevantsnAsyncHttpPost(savename);
 			}
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
 	}
 	
 	private void initPullToRefresh() {
-		// TODO Auto-generated method stub
 		ILoadingLayout startLabels = pull_relevant_list.getLoadingLayoutProxy(true,false);
 		startLabels.setPullLabel("下拉刷新...");
 		startLabels.setRefreshingLabel("正在刷新...");
@@ -118,48 +111,36 @@ public class RelevantActivity extends Activity {
 	}
 	
 	public void getRelevantsnAsyncHttpPost(String name) {
-		String path = GlobalParame.URl + "/unReadList";
-		DaHttpRequest dr = new DaHttpRequest(this);
-		RequestParams params = new RequestParams();
-		params.put("uname", name);
-		dr.post(path, params, new AsyncHttpResponseHandler() {
+		OkHttpUtils.post()
+				.url(Api.Url + "/unReadList")
+				.addParams("uname", name)
+				.build()
+				.execute(new StringCallback() {
+					@Override
+					public void onError(Call call, Exception e, int id) {
+						loadingProgress.dismiss();
+						Toast.makeText(RelevantActivity.this, "加载失败，下拉重新加载",Toast.LENGTH_LONG).show();
+					}
 
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-				// TODO Auto-generated method stub
-				loadingProgress.dismiss();
-				Toast.makeText(RelevantActivity.this, "加载失败，下拉重新加载",Toast.LENGTH_LONG).show();
-				// Log.i("TAG", "请求失败：" + new String(arg2));
-			}
-
-			@Override
-			public void onStart() {
-				// TODO Auto-generated method stub
-				super.onStart();
-			}
-
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				// TODO Auto-generated method stub
-				String minifeedStr = new String(arg2);
-				Log.i("hello", "请求成功：" + minifeedStr);
-				Gson gson = new Gson();
-				UnReadMf unReadMf = gson.fromJson(minifeedStr, UnReadMf.class);
-				int tag = unReadMf.ret;
-				List<Unread> unReads = unReadMf.data.unreadlist;
-				loadingProgress.dismiss();
-				switch (tag) {
-				case 0:
-					unreadlist = unReads;
-					pull_relevant_list.setAdapter(relevantAdapter);
-					break;
-				default:
-					break;
-				}
-				pull_relevant_list.onRefreshComplete();
-			}
-		});
+					@Override
+					public void onResponse(String response, int id) {
+						Log.d(TAG, "onResponse: " + response);
+						Gson gson = new Gson();
+						UnReadMf unReadMf = gson.fromJson(response, UnReadMf.class);
+						int tag = unReadMf.ret;
+						List<Unread> unReads = unReadMf.data.unreadlist;
+						loadingProgress.dismiss();
+						switch (tag) {
+							case 0:
+								unreadlist = unReads;
+								pull_relevant_list.setAdapter(relevantAdapter);
+								break;
+							default:
+								break;
+						}
+						pull_relevant_list.onRefreshComplete();
+					}
+				});
 	}
 	
 	/** 适配器 */
@@ -167,25 +148,21 @@ public class RelevantActivity extends Activity {
 		
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return unreadlist == null ? 0 : unreadlist.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			return unreadlist == null ? null : unreadlist.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return position;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			if (convertView == null) {
 				LayoutInflater inflater = LayoutInflater.from(RelevantActivity.this);
 				convertView = inflater.inflate(R.layout.list_item_relevant, null);
@@ -206,12 +183,15 @@ public class RelevantActivity extends Activity {
 				rl_lcuname.setText(unread.minifeed.uname);
 				rl_minifeed.setText(unread.minifeed.lc_info);
 				if (unread.uname.equals(savename)) {
-					GlobalParame.setPersonImg(savename,rluser_img);
+					Utils.setPersonImg(savename,rluser_img);
 				}else{
 					if (unread.url!=null) {
-						ImageLoader.getInstance().displayImage(GlobalParame.URl+unread.url,rluser_img, GlobalParame.getOptionsUnDisc());
+						Glide.with(RelevantActivity.this)
+								.load(Api.Url + unread.url)
+								.skipMemoryCache(true)
+								.into(rluser_img);
 					}else{
-						rluser_img.setImageBitmap(RepeatUtils.readBitMap(RelevantActivity.this, R.drawable.userimg));
+						rluser_img.setImageResource(R.drawable.userimg);
 					}
 				}
 			}
@@ -220,7 +200,6 @@ public class RelevantActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					Intent intent = new Intent(RelevantActivity.this,MinifeedActivity.class);
 					Bundle bundle = new Bundle();
 					bundle.putSerializable("minifeed", mfd);
@@ -235,13 +214,6 @@ public class RelevantActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.relevant, menu);
-		return true;
 	}
 
 }
