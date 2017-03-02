@@ -9,7 +9,7 @@
         android:id="@+id/loadingIv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@anim/frame_loadin"
+        android:background="@drawable/frame_loadin"
         android:contentDescription="@string/app_name" />
 
     <TextView

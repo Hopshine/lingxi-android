@@ -3,21 +3,23 @@ package com.lingci.common.util;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.lingci.R;
 import com.lingci.common.Api;
 
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * 工具类
@@ -25,6 +27,40 @@ import java.util.regex.Pattern;
  */
 public class Utils {
 
+    private static final long loadTime = 1500;
+    private static long time;
+
+    public static void setTime(){
+        time = System.currentTimeMillis();
+    }
+
+    public interface OnLoading{
+        void onLoading();
+    }
+
+    public static void loadingTime(final Handler handler, final OnLoading loading){
+        time = System.currentTimeMillis() - time;
+        if (time < loadTime) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep((loadTime - time));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.onLoading();
+                        }
+                    });
+                }
+            }).start();
+        }else {
+            loading.onLoading();
+        }
+    }
 
     /**
      * 手机验证
@@ -52,16 +88,18 @@ public class Utils {
      * 设置头像
      */
     public static void setPersonImg(String uName, ImageView imgView) {
-        String pathName = Environment.getExternalStorageDirectory() + "/lingci/image/avatar/" + "headportraits.png";
-        if (new File(pathName).exists()) {
-            Bitmap btm = BitmapFactory.decodeFile(pathName);
-            imgView.setImageBitmap(btm);
-        } else {
-            String url = Api.Url + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
-            Glide.with(imgView.getContext())
-                    .load(url)
-                    .into(imgView);
+        String pathName = Environment.getExternalStorageDirectory() + "/lingci/image/avatar/headportraits.png";
+//        Bitmap btm = BitmapFactory.decodeFile(pathName);
+//        imgView.setImageBitmap(btm);
+        if (!new File(pathName).exists()) {
+            pathName = Api.Url + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
         }
+        Glide.with(imgView.getContext())
+                .load(pathName)
+                .placeholder(R.mipmap.userimg)
+                .error(R.mipmap.userimg)
+                .bitmapTransform(new CropCircleTransformation(imgView.getContext()))
+                .into(imgView);
     }
 
     /**

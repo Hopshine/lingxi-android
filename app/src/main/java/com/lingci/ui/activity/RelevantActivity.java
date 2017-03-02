@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +29,6 @@ import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.util.ViewHolder;
 import com.lingci.common.view.CustomProgressDialog;
-import com.lingci.common.view.RoundImageView;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed;
 import com.lingci.entity.UnReadMf;
@@ -70,7 +70,7 @@ public class RelevantActivity extends BaseActivity {
 //			ToastUtil.showSingleton(this, "你能找到这个秘密吗？");
 			MoeToast.makeText(this, "你能找到这个秘密吗？");
 		}
-		loadingProgress = new CustomProgressDialog(this,"正在加载...", R.anim.frame_loadin);
+		loadingProgress = new CustomProgressDialog(this,"正在加载...", R.drawable.frame_loadin);
 		lc_ruturn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -167,7 +167,7 @@ public class RelevantActivity extends BaseActivity {
 				LayoutInflater inflater = LayoutInflater.from(RelevantActivity.this);
 				convertView = inflater.inflate(R.layout.list_item_relevant, null);
 			}
-			RoundImageView rluser_img = ViewHolder.get(convertView, R.id.rluser_img);
+			ImageView rluser_img = ViewHolder.get(convertView, R.id.rluser_img);
 			TextView rl_uname = ViewHolder.get(convertView, R.id.rl_uname);
 			TextView rl_time = ViewHolder.get(convertView, R.id.rl_time);
 			EmojiconTextView rl_comment = ViewHolder.get(convertView, R.id.rl_comment);
@@ -191,7 +191,7 @@ public class RelevantActivity extends BaseActivity {
 								.skipMemoryCache(true)
 								.into(rluser_img);
 					}else{
-						rluser_img.setImageResource(R.drawable.userimg);
+						rluser_img.setImageResource(R.mipmap.userimg);
 					}
 				}
 			}

@@ -62,9 +62,9 @@
             android:hint="吐槽一下"
             android:inputType="textMultiLine"
             android:maxLength="140"
-            android:maxWidth="180dp"
-            android:minWidth="15dp"
-            android:padding="7dp"
+            android:maxHeight="180dp"
+            android:minHeight="36dp"
+            android:padding="6dp"
             emojicon:emojiconSize="28sp"
             android:lineSpacingExtra="3dp"
             android:scrollHorizontally="false" />

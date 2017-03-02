@@ -48,6 +48,7 @@ import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.Call;
 
 public class HomeFragment extends Fragment {
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment {
         minifeeds = new ArrayList<>();
         lcids = new ArrayList<>();
         loadingProgress = new CustomProgressDialog(getActivity(),
-                R.string.dialog_loading_lc, R.anim.frame_loadin);
+                R.string.dialog_loading_lc, R.drawable.frame_loadin);
         pullToRefresh = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
         mfAdapter = new MiniFeddAdapter();
         pullToRefresh.setMode(Mode.BOTH);
@@ -300,11 +301,11 @@ public class HomeFragment extends Fragment {
                     lc_chat.setVisibility(View.GONE);
                 }
                 if (isLike) {
-                    mf_like_icon.setImageResource(R.drawable.list_item_icon_like);
+                    mf_like_icon.setImageResource(R.mipmap.list_item_icon_like);
                     mf_like.setClickable(false);
                     mf_like.setEnabled(false);
                 } else {
-                    mf_like_icon.setImageResource(R.drawable.list_item_icon_like_nor);
+                    mf_like_icon.setImageResource(R.mipmap.list_item_icon_like_nor);
                     mf_like.setClickable(true);
                     mf_like.setEnabled(true);
                 }
@@ -331,15 +332,13 @@ public class HomeFragment extends Fragment {
                 if (mf.uname.equals(savename)) {
                     Utils.setPersonImg(savename, user_img);
                 } else {
-                    if (mf.url != null) {
-                        Glide.with(getActivity())
-                                .load(Api.Url + mf.url)
-                                .skipMemoryCache(true)
-                                .error(R.drawable.userimg)
-                                .into(user_img);
-                    } else {
-                        user_img.setImageResource(R.drawable.userimg);
-                    }
+                    Glide.with(getActivity())
+                            .load(Api.Url + mf.url)
+                            .skipMemoryCache(true)
+                            .placeholder(R.mipmap.userimg)
+                            .error(R.mipmap.userimg)
+                            .bitmapTransform(new CropCircleTransformation(user_img.getContext()))
+                            .into(user_img);
                 }
                 final int index = position;
                 mf_comment.setOnClickListener(new OnClickListener() {

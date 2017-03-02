@@ -47,7 +47,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void goRegister(View view) {
-        registerProgress = new CustomProgressDialog(this, R.string.dialog_loading_reg, R.anim.frame_loadin);
+        registerProgress = new CustomProgressDialog(this, R.string.dialog_loading_reg, R.drawable.frame_loadin);
         String uName = userName.getText().toString().trim();
         String uPwd = userPwd.getText().toString().trim();
         String uDoPwd = doUserPwd.getText().toString().trim();

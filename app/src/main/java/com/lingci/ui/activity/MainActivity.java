@@ -54,10 +54,10 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     }
 
     private void initBottomNavigation() {
-        BottomNavigationItem home = new BottomNavigationItem(R.drawable.icon_home, "主页").setInactiveIconResource(R.drawable.icon_home_nor);
-        BottomNavigationItem camera = new BottomNavigationItem(R.drawable.icon_camera, "圈子").setInactiveIconResource(R.drawable.icon_camera_nor);
-        BottomNavigationItem message = new BottomNavigationItem(R.drawable.icon_message, "消息").setInactiveIconResource(R.drawable.icon_message_nor);
-        BottomNavigationItem mine = new BottomNavigationItem(R.drawable.icon_mine, "我的").setInactiveIconResource(R.drawable.icon_mine_nor);
+        BottomNavigationItem home = new BottomNavigationItem(R.mipmap.icon_home, "主页").setInactiveIconResource(R.mipmap.icon_home_nor);
+        BottomNavigationItem camera = new BottomNavigationItem(R.mipmap.icon_camera, "圈子").setInactiveIconResource(R.mipmap.icon_camera_nor);
+        BottomNavigationItem message = new BottomNavigationItem(R.mipmap.icon_message, "消息").setInactiveIconResource(R.mipmap.icon_message_nor);
+        BottomNavigationItem mine = new BottomNavigationItem(R.mipmap.icon_mine, "我的").setInactiveIconResource(R.mipmap.icon_mine_nor);
         mBottomNavigation.addItem(home).addItem(camera).addItem(message).addItem(mine)
                 .setMode(BottomNavigationBar.MODE_FIXED)//切换模式
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)//背景风格

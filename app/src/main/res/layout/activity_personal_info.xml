@@ -33,16 +33,14 @@
                     android:layout_centerVertical="true"
                     android:text="头像" />
 
-                <com.lingci.common.view.RoundImageView
+                <ImageView
                     android:id="@+id/person_img"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/userimg"
-                    imagecontrol:border_outside_color="#FFFFFF"
-                    imagecontrol:border_thickness="3dp" />
+                    android:src="@mipmap/userimg" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:text="用戶名" />
+                    android:text="用户名" />
                  <TextView
                     android:id="@+id/person_name"
                     android:layout_width="wrap_content"

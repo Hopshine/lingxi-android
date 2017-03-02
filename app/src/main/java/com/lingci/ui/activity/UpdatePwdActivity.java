@@ -44,7 +44,7 @@ public class UpdatePwdActivity extends BaseActivity {
 	}
 
 	public void goUpdatePwd(View view) {
-		updateProgress = new CustomProgressDialog(this,R.string.dialog_loading_upwd,R.anim.frame_loadin);
+		updateProgress = new CustomProgressDialog(this,R.string.dialog_loading_upwd,R.drawable.frame_loadin);
 		String uName = userName.getText().toString().trim();
 		String uPwd = userPwd.getText().toString().trim();
 		String uDoPwd = doUserPwd.getText().toString().trim();

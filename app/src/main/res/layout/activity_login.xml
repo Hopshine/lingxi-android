@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="150dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/login_image" />
+        android:layout_gravity="center"
+        android:src="@mipmap/login_image" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@null"
-            android:drawableLeft="@drawable/login_username"
+            android:drawableLeft="@mipmap/login_username"
             android:drawablePadding="16dp"
             android:hint="@string/hint_uname"
             android:inputType="textPersonName"
@@ -47,7 +48,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@null"
-            android:drawableLeft="@drawable/login_password"
+            android:drawableLeft="@mipmap/login_password"
             android:drawablePadding="16dp"
             android:hint="@string/hint_pwd"
             android:inputType="textPassword"

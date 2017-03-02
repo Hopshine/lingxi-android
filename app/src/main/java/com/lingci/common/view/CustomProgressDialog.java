@@ -1,7 +1,5 @@
 package com.lingci.common.view;
 
-import com.lingci.R;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
@@ -9,8 +7,10 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lingci.R;
+
 /**
- * @Description:自定义加载动画
+ * 加载动画
  */
 public class CustomProgressDialog extends ProgressDialog {
 
@@ -73,7 +73,6 @@ public class CustomProgressDialog extends ProgressDialog {
 
 	@Override
 	public void dismiss() {
-		// TODO Auto-generated method stub
 		super.dismiss();
 	}
 }

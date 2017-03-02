@@ -14,13 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <com.lingci.common.view.RoundImageView
+        <ImageView
             android:id="@+id/cmuser_img"
             android:layout_width="43dp"
             android:layout_height="43dp"
             android:layout_marginRight="12dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/userimg" />
+            android:src="@mipmap/userimg" />
 
         <TextView
             android:id="@+id/cm_uname"

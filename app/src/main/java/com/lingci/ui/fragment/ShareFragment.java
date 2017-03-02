@@ -42,7 +42,7 @@ public class ShareFragment extends Fragment {
 	private void init(View view) {
 		tv_top = (TextView) view.findViewById(R.id.tv_top);
 		tv_top.setText("普通的分享");
-		shareProgress = new CustomProgressDialog(getActivity(), "发布中...",R.anim.frame_loadin);
+		shareProgress = new CustomProgressDialog(getActivity(), "发布中...",R.drawable.frame_loadin);
 		lc_info = (EmojiconEditText) view.findViewById(R.id.share_lc_info);
 		share = (Button) view.findViewById(R.id.share_lc);
 		share.setOnClickListener(new OnClickListener() {

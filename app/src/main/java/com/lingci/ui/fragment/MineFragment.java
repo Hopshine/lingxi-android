@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,7 +29,6 @@ import com.lingci.ui.activity.AboutActivity;
 import com.lingci.ui.activity.LoginActivity;
 import com.lingci.ui.activity.PersonalInfoActivity;
 import com.lingci.ui.activity.RelevantActivity;
-import com.lingci.common.view.RoundImageView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -42,7 +42,7 @@ public class MineFragment extends Fragment implements OnClickListener {
     private TextView tv_top;
     private TextView tv_uname, mine_aet, mine_exit, mine_appinfo;
     private RelativeLayout mine_top;
-    private RoundImageView user_img;
+    private ImageView user_img;
     private String uname;
     private OperateBroadcastReceiver receiver;
 
@@ -82,7 +82,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         uname = SPUtils.getInstance(getActivity()).getString("username", "");
         tv_uname = (TextView) view.findViewById(R.id.mine_tv_uname);
         mine_top = (RelativeLayout) view.findViewById(R.id.mine_top);
-        user_img = (RoundImageView) view.findViewById(R.id.mine_user_img);
+        user_img = (ImageView) view.findViewById(R.id.mine_user_img);
         mine_aet = (TextView) view.findViewById(R.id.mine_aet);
         mine_appinfo = (TextView) view.findViewById(R.id.mine_appinfo);
         mine_exit = (TextView) view.findViewById(R.id.mine_exit);
@@ -91,9 +91,9 @@ public class MineFragment extends Fragment implements OnClickListener {
         mine_appinfo.setOnClickListener(this);
         mine_exit.setOnClickListener(this);
         //设置TextView左右图片
-        Drawable mine_item_aet = getResources().getDrawable(R.drawable.mine_item_aet);
-        Drawable mine_item_right = getResources().getDrawable(R.drawable.mine_item_right);
-        Drawable mine_unread_right = getResources().getDrawable(R.drawable.mine_unread_right);
+        Drawable mine_item_aet = getResources().getDrawable(R.mipmap.mine_item_aet);
+        Drawable mine_item_right = getResources().getDrawable(R.mipmap.mine_item_right);
+        Drawable mine_unread_right = getResources().getDrawable(R.mipmap.mine_unread_right);
         mine_item_aet.setBounds(0, 0, mine_item_aet.getIntrinsicWidth(), mine_item_aet.getIntrinsicHeight());
         mine_item_right.setBounds(0, 0, mine_item_right.getIntrinsicWidth(), mine_item_right.getIntrinsicHeight());
         mine_unread_right.setBounds(0, 0, mine_unread_right.getIntrinsicWidth(), mine_unread_right.getIntrinsicHeight());

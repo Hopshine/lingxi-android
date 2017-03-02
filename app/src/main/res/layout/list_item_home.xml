@@ -28,7 +28,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="12dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/userimg" />
+                android:src="@mipmap/userimg" />
 
             <TextView
                 android:id="@+id/tv_uname"
@@ -56,7 +56,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:visibility="gone"
-                android:src="@drawable/icon_home_chat"/>
+                android:src="@mipmap/icon_home_chat"/>
         </RelativeLayout>
 
         <com.lingci.emojicon.EmojiconTextView
@@ -108,7 +108,7 @@
                 android:contentDescription="@string/main_mine"
                 android:focusable="false"
                 android:scaleType="centerInside"
-                android:src="@drawable/list_item_icon_see" />
+                android:src="@mipmap/list_item_icon_see" />
 
             <TextView
                 android:id="@+id/mf_see_num"
@@ -136,7 +136,7 @@
                 android:contentDescription="@string/main_mine"
                 android:focusable="false"
                 android:scaleType="centerInside"
-                android:src="@drawable/list_item_icon_comment" />
+                android:src="@mipmap/list_item_icon_comment" />
 
             <TextView
                 android:id="@+id/mf_comment_num"
@@ -165,7 +165,7 @@
                 android:contentDescription="@string/main_mine"
                 android:focusable="false"
                 android:scaleType="centerInside"
-                android:src="@drawable/list_item_icon_like_nor" />
+                android:src="@mipmap/list_item_icon_like_nor" />
 
             <TextView
                 android:id="@+id/mf_like_num"

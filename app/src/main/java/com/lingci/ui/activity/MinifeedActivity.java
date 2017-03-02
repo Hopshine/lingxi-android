@@ -2,6 +2,7 @@ package com.lingci.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,7 +34,6 @@ import com.lingci.common.util.ViewHolder;
 import com.lingci.common.view.CustomProgressDialog;
 import com.lingci.common.view.MyListView;
 import com.lingci.common.view.MyScrollView;
-import com.lingci.common.view.RoundImageView;
 import com.lingci.emojicon.EmojiconEditText;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Comments;
@@ -65,7 +65,7 @@ public class MinifeedActivity extends BaseActivity {
     private MyListView mflistView;
     private MyScrollView scroll;
     private CommentAdapter cmtAdapter;
-    private RoundImageView user_img;
+    private ImageView user_img;
     private TextView tv_uname;
     private TextView pl_time;
     private EmojiconTextView lc_info;
@@ -96,7 +96,7 @@ public class MinifeedActivity extends BaseActivity {
     }
 
     private void initFindView() {
-        user_img = (RoundImageView) findViewById(R.id.user_img);
+        user_img = (ImageView) findViewById(R.id.user_img);
         tv_uname = (TextView) findViewById(R.id.tv_uname);
         pl_time = (TextView) findViewById(R.id.pl_time);
         lc_info = (EmojiconTextView) findViewById(R.id.lc_info);
@@ -120,11 +120,11 @@ public class MinifeedActivity extends BaseActivity {
         mf_comment_num.setText(String.valueOf(mf.cmtnum));
         mf_like_num.setText(String.valueOf(mf.likenum));
         if (mf.islike) {
-            mf_like_icon.setImageResource(R.drawable.list_item_icon_like);
+            mf_like_icon.setImageResource(R.mipmap.list_item_icon_like);
             mf_like.setClickable(false);
             mf_like.setEnabled(false);
         } else {
-            mf_like_icon.setImageResource(R.drawable.list_item_icon_like_nor);
+            mf_like_icon.setImageResource(R.mipmap.list_item_icon_like_nor);
             mf_like.setClickable(true);
             mf_like.setEnabled(true);
         }
@@ -147,7 +147,7 @@ public class MinifeedActivity extends BaseActivity {
 
     private void init() {
         savename = SPUtils.getInstance(MinifeedActivity.this).getString("username", "");
-        loadingProgress = new CustomProgressDialog(this, "加载评论中...", R.anim.frame_loadin);
+        loadingProgress = new CustomProgressDialog(this, "加载评论中...", R.drawable.frame_loadin);
         commentList = new ArrayList<Comment>();
         tv_top = (TextView) this.findViewById(R.id.tv_top);
         lc_ruturn = (LinearLayout) this.findViewById(R.id.lc_ruturn);
@@ -156,7 +156,7 @@ public class MinifeedActivity extends BaseActivity {
         getCommentsnAsyncHttpPost(lcid);
         cmtAdapter = new CommentAdapter();
         mflistView.setAdapter(cmtAdapter);
-        setListViewHeightBasedOnChildren(mflistView);
+//        setListViewHeightBasedOnChildren(mflistView);
         scroll.smoothScrollTo(0, 0);
         lc_ruturn.setVisibility(View.VISIBLE);
         tv_top.setText("普通的动态");
@@ -198,14 +198,14 @@ public class MinifeedActivity extends BaseActivity {
                 switch (MSG_MODE) {
                     case MSG_COMMRNT:
                         //评论
-                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "评论中...", R.anim.frame_loadin);
+                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "评论中...", R.drawable.frame_loadin);
                         postAddComment(lcid, save_uname, msg);
                         cmt_edit.setText(null);
                         hideSoftInput(cmt_edit);
                         break;
                     case MSG_REPLY:
                         //回复
-                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "回复中...", R.anim.frame_loadin);
+                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "回复中...", R.drawable.frame_loadin);
                         String cmid = commentList.get(cmid_index).cmid + "";
                         postAddReply(cmid, save_uname, rp_name, msg);
                         cmt_edit.setText(null);
@@ -258,7 +258,7 @@ public class MinifeedActivity extends BaseActivity {
         });
     }
 
-    public void setUserImg(String name, String url, RoundImageView imgView) {
+    public void setUserImg(String name, String url, ImageView imgView) {
         if (name.equals(savename)) {
             Utils.setPersonImg(savename, imgView);
         } else {
@@ -268,7 +268,7 @@ public class MinifeedActivity extends BaseActivity {
                         .skipMemoryCache(true)
                         .into(imgView);
             } else {
-                imgView.setImageResource(R.drawable.userimg);
+                imgView.setImageResource(R.mipmap.userimg);
             }
         }
     }
@@ -409,6 +409,7 @@ public class MinifeedActivity extends BaseActivity {
      */
     public void getCommentsnAsyncHttpPost(String lcid) {
         loadingProgress.show();
+        Utils.setTime();
         OkHttpUtils.post()
                 .url(Api.Url + "/commentList")
                 .addParams("lcid", lcid)
@@ -421,21 +422,62 @@ public class MinifeedActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        loadingProgress.dismiss();
-                        Log.d(TAG, "onResponse: " + response);
-                        Comments comment = getComments(response);
-                        int tag = comment.ret;
-                        switch (tag) {
-                            case 0:
-                                commentList = comment.data.cmtlist;
-                                cmtAdapter.notifyDataSetChanged();
+                    public void onResponse(final String response, int id) {
+                        Utils.loadingTime(new Handler(), new Utils.OnLoading() {
+                            @Override
+                            public void onLoading() {
                                 loadingProgress.dismiss();
-                                break;
-                            default:
-                                break;
-                        }
-                        hideSoftInput(cmt_edit);
+                                Log.d(TAG, "onResponse: " + response);
+                                Comments comment = getComments(response);
+                                int tag = comment.ret;
+                                switch (tag) {
+                                    case 0:
+                                        commentList = comment.data.cmtlist;
+                                        cmtAdapter.notifyDataSetChanged();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                hideSoftInput(cmt_edit);
+                            }
+                        });
+
+                        /**
+                        final long time = Utils.getTime();
+                        Log.d(TAG, "time: " + time);
+                        if (time < 1500)
+                            handler = new Handler();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep((1500 - time));
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // 在这里进行UI操作
+                                            handler = null;
+                                            loadingProgress.dismiss();
+                                            Log.d(TAG, "onResponse: " + response);
+                                            Comments comment = getComments(response);
+                                            int tag = comment.ret;
+                                            switch (tag) {
+                                                case 0:
+                                                    commentList = comment.data.cmtlist;
+                                                    cmtAdapter.notifyDataSetChanged();
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                            hideSoftInput(cmt_edit);
+                                        }
+                                    });
+                                }
+                            }).start();
+                         */
                     }
                 });
     }
@@ -466,7 +508,7 @@ public class MinifeedActivity extends BaseActivity {
                 LayoutInflater inflater = LayoutInflater.from(MinifeedActivity.this);
                 convertView = inflater.inflate(R.layout.mf_comment_item, null);
             }
-            RoundImageView mfuser_img = ViewHolder.get(convertView, R.id.cmuser_img);
+            ImageView mfuser_img = ViewHolder.get(convertView, R.id.cmuser_img);
             TextView cm_uname = ViewHolder.get(convertView, R.id.cm_uname);
             TextView cm_time = ViewHolder.get(convertView, R.id.cm_time);
             EmojiconTextView cm_comment = ViewHolder.get(convertView, R.id.comment);

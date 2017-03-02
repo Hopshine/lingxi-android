@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.lingci.R;
 
 /**
+ * Moe
  * Created by bafsj on 16/1/21.
  */
 public class MoeToast {

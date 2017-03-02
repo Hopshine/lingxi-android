@@ -15,6 +15,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,6 @@ import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
-import com.lingci.common.view.RoundImageView;
 import com.lingci.module.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -52,7 +52,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     @BindView(R.id.tv_top)
     TextView tv_top;
     @BindView(R.id.person_img)
-    RoundImageView person_img;
+    ImageView person_img;
     @BindView(R.id.person_name)
     TextView person_name;
     private Bitmap bitmap;
@@ -70,8 +70,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     }
 
     private void init() {
-//		person_img = (RoundImageView) findViewById(R.id.person_img);
-        loadingProgress = new CustomProgressDialog(this, "修改头像中...", R.anim.frame_loadin);
+//		person_img = (ImageView) findViewById(R.id.person_img);
+        loadingProgress = new CustomProgressDialog(this, "修改头像中...", R.drawable.frame_loadin);
         lc_ruturn.setVisibility(View.VISIBLE);
         lc_ruturn.setOnClickListener(this);
         person_img.setOnClickListener(this);

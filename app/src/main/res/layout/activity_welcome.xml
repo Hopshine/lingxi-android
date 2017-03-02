@@ -11,13 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/id53565769" />
+        android:src="@mipmap/id53565769" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="100dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/lingciabout" />
+        android:src="@mipmap/lingciabout" />
 
 </LinearLayout>
