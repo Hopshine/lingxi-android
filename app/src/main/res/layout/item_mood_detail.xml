@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/mood_card"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#ffffff"
+              android:descendantFocusability="blocksDescendants"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/mood_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="0dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/user_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/userimg"/>
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/user_img"
+                android:text="@string/app_name"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/mood_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_name"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@id/user_img"
+                android:text="@string/app_name"/>
+
+            <ImageView
+                android:id="@+id/lc_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/icon_home_chat"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <com.lingci.emojicon.EmojiconTextView
+            android:id="@+id/mood_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="3dp"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="2dp"
+            android:text="@string/app_name"
+            android:textSize="16sp"
+            emojicon:emojiconAlignment="baseline"
+            emojicon:emojiconSize="28sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_marginTop="@dimen/view_margin"
+            android:background="#ededed"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/item_mood_action" />
+
+    <LinearLayout
+        android:id="@+id/like_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="#f2f2f2"
+        android:paddingBottom="@dimen/mini_padding"
+        android:paddingTop="@dimen/mini_padding"
+        android:paddingLeft="@dimen/mini_padding"
+        android:paddingRight="@dimen/common_padding"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:contentDescription="@string/main_mine"
+            android:focusable="false"
+            android:scaleType="centerInside"
+            android:src="@mipmap/list_item_icon_like"/>
+
+        <TextView
+            android:id="@+id/like_people"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="零次、十兵卫"
+            android:textColor="#4FC1E9"/>
+
+        <TextView
+            android:id="@+id/like_feel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="觉得很赞"/>
+
+    </LinearLayout>
+
+</LinearLayout>

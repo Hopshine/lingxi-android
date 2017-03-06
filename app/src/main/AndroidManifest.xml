@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lingci" >
+          package="com.lingci">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".common.BaseApplication"
@@ -13,19 +13,21 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:logo="@android:color/transparent"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.WelcomeActivity"
-            android:theme="@style/AppTheme.Fullscreen" >
+            android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LoginActivity"/>
         <activity android:name=".ui.activity.RegisterActivity"/>
         <activity android:name=".ui.activity.UpdatePwdActivity"/>
-        <activity android:name=".ui.activity.MainActivity"
+        <activity
+            android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.MinifeedActivity"/>
         <activity android:name=".ui.activity.PersonalInfoActivity"/>
@@ -37,18 +39,23 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="com.lingci"
                     android:pathPrefix="/conversation/"
-                    android:scheme="rong" />
+                    android:scheme="rong"/>
             </intent-filter>
         </activity>
 
         <meta-data
             android:name="LINGCI_APP_KEY"
-            android:value="CqYt2014Xyz" />
+            android:value="CqYt2014Xyz"/>
+
+        <activity android:name=".module.mood.PublishActivity">
+        </activity>
     </application>
 
 </manifest>

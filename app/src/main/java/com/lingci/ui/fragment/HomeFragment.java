@@ -5,8 +5,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,6 +41,7 @@ import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.MiniFeeds;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed.Like;
+import com.lingci.module.mood.PublishActivity;
 import com.lingci.ui.activity.MinifeedActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -46,6 +49,8 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -53,7 +58,8 @@ import okhttp3.Call;
 
 public class HomeFragment extends Fragment {
 
-    private TextView tv_top;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     private PullToRefreshListView pullToRefresh;
     private MiniFeeds minifeed;
     private List<MiniFeed> minifeeds;
@@ -68,16 +74,29 @@ public class HomeFragment extends Fragment {
     private Handler handler = new Handler();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, view);
         init(view);
         return view;
     }
 
     private void init(View view) {
-        tv_top = (TextView) view.findViewById(R.id.tv_top);
-        tv_top.setText("普通的首页");
+        mToolbar.setTitle("普通的首页");
+        mToolbar.setTitleTextAppearance(getContext(), R.style.AppTextAppearance);
+        mToolbar.inflateMenu(R.menu.menu_publish);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_share:
+                        startActivity(new Intent(getActivity(), PublishActivity.class));
+                        break;
+                }
+                return false;
+            }
+        });
+
         savename = SPUtils.getInstance(getActivity()).getString("username", "");
         minifeeds = new ArrayList<>();
         lcids = new ArrayList<>();

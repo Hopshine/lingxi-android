@@ -70,6 +70,9 @@
     <string name="toast_uped_ok">修改密码成功</string>
     <string name="toast_getmf_error">获取动态失败</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!-- painted eggshell -->
 
 </resources>

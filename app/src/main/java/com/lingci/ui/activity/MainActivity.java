@@ -15,6 +15,7 @@ import com.lingci.common.Constants;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.module.BaseActivity;
+import com.lingci.module.main.MoodFragment;
 import com.lingci.ui.fragment.HomeFragment;
 import com.lingci.ui.fragment.MessageFragment;
 import com.lingci.ui.fragment.MineFragment;
@@ -39,6 +40,8 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private ShareFragment sharefragment;
     private MessageFragment messagefragment;
     private MineFragment minefragment;
+
+    private MoodFragment mMoodFragment;
 
     private String exit = "MM";
 
@@ -108,12 +111,20 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                 transaction.show(homefragment);
             }
         } else if (index == 1) {
+            if (mMoodFragment == null){
+                mMoodFragment = MoodFragment.newInstance("", "");
+                transaction.add(R.id.fragment_container, mMoodFragment);
+            } else {
+                transaction.show(mMoodFragment);
+            }
+            /**
             if (sharefragment == null) {
                 sharefragment = new ShareFragment();
                 transaction.add(R.id.fragment_container, sharefragment);
             } else {
                 transaction.show(sharefragment);
             }
+             */
         } else if (index == 2) {
             if (messagefragment == null) {
                 messagefragment = new MessageFragment();
@@ -148,6 +159,9 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         }
         if (minefragment != null) {
             transaction.hide(minefragment);
+        }
+        if (mMoodFragment != null) {
+            transaction.hide(mMoodFragment);
         }
     }
 
