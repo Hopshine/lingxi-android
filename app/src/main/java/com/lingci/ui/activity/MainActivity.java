@@ -19,7 +19,6 @@ import com.lingci.module.main.MoodFragment;
 import com.lingci.ui.fragment.HomeFragment;
 import com.lingci.ui.fragment.MessageFragment;
 import com.lingci.ui.fragment.MineFragment;
-import com.lingci.ui.fragment.ShareFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +36,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private long mExitTime = 0;
     private FragmentManager fragmentManager;
     private HomeFragment homefragment;
-    private ShareFragment sharefragment;
     private MessageFragment messagefragment;
     private MineFragment minefragment;
 
@@ -117,14 +115,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
             } else {
                 transaction.show(mMoodFragment);
             }
-            /**
-            if (sharefragment == null) {
-                sharefragment = new ShareFragment();
-                transaction.add(R.id.fragment_container, sharefragment);
-            } else {
-                transaction.show(sharefragment);
-            }
-             */
         } else if (index == 2) {
             if (messagefragment == null) {
                 messagefragment = new MessageFragment();
@@ -150,9 +140,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private void hideFragments(FragmentTransaction transaction) {
         if (homefragment != null) {
             transaction.hide(homefragment);
-        }
-        if (sharefragment != null) {
-            transaction.hide(sharefragment);
         }
         if (messagefragment != null) {
             transaction.hide(messagefragment);

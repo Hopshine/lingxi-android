@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".module.mood.PublishActivity">
 
     <include layout="@layout/toolbar"/>
 
     <com.lingci.emojicon.EmojiconEditText
-        android:id="@+id/share_lc_info"
+        android:id="@+id/mood_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:background="#ffffff"
         android:gravity="top|left"
         android:hint="@string/hint_share"
         android:inputType="textMultiLine"
-        android:maxLength="240"
+        android:lineSpacingExtra="3dp"
         android:maxHeight="233dp"
+        android:maxLength="240"
         android:minHeight="123dp"
         android:padding="7dp"
-        app:emojiconSize="28sp"
-        android:lineSpacingExtra="3dp"
-        android:scrollHorizontally="false" />
+        android:scrollHorizontally="false"
+        app:emojiconSize="28sp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="公开的"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:id="@+id/iv_submit"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="@dimen/view_padding"
+            android:layout_alignParentRight="true"
             android:src="@mipmap/icon_publish"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:layout_margin="10dp"
+        android:elevation="0dp"
         android:padding="6dp"/>
 </LinearLayout>
