@@ -1,4 +1,4 @@
-package com.lingci.module.main;
+package com.lingci.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

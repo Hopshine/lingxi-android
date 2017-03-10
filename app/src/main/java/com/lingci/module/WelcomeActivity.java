@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,14 +9,15 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.lingci.R;
 import com.lingci.common.Api;
+import com.lingci.common.BaseApplication;
 import com.lingci.common.Constants;
+import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
+import com.lingci.common.util.ToastUtil;
 import com.lingci.common.util.Utils;
 import com.lingci.entity.Users;
-import com.lingci.common.BaseApplication;
-import com.lingci.module.BaseActivity;
-import com.lingci.common.util.MoeToast;
-import com.lingci.common.util.ToastUtil;
+import com.lingci.module.main.MainActivity;
+import com.lingci.module.member.LoginActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

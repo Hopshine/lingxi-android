@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.member;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.view.CustomProgressDialog;
 import com.lingci.module.BaseActivity;
+import com.lingci.module.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

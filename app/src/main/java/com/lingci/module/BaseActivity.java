@@ -10,7 +10,7 @@ import com.lingci.R;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public static final String TAG = "lc";
+    public static final String TAG = "lcDev";
 
     /**
      * setupToolbar

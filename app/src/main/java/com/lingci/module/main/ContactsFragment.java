@@ -1,4 +1,4 @@
-package com.lingci.ui.fragment;
+package com.lingci.module.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

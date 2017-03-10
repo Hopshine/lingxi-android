@@ -1,4 +1,4 @@
-package com.lingci.ui.adapter;
+package com.lingci.adapter;
 
 import android.content.Context;
 import android.view.View;

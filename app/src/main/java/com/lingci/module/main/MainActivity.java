@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.main;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,10 +15,6 @@ import com.lingci.common.Constants;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.module.BaseActivity;
-import com.lingci.module.main.MoodFragment;
-import com.lingci.ui.fragment.HomeFragment;
-import com.lingci.ui.fragment.MessageFragment;
-import com.lingci.ui.fragment.MineFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,10 +32,9 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private long mExitTime = 0;
     private FragmentManager fragmentManager;
     private HomeFragment homefragment;
+    private MoodFragment mMoodFragment;
     private MessageFragment messagefragment;
     private MineFragment minefragment;
-
-    private MoodFragment mMoodFragment;
 
     private String exit = "MM";
 

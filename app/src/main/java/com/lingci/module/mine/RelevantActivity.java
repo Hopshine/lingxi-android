@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +34,7 @@ import com.lingci.entity.MiniFeeds.Data.MiniFeed;
 import com.lingci.entity.UnReadMf;
 import com.lingci.entity.UnReadMf.Data.Unread;
 import com.lingci.module.BaseActivity;
+import com.lingci.module.mood.MinifeedActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

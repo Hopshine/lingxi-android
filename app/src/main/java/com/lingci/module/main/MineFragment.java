@@ -1,4 +1,4 @@
-package com.lingci.ui.fragment;
+package com.lingci.module.main;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -25,10 +25,10 @@ import com.lingci.common.Api;
 import com.lingci.common.Constants;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
-import com.lingci.ui.activity.AboutActivity;
-import com.lingci.ui.activity.LoginActivity;
-import com.lingci.ui.activity.PersonalInfoActivity;
-import com.lingci.ui.activity.RelevantActivity;
+import com.lingci.module.member.LoginActivity;
+import com.lingci.module.mine.PersonalInfoActivity;
+import com.lingci.module.mine.RelevantActivity;
+import com.lingci.module.setting.AboutActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -103,11 +103,7 @@ public class MineFragment extends Fragment implements OnClickListener {
             mine_aet.setCompoundDrawables(mine_item_aet, null, mine_unread_right, null);
         }
 
-        if (uname == "" || uname.length() == 0) {
-            tv_uname.setText(null);
-        } else {
-            tv_uname.setText(uname);
-        }
+        tv_uname.setText(uname);
         Utils.setPersonImg(uname, user_img);
     }
 

@@ -1,4 +1,4 @@
-package com.lingci.ui.fragment;
+package com.lingci.module.main;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lingci.R;
-import com.lingci.ui.adapter.ConversationListAdapterEx;
+import com.lingci.adapter.ConversationListAdapterEx;
 
 import io.rong.imkit.RongContext;
 import io.rong.imkit.fragment.ConversationListFragment;

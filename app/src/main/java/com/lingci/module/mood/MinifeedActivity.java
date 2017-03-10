@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.mood;
 
 import android.content.Context;
 import android.os.Bundle;

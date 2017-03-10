@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.mine;
 
 import android.app.Activity;
 import android.app.Dialog;

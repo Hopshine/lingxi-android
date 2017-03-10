@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.conversation;
 
 import android.content.Intent;
 import android.net.Uri;

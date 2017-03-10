@@ -1,4 +1,4 @@
-package com.lingci.ui.activity;
+package com.lingci.module.setting;
 
 import android.os.Bundle;
 import android.view.View;

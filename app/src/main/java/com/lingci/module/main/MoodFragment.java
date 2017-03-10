@@ -2,16 +2,18 @@ package com.lingci.module.main;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lingci.R;
+import com.lingci.adapter.MoodAdapter;
 import com.lingci.entity.Mood;
+import com.lingci.module.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,12 @@ import butterknife.ButterKnife;
 /**
  * 用户心情列表
  */
-public class MoodFragment extends Fragment {
+public class MoodFragment extends BaseFragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     private String mParam1;
     private String mParam2;
@@ -70,6 +74,7 @@ public class MoodFragment extends Fragment {
     }
 
     private void init() {
+        setupToolbar(mToolbar, "圈子", 0, null);
         mList.add(new Mood());
         mList.add(new Mood());
         mList.add(new Mood());

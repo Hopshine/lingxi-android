@@ -1,4 +1,4 @@
-package com.lingci.ui.fragment;
+package com.lingci.module.main;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -42,7 +42,7 @@ import com.lingci.entity.MiniFeeds;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed.Like;
 import com.lingci.module.mood.PublishActivity;
-import com.lingci.ui.activity.MinifeedActivity;
+import com.lingci.module.mood.MinifeedActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

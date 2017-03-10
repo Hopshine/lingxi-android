@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff"
-    tools:context=".ui.activity.MinifeedActivity" >
+    tools:context=".module.mood.MinifeedActivity" >
 
     <include layout="@layout/base_app_title" />
 
