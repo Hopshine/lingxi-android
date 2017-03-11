@@ -2,12 +2,12 @@ package com.lingci.module.member;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lingci.R;
@@ -24,14 +24,21 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import okhttp3.Call;
 
 public class LoginActivity extends BaseActivity {
 
-    private TextView tv_top;
-    private EditText userName, userPwd;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.username)
+    EditText mUsername;
+    @BindView(R.id.password)
+    EditText mPassword;
+
     private String saveuname;
     private long mExitTime = 0;
     private CustomProgressDialog loginProgress;
@@ -40,28 +47,24 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        tv_top = (TextView) this.findViewById(R.id.tv_top);
-        userName = (EditText) this.findViewById(R.id.username);
-        userPwd = (EditText) this.findViewById(R.id.password);
         String savename = SPUtils.getInstance(this).getString("username", "");
-        tv_top.setText(R.string.title_bar_login);
+        mToolbar.setTitle(R.string.title_bar_login);
 
         int x = (int) (Math.random() * 6) + 1;
-        if (x == 5) {
-//			ToastUtil.showSingleton(this, "从哪里来到哪里去？你明白吗？");
-            MoeToast.makeText(this, "从哪里来到哪里去？你明白吗？");
-        }
-        userName.setText(savename);
-        userName.setSelection(savename.length());
+        if (x == 5) MoeToast.makeText(this, "从哪里来到哪里去？你明白吗？");
+
+        mUsername.setText(savename);
+        mUsername.setSelection(savename.length());
     }
 
     public void login(View view) {
-        String uname = userName.getText().toString();
-        String upwd = userPwd.getText().toString();
+        String uname = mUsername.getText().toString().trim();
+        String upwd = mPassword.getText().toString().trim();
         loginProgress = new CustomProgressDialog(this, R.string.dialog_loading_lg, R.drawable.frame_loadin);
         if (!TextUtils.isEmpty(uname) && !TextUtils.isEmpty(upwd)) {
             postLogin(uname, upwd);

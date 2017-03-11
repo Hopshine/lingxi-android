@@ -1,17 +1,24 @@
 package com.lingci.module.setting;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lingci.R;
-import com.lingci.module.BaseActivity;
 import com.lingci.common.util.MoeToast;
+import com.lingci.module.BaseActivity;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AboutActivity extends BaseActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.about_info)
+    WebView mAboutInfo;
 
     private LinearLayout lc_ruturn;
     private TextView tv_top;
@@ -21,27 +28,17 @@ public class AboutActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        lc_ruturn = (LinearLayout) findViewById(R.id.lc_ruturn);
-        tv_top = (TextView) findViewById(R.id.tv_top);
-        about_info = (WebView) findViewById(R.id.about_info);
-        lc_ruturn.setVisibility(View.VISIBLE);
-        tv_top.setText("关于普通的APP");
+        setupToolbar(mToolbar, "关于普通的APP", true, 0, null);
         int x = (int) (Math.random() * 3) + 1;
         if (x == 1) {
             MoeToast.makeText(this, "据说这APP隐藏着一个不为人知的秘密！");
         }
-        about_info.loadUrl(" file:///android_asset/about.html");
-        lc_ruturn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        mAboutInfo.loadUrl(" file:///android_asset/about.html");
     }
 
 }

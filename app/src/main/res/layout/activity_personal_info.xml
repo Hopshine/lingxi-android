@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     android:orientation="vertical"
-    tools:context=".ui.activity.PersonalInfoActivity" >
+    tools:context=".module.mine.PersonalInfoActivity" >
 
-    <include layout="@layout/base_app_title" />
+    <include layout="@layout/toolbar" />
 
     <com.lingci.common.view.MyScrollView
         android:layout_width="match_parent"

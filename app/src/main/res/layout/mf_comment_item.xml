@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ffffff"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingRight="10dp"
-    android:paddingTop="10dp"
-    android:descendantFocusability="blocksDescendants">
+    android:paddingTop="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/cmuser_img"
@@ -20,7 +21,7 @@
             android:layout_height="43dp"
             android:layout_marginRight="12dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/userimg" />
+            android:src="@mipmap/userimg"/>
 
         <TextView
             android:id="@+id/cm_uname"
@@ -29,7 +30,7 @@
             android:layout_marginTop="3dp"
             android:layout_toRightOf="@id/cmuser_img"
             android:text="@string/app_name"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/cm_time"
@@ -40,40 +41,39 @@
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/cmuser_img"
             android:text="@string/app_name"
-            android:textSize="10sp" />
+            android:textSize="10sp"/>
 
         <com.lingci.emojicon.EmojiconTextView
             android:id="@+id/comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/cm_time"
-            android:textSize="16sp"
-            emojicon:emojiconAlignment="baseline"
-            emojicon:emojiconSize="28sp"
-            android:lineSpacingExtra="3dp"
             android:layout_marginLeft="-3dp"
             android:layout_marginTop="3dp"
             android:layout_toRightOf="@id/cmuser_img"
-            android:text="我就是评论,爱我你怕了没，反正我的就是要任性的发很多才行，不然对不起这个文本是不是啊" />
+            android:lineSpacingExtra="3dp"
+            android:text="我就是评论,爱我你怕了没，反正我的就是要任性的发很多才行，不然对不起这个文本是不是啊"
+            android:textSize="16sp"
+            emojicon:emojiconAlignment="baseline"
+            emojicon:emojiconSize="28sp"/>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <View
             android:layout_width="65dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <com.lingci.common.view.MyListView
             android:id="@+id/cm_reply_list"
             android:layout_width="0dp"
-            android:divider="@null"
-            android:fadingEdge="none"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
-        </com.lingci.common.view.MyListView>
+            android:layout_weight="1"
+            android:divider="@null"
+            android:fadingEdge="none"/>
     </LinearLayout>
 
 </LinearLayout>

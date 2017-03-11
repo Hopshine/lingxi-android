@@ -5,9 +5,9 @@
     android:background="#ffffff"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".ui.activity.RegisterActivity" >
+    tools:context=".module.member.RegisterActivity" >
 
-    <include layout="@layout/base_app_title" />
+    <include layout="@layout/toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             android:background="#dcdcdc" />
 
         <EditText
-            android:id="@+id/dopassword"
+            android:id="@+id/do_password"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"

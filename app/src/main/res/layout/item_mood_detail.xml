@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:emojicon="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/mood_card"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="#ffffff"
-              android:descendantFocusability="blocksDescendants"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mood_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/mood_body"
@@ -82,18 +83,18 @@
 
     </LinearLayout>
 
-    <include layout="@layout/item_mood_action" />
+    <include layout="@layout/item_mood_action"/>
 
     <LinearLayout
         android:id="@+id/like_window"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:background="#f2f2f2"
+        android:gravity="center_vertical"
         android:paddingBottom="@dimen/mini_padding"
-        android:paddingTop="@dimen/mini_padding"
         android:paddingLeft="@dimen/mini_padding"
         android:paddingRight="@dimen/common_padding"
+        android:paddingTop="@dimen/mini_padding"
         android:visibility="visible">
 
         <ImageView

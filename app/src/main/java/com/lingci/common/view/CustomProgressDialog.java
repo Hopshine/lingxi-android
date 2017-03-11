@@ -15,24 +15,22 @@ import com.lingci.R;
 public class CustomProgressDialog extends ProgressDialog {
 
 	private AnimationDrawable mAnimation;
-	// private Context mContext;
 	private ImageView mImageView;
 	private CharSequence mLoadingTip;
 	private TextView mLoadingTv;
 	private int mResid;
 
-	
-	public CustomProgressDialog(Context context, int tipid, int id) {
-		super(context);
-		// this.mContext = context;
-		this.mLoadingTip = context.getResources().getText(tipid);
-		this.mResid = id;
-		setCanceledOnTouchOutside(true);
+
+	public CustomProgressDialog(Context context, int tipId, int id) {
+		this(context, context.getResources().getString(tipId), id);
 	}
-	
+
 	public  CustomProgressDialog(Context context, CharSequence tip, int id) {
-		super(context);
-		// this.mContext = context;
+        this(context, R.style.dialog, tip, id);
+	}
+
+	public CustomProgressDialog(Context context, int theme, CharSequence tip, int id) {
+		super(context, theme);
 		this.mLoadingTip = tip;
 		this.mResid = id;
 		setCanceledOnTouchOutside(true);
@@ -41,12 +39,13 @@ public class CustomProgressDialog extends ProgressDialog {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initView();
-		initData();
+        setContentView(R.layout.progress_dialog);
+		init();
 	}
 
-	private void initData() {
-
+	private void init() {
+        mLoadingTv = (TextView) findViewById(R.id.loadingTv);
+        mImageView = (ImageView) findViewById(R.id.loadingIv);
 		mImageView.setBackgroundResource(mResid);
 		// 通过ImageView对象拿到背景显示的AnimationDrawable
 		mAnimation = (AnimationDrawable) mImageView.getBackground();
@@ -63,12 +62,6 @@ public class CustomProgressDialog extends ProgressDialog {
 	
 	public void setContent(CharSequence str) {
 		mLoadingTv.setText(str);
-	}
-
-	private void initView() {
-		setContentView(R.layout.progress_dialog);
-		mLoadingTv = (TextView) findViewById(R.id.loadingTv);
-		mImageView = (ImageView) findViewById(R.id.loadingIv);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -47,14 +48,14 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     private static final int RESULT_REQUEST_CODE = 2;
     private static final int CAMRMA = 0X12;
     private static final int PIC = 0x01;
-    @BindView(R.id.lc_ruturn)
-    LinearLayout lc_ruturn;
-    @BindView(R.id.tv_top)
-    TextView tv_top;
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.person_img)
-    ImageView person_img;
+    ImageView mPersonImg;
     @BindView(R.id.person_name)
-    TextView person_name;
+    TextView mPersonName;
+
     private Bitmap bitmap;
     private String savename;
     private String imgStr;
@@ -70,33 +71,26 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     }
 
     private void init() {
-//		person_img = (ImageView) findViewById(R.id.person_img);
+        setupToolbar(mToolbar, "个人信息", true, 0, null);
         loadingProgress = new CustomProgressDialog(this, "修改头像中...", R.drawable.frame_loadin);
-        lc_ruturn.setVisibility(View.VISIBLE);
-        lc_ruturn.setOnClickListener(this);
-        person_img.setOnClickListener(this);
-        tv_top.setText("个人信息");
+        mPersonImg.setOnClickListener(this);
 
         int x = (int) (Math.random() * 5) + 1;
         if (x == 1) {
-//			ToastUtil.showSingleton(this, "是谁，是谁在哪里？");
             MoeToast.makeText(this, "是谁，是谁在那里？");
         }
         savename = SPUtils.getInstance(PersonalInfoActivity.this).getString("username", "");
-        person_name.setText(savename);
+        mPersonName.setText(savename);
         fileDir = new File(Environment.getExternalStorageDirectory() + "/lingci/image/avatar");
         if (!fileDir.exists()) {
             fileDir.mkdirs(); // 如果该目录不存在,则创建一个这样的目录
         }
-        Utils.setPersonImg(savename, person_img);
+        Utils.setPersonImg(savename, mPersonImg);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lc_ruturn:
-                onBackPressed();
-                break;
             case R.id.person_img:
                 final Dialog dialog = new Dialog(PersonalInfoActivity.this, R.style.dialog);
                 dialog.setContentView(R.layout.photo_camera_dialog);
@@ -218,7 +212,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         if (extras != null) {
             bitmap = extras.getParcelable("data");
             savePic(bitmap);
-            person_img.setImageBitmap(bitmap);
+            mPersonImg.setImageBitmap(bitmap);
             imgStr = Bitmap2StrByBase64(bitmap);
             Intent intent = new Intent();
             intent.setAction(Constants.UPDATE_USERIMG);

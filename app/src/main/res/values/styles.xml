@@ -33,11 +33,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
     
-    <style name="dialog_undim" parent="@android:style/Theme.Dialog">
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/transparent</item>
+    <style name="dialog.unDim" parent="dialog">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@null</item>

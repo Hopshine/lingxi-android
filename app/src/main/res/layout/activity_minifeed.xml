@@ -7,7 +7,7 @@
     android:background="#ffffff"
     tools:context=".module.mood.MinifeedActivity" >
 
-    <include layout="@layout/base_app_title" />
+    <include layout="@layout/toolbar" />
 
     <FrameLayout
         android:layout_width="match_parent"

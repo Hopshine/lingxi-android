@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-    <include layout="@layout/base_app_title"/>
+    <include layout="@layout/toolbar"/>
 
     <com.lingci.common.view.MyScrollView
         android:layout_width="match_parent"

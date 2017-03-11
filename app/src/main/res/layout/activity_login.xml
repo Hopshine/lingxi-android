@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context=".ui.activity.LoginActivity" >
+    tools:context=".module.member.LoginActivity" >
 
-    <include layout="@layout/base_app_title" />
+    <include layout="@layout/toolbar" />
 
     <ImageView
         android:layout_width="wrap_content"

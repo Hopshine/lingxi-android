@@ -2,17 +2,17 @@ package com.lingci.module.member;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lingci.R;
 import com.lingci.common.Api;
-import com.lingci.module.BaseActivity;
 import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.module.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -22,36 +22,43 @@ import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 
 public class RegisterActivity extends BaseActivity {
 
-    private EditText userName, userPwd, doUserPwd, userPhone;
-    private TextView tv_top;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.username)
+    EditText mUsername;
+    @BindView(R.id.password)
+    EditText mPassword;
+    @BindView(R.id.do_password)
+    EditText mDoPassword;
+    @BindView(R.id.phone)
+    EditText mPhone;
+
     private CustomProgressDialog registerProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registe);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        tv_top = (TextView) this.findViewById(R.id.tv_top);
-        userName = (EditText) this.findViewById(R.id.username);
-        userPwd = (EditText) this.findViewById(R.id.password);
-        doUserPwd = (EditText) this.findViewById(R.id.dopassword);
-        userPhone = (EditText) this.findViewById(R.id.phone);
-        tv_top.setText(R.string.title_bar_reg);
+        mToolbar.setTitle(R.string.title_bar_reg);
     }
 
     public void goRegister(View view) {
         registerProgress = new CustomProgressDialog(this, R.string.dialog_loading_reg, R.drawable.frame_loadin);
-        String uName = userName.getText().toString().trim();
-        String uPwd = userPwd.getText().toString().trim();
-        String uDoPwd = doUserPwd.getText().toString().trim();
-        String uPhone = userPhone.getText().toString().trim();
+        String uName = mUsername.getText().toString().trim();
+        String uPwd = mPassword.getText().toString().trim();
+        String uDoPwd = mDoPassword.getText().toString().trim();
+        String uPhone = mPhone.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
             Toast.makeText(this, R.string.toast_reg_null, Toast.LENGTH_SHORT).show();
         } else {
@@ -77,7 +84,6 @@ public class RegisterActivity extends BaseActivity {
      * @return 是或否
      */
     public static boolean isMobileNum(String mobiles) {
-
         Pattern p = Pattern.compile("1[34578]\\d{9}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
