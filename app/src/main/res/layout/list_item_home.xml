@@ -192,17 +192,10 @@
         android:visibility="visible">
 
         <TextView
-            android:id="@+id/like_feel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\u3000\u3000\u3000\u3000\u3000\u3000觉得很赞"/>
-
-        <TextView
             android:id="@+id/like_people"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="零次、十兵卫"
-            android:textColor="#4FC1E9"/>
+            android:text="零次、十兵卫觉得很赞"/>
     </RelativeLayout>
 
 </RelativeLayout>

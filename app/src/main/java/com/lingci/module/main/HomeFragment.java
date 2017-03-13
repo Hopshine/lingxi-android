@@ -32,6 +32,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lingci.R;
 import com.lingci.common.Api;
 import com.lingci.common.Constants;
+import com.lingci.common.util.ColorPhrase;
 import com.lingci.common.util.DateComparUtil;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
@@ -41,8 +42,8 @@ import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.MiniFeeds;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed;
 import com.lingci.entity.MiniFeeds.Data.MiniFeed.Like;
-import com.lingci.module.mood.PublishActivity;
 import com.lingci.module.mood.MinifeedActivity;
+import com.lingci.module.mood.PublishActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
     private PullToRefreshListView pullToRefresh;
     private MiniFeeds minifeed;
     private List<MiniFeed> minifeeds;
@@ -295,7 +297,6 @@ public class HomeFragment extends Fragment {
             final ImageView mf_like_icon = ViewHolder.get(convertView, R.id.mf_like_icon);
             RelativeLayout like_window = ViewHolder.get(convertView, R.id.like_window);
             TextView like_people = ViewHolder.get(convertView, R.id.like_people);
-            TextView like_feel = ViewHolder.get(convertView, R.id.like_feel);
 
             if (minifeeds != null) {
                 final MiniFeed mf = minifeeds.get(position);
@@ -330,8 +331,6 @@ public class HomeFragment extends Fragment {
                 }
                 List<Like> likes = mf.likelist;
                 String likeStr = getLikeStr(likes);
-                String length = getIndent(likeStr.length());
-                like_people.setText(likeStr);
                 switch (mf.likenum) {
                     case 0:
                         mf_like_num.setText("赞");
@@ -341,13 +340,16 @@ public class HomeFragment extends Fragment {
                     case 2:
                     case 3:
                         like_window.setVisibility(View.VISIBLE);
-                        like_feel.setText(length + "觉得很赞");
+                        likeStr = likeStr + "觉得很赞";
                         break;
                     default:
                         like_window.setVisibility(View.VISIBLE);
-                        like_feel.setText(length + "等" + mf.likenum + "人觉得很赞");
+                        likeStr = likeStr + "等" + mf.likenum + "人觉得很赞";
                         break;
                 }
+                //突出颜色
+                CharSequence chars = ColorPhrase.from(likeStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
+                like_people.setText(chars);
                 if (mf.uname.equals(savename)) {
                     Utils.setPersonImg(savename, user_img);
                 } else {
@@ -411,30 +413,12 @@ public class HomeFragment extends Fragment {
      */
     public String getLikeStr(List<Like> likes) {
         String likeStr = "";
-        switch (likes.size()) {
-            case 0:
-                break;
-            case 1:
-                likeStr = likes.get(0).uname;
-                break;
-            case 2:
-                likeStr = likes.get(0).uname + "、" + likes.get(1).uname;
-                break;
-            default:
-                likeStr = likes.get(0).uname + "、" + likes.get(1).uname + "、" + likes.get(2).uname;
-                break;
+        for (int i = 0; i < likes.size(); i++) {
+            if (i == 3) break;
+            likeStr = likeStr + "{" + likes.get(i).uname + "、}" + "";
         }
+        if (likes.size() > 0) likeStr = likeStr.substring(0, likeStr.length()-2) + "}";
         return likeStr;
     }
 
-    /**
-     * 获取缩进
-     */
-    public String getIndent(int lenght) {
-        String indent = "";
-        for (int i = 0; i < lenght; i++) {
-            indent = indent + "\u3000";
-        }
-        return indent;
-    }
 }

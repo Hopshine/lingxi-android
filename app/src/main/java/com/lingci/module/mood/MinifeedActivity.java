@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lingci.R;
 import com.lingci.common.Api;
+import com.lingci.common.util.ColorPhrase;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.util.ViewHolder;
@@ -54,7 +55,6 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 
 import static com.lingci.R.id.lc_info;
-import static com.lingci.R.id.like_feel;
 import static com.lingci.R.id.like_window;
 import static com.lingci.R.id.mf_comment;
 import static com.lingci.R.id.mf_comment_num;
@@ -98,8 +98,6 @@ public class MinifeedActivity extends BaseActivity {
     LinearLayout mMfLike;
     @BindView(R.id.btn_list)
     LinearLayout mBtnList;
-    @BindView(like_feel)
-    TextView mLikeFeel;
     @BindView(R.id.like_people)
     TextView mLikePeople;
     @BindView(like_window)
@@ -162,8 +160,6 @@ public class MinifeedActivity extends BaseActivity {
         lcid = mf.lcid + "";
         List<Like> likes = mf.likelist;
         String likeStr = getLikeStr(likes);
-        String length = getIndent(likeStr.length());
-        mLikePeople.setText(likeStr);
         switch (mf.likenum) {
             case 0:
                 mMfLikeNum.setText("赞");
@@ -171,9 +167,12 @@ public class MinifeedActivity extends BaseActivity {
                 break;
             default:
                 mLikeWindow.setVisibility(View.VISIBLE);
-                mLikeFeel.setText(length + "觉得很赞");
+                likeStr = likeStr + "觉得很赞";
                 break;
         }
+        //突出颜色
+        CharSequence chars = ColorPhrase.from(likeStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
+        mLikePeople.setText(chars);
     }
 
     private void init() {
@@ -294,6 +293,7 @@ public class MinifeedActivity extends BaseActivity {
     public void openSofInput(EditText edit) {
         edit.setText(null);
         edit.requestFocus();
+//        edit.setFocusable(true);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
@@ -301,18 +301,8 @@ public class MinifeedActivity extends BaseActivity {
      * 隐藏输入法
      */
     public void hideSoftInput(EditText edit) {
+//        edit.setFocusable(false);
         imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
-    }
-
-    /**
-     * 获取缩进
-     */
-    public String getIndent(int lenght) {
-        String indent = "";
-        for (int i = 0; i < lenght; i++) {
-            indent = indent + "\u3000";
-        }
-        return indent;
     }
 
     /**
@@ -322,9 +312,9 @@ public class MinifeedActivity extends BaseActivity {
         String likeStr = "";
         for (int i = 0; i < likes.size(); i++) {
             if (i == likes.size() - 1) {
-                likeStr = likeStr + likes.get(i).uname;
+                likeStr = likeStr + "{" + likes.get(i).uname + "}";
             } else {
-                likeStr = likeStr + likes.get(i).uname + "、";
+                likeStr = likeStr + "{" + likes.get(i).uname + "、}";
             }
         }
         return likeStr;
@@ -544,18 +534,14 @@ public class MinifeedActivity extends BaseActivity {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     MSG_MODE = MSG_REPLY;
-                    TextView rp_uname = (TextView) view.findViewById(R.id.rp_uname);
-                    String uname = rp_uname.getText().toString();
-//					if(uname.equals(save_uname)){
-                    /** 不支持自己搞自己 */
-//					}else{
-                    rp_name = uname;
-                    mCmtEdit.setHint("回复：" + rp_uname.getText());
+                    TextView rp_reply = (TextView) view.findViewById(R.id.reply);
+                    String replyStr = rp_reply.getText().toString();
+                    String uName = replyStr.substring(0, replyStr.indexOf("回复"));
+                    rp_name = uName;
+                    mCmtEdit.setHint("回复：" + uName);
                     openSofInput(mCmtEdit);
                     mMfMask.setVisibility(View.VISIBLE);
                     cmid_index = (Integer) parent.getTag();
-//						mCmtEdit.setText("cmid的索引"+cmid_index);
-//					}
                 }
             });
             return convertView;
@@ -567,7 +553,7 @@ public class MinifeedActivity extends BaseActivity {
      */
     private class ReplyAdapter extends BaseAdapter {
 
-        private ArrayList<Reply> replyList = new ArrayList<Reply>();
+        private ArrayList<Reply> replyList = new ArrayList<>();
 
         @SuppressWarnings("unchecked")
         public ReplyAdapter(ArrayList<Reply> replyList) {
@@ -596,14 +582,10 @@ public class MinifeedActivity extends BaseActivity {
                 convertView = inflater.inflate(R.layout.cmt_reply_itme, null);
             }
             EmojiconTextView rp_reply = ViewHolder.get(convertView, R.id.reply);
-            TextView rp_uname = ViewHolder.get(convertView, R.id.rp_uname);
-            TextView rp_touname = ViewHolder.get(convertView, R.id.rp_touname);
             Reply reply = replyList.get(position);
-            rp_uname.setText(reply.uname);
-            rp_touname.setText(reply.touname);
-            int length = reply.uname.length() + reply.touname.length() + 3;
-            String indent = getIndent(length);
-            rp_reply.setText(indent + reply.reply);
+            String replyStr = "{" + reply.uname + "}回复{" + reply.touname + "}：" + reply.reply;
+            CharSequence chars = ColorPhrase.from(replyStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
+            rp_reply.setText(chars);
             return convertView;
         }
 
