@@ -2,22 +2,21 @@ package com.lingci.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lingci.R;
 import com.lingci.common.Api;
-import com.lingci.common.util.ColorPhrase;
-import com.lingci.common.util.Utils;
 import com.lingci.emojicon.EmojiconTextView;
-import com.lingci.entity.Like;
-import com.lingci.entity.Mood;
+import com.lingci.entity.Evaluate;
+import com.lingci.entity.Reply;
 
 import java.util.List;
 
@@ -27,12 +26,12 @@ import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
- * Mood Adapter
+ * Evaluate Adapter
  */
-public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<Mood<Like>> mList;
+    private List<Evaluate<Reply>> mList;
 
     public static final int LOAD_MORE = 0;
     public static final int LOAD_PULL_TO = 1;
@@ -45,14 +44,14 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
-        void onItemClick(View view, Mood<Like> mood);
+        void onItemClick(View view, Evaluate<Reply> evaluate);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
         this.mOnItemListener = onItemListener;
     }
 
-    public MoodAdapter(Context context, List<Mood<Like>> list) {
+    public EvaluateAdapter(Context context, List<Evaluate<Reply>> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -73,8 +72,8 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View view = View.inflate(parent.getContext(), R.layout.item_footer, null);
             return new FooterViewHolder(view);
         } else {
-            View view = View.inflate(parent.getContext(), R.layout.item_mood_detail, null);
-            return new MoodViewHolder(view);
+            View view = View.inflate(parent.getContext(), R.layout.item_evaluate, null);
+            return new EvaluateViewHolder(view);
         }
     }
 
@@ -84,8 +83,8 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             footerViewHolder.bindItem();
         } else {
-            MoodViewHolder moodViewHolder = (MoodViewHolder) holder;
-            moodViewHolder.bindItem(mContext, mList.get(position));
+            EvaluateViewHolder evaluateViewHolder = (EvaluateViewHolder) holder;
+            evaluateViewHolder.bindItem(mContext, mList.get(position));
         }
     }
 
@@ -99,14 +98,9 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void updateData(List<Mood<Like>> data) {
+    public void updateData(List<Evaluate<Reply>> data) {
         mList.addAll(data);
-        mStatus = LOAD_PULL_TO;
         notifyDataSetChanged();
-    }
-
-    public void addLike(Mood<Like> mood){
-        mList.contains(mood);
     }
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
@@ -148,104 +142,48 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class MoodViewHolder extends RecyclerView.ViewHolder {
+    class EvaluateViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.evaluate_body)
+        RelativeLayout mEvaluateBody;
         @BindView(R.id.user_img)
         ImageView mUserImg;
         @BindView(R.id.user_name)
         TextView mUserName;
-        @BindView(R.id.mood_time)
-        TextView mMoodTime;
-        @BindView(R.id.lc_chat)
-        ImageView mLcChat;
-        @BindView(R.id.mood_info)
-        EmojiconTextView mMoodInfo;
-        @BindView(R.id.mood_body)
-        LinearLayout mMoodBody;
-        @BindView(R.id.mf_see_num)
-        TextView mMfSeeNum;
-        @BindView(R.id.mf_comment_num)
-        TextView mMfCommentNum;
-        @BindView(R.id.mf_comment)
-        LinearLayout mMfComment;
-        @BindView(R.id.mf_like_icon)
-        ImageView mMfLikeIcon;
-        @BindView(R.id.mf_like_num)
-        TextView mMfLikeNum;
-        @BindView(R.id.mf_like)
-        LinearLayout mMfLike;
-        @BindView(R.id.mood_action)
-        LinearLayout mMoodAction;
-        @BindView(R.id.like_people)
-        TextView mLikePeople;
-        @BindView(R.id.like_window)
-        LinearLayout mLikeWindow;
-        @BindView(R.id.mood_card)
-        LinearLayout mMoodCard;
-        private Mood<Like> mMood;
+        @BindView(R.id.evaluate_time)
+        TextView mEvaluateTime;
+        @BindView(R.id.evaluate_info)
+        EmojiconTextView mEvaluateInfo;
+        @BindView(R.id.recycler_view)
+        RecyclerView mRecyclerView;
+        private Evaluate<Reply> mEvaluate;
 
-        public MoodViewHolder(View itemView) {
+        public EvaluateViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(layoutManager);
         }
 
-        public void bindItem(Context context, Mood<Like> mood) {
-            mMood = mood;
-            //是否能够聊天
-            if (mood.isIm_ability()) mLcChat.setVisibility(View.VISIBLE);
-            else mLcChat.setVisibility(View.GONE);
-            //动态详情
+        public void bindItem(Context context, Evaluate<Reply> evaluate) {
+            mEvaluate = evaluate;
             Glide.with(context)
-                    .load(Api.Url + mood.getUrl())
+                    .load(Api.Url + evaluate.getUrl())
                     .skipMemoryCache(true)
                     .placeholder(R.mipmap.userimg)
                     .error(R.mipmap.userimg)
                     .bitmapTransform(new CropCircleTransformation(context))
                     .into(mUserImg);
-            mUserName.setText(mood.getUname());
-            mMoodTime.setText(mood.getPl_time());
-            mMoodInfo.setText(mood.getLc_info());
-            //查看评论点赞数
-            mMfSeeNum.setText(String.valueOf(mood.getViewnum()));
-            mMfCommentNum.setText(String.valueOf(mood.getCmtnum()));
-            mMfLikeNum.setText(String.valueOf(mood.getLikenum()));
-            //是否已经点赞
-            if (mood.islike()) {
-                mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like);
-                mMfLike.setClickable(false);
-                mMfLike.setEnabled(false);
-            } else {
-                mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like_nor);
-                mMfLike.setClickable(true);
-                mMfLike.setEnabled(true);
-            }
-            //点赞列表
-            String likeStr = Utils.getLongLikeStr(mood.getLikelist());
-            switch (mood.getLikenum()) {
-                case 0:
-                    mMfLikeNum.setText("赞");
-                    mLikeWindow.setVisibility(View.GONE);
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                    mLikeWindow.setVisibility(View.VISIBLE);
-                    likeStr = likeStr + "觉得很赞";
-                    break;
-                default:
-                    mLikeWindow.setVisibility(View.VISIBLE);
-                    likeStr = likeStr + "等" + mood.getLikenum() + "人觉得很赞";
-                    break;
-            }
-            //突出颜色
-            CharSequence chars = ColorPhrase.from(likeStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
-            mLikePeople.setText(chars);
+            mUserName.setText(evaluate.getUname());
+            mEvaluateTime.setText(evaluate.getCm_time());
+            mEvaluateInfo.setText(evaluate.getComment());
+            ReplyAdapter adapter = new ReplyAdapter(context, evaluate.getReplylist());
+            mRecyclerView.setAdapter(adapter);
         }
 
-
-        @OnClick({R.id.user_img, R.id.lc_chat, R.id.mf_comment, R.id.mf_like, R.id.mood_card})
+        @OnClick({R.id.user_img, R.id.evaluate_body})
         public void onClick(View view) {
-            if (mOnItemListener != null) mOnItemListener.onItemClick(view, mMood);
+            if (mOnItemListener != null) mOnItemListener.onItemClick(view, mEvaluate);
         }
     }
 }

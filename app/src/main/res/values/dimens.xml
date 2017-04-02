@@ -15,7 +15,19 @@
     <dimen name="toolbar_height">48dp</dimen>
 
     <dimen name="icon_size">24dp</dimen>
-    <dimen name="mood_action_height">36dp</dimen>
+    <dimen name="mood_action_height">32dp</dimen>
+    <dimen name="mood_margin">6dp</dimen>
+    
+    <dimen name="evaluate_avatar">43dp</dimen>
+    <dimen name="evaluate_margin">3dp</dimen>
+    <dimen name="evaluate_recycler_margin">60dp</dimen>
 
+    <!--text size-->
     <dimen name="mood_action_size">12sp</dimen>
+
+    <dimen name="evaluate_title">14sp</dimen>
+    <dimen name="evaluate_time">12sp</dimen>
+    <dimen name="evaluate_info">16sp</dimen>
+    <dimen name="evaluate_emoji">28sp</dimen>
+
 </resources>

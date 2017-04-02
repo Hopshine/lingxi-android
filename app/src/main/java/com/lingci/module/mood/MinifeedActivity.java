@@ -23,7 +23,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -38,15 +37,11 @@ import com.lingci.common.view.MyListView;
 import com.lingci.common.view.MyScrollView;
 import com.lingci.emojicon.EmojiconEditText;
 import com.lingci.emojicon.EmojiconTextView;
-import com.lingci.entity.Comments;
-import com.lingci.entity.Comments.Data.Comment;
-import com.lingci.entity.Comments.Data.Comment.Reply;
-import com.lingci.entity.MiniFeeds.Data.MiniFeed;
-import com.lingci.entity.MiniFeeds.Data.MiniFeed.Like;
 import com.lingci.module.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +118,7 @@ public class MinifeedActivity extends BaseActivity {
     private String rp_name;
     private int cmid_index;
     private CommentAdapter cmtAdapter;
-    private List<Comment> commentList;
+    private List<Comments.Data.Comment> commentList;
     private InputMethodManager imm;
     private CustomProgressDialog loadingProgress;
 
@@ -138,9 +133,8 @@ public class MinifeedActivity extends BaseActivity {
     }
 
     private void initFindView() {
-
         Bundle bundle = this.getIntent().getExtras();
-        MiniFeed mf = (MiniFeed) bundle.getSerializable("minifeed");
+        MiniFeeds.Data.MiniFeed mf = (MiniFeeds.Data.MiniFeed) bundle.getSerializable("minifeed");
         setUserImg(mf.uname, mf.url, mUserImg);
         mTvUname.setText(mf.uname);
         mPlTime.setText(mf.pl_time);
@@ -158,7 +152,7 @@ public class MinifeedActivity extends BaseActivity {
             mMfLike.setEnabled(true);
         }
         lcid = mf.lcid + "";
-        List<Like> likes = mf.likelist;
+        List<MiniFeeds.Data.MiniFeed.Like> likes = mf.likelist;
         String likeStr = getLikeStr(likes);
         switch (mf.likenum) {
             case 0:
@@ -176,8 +170,8 @@ public class MinifeedActivity extends BaseActivity {
     }
 
     private void init() {
-        savename = SPUtils.getInstance(MinifeedActivity.this).getString("username", "");
-        loadingProgress = new CustomProgressDialog(this, "加载评论中...", R.drawable.frame_loadin);
+        savename = SPUtils.getInstance(MinifeedActivity.this).getString("username");
+        loadingProgress = new CustomProgressDialog(this, "加载评论中...");
         setupToolbar(mToolbar, "普通的动态", true, 0, null);
         commentList = new ArrayList<>();
         getCommentsnAsyncHttpPost(lcid);
@@ -185,16 +179,18 @@ public class MinifeedActivity extends BaseActivity {
         mCmtLv.setAdapter(cmtAdapter);
 //        setListViewHeightBasedOnChildren(mflistView);
         mCmtScroll.smoothScrollTo(0, 0);
+
+
     }
 
     private void initEdit() {
-        /** 输入状态模式默认为评论 */
+        /* 输入状态模式默认为评论 */
         MSG_MODE = MSG_COMMRNT;
-        save_uname = SPUtils.getInstance(MinifeedActivity.this).getString("username", "");
+        save_uname = SPUtils.getInstance(MinifeedActivity.this).getString("username");
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mCmtEdit.addTextChangedListener(new EditTextWatcher());
 
-        /** 输入框点击调用遮罩 */
+        /* 输入框点击调用遮罩 */
         mCmtEdit.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -203,7 +199,7 @@ public class MinifeedActivity extends BaseActivity {
             }
         });
 
-        /** 发表评论或回复 */
+        /* 发表评论或回复 */
         mCmtShare.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -212,14 +208,14 @@ public class MinifeedActivity extends BaseActivity {
                 switch (MSG_MODE) {
                     case MSG_COMMRNT:
                         //评论
-                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "评论中...", R.drawable.frame_loadin);
+                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "评论中...");
                         postAddComment(lcid, save_uname, msg);
                         mCmtEdit.setText(null);
                         hideSoftInput(mCmtEdit);
                         break;
                     case MSG_REPLY:
                         //回复
-                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "回复中...", R.drawable.frame_loadin);
+                        loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "回复中...");
                         String cmid = commentList.get(cmid_index).cmid + "";
                         postAddReply(cmid, save_uname, rp_name, msg);
                         mCmtEdit.setText(null);
@@ -232,7 +228,7 @@ public class MinifeedActivity extends BaseActivity {
             }
         });
 
-        /** 点击遮罩隐藏输入法 */
+        /* 点击遮罩隐藏输入法 */
         mMfMask.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -242,7 +238,7 @@ public class MinifeedActivity extends BaseActivity {
             }
         });
 
-        /** 动态本体点击调用输入法 */
+        /* 动态本体点击调用输入法 */
         mMfComment.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -254,7 +250,7 @@ public class MinifeedActivity extends BaseActivity {
             }
         });
 
-        /** 评论ListView的item点击事件 */
+        /* 评论ListView的item点击事件 */
         mCmtLv.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -267,7 +263,6 @@ public class MinifeedActivity extends BaseActivity {
                 mCmtEdit.setHint("回复：" + cm_uname.getText());
                 openSofInput(mCmtEdit);
                 mMfMask.setVisibility(View.VISIBLE);
-//				Toast.makeText(MinifeedActivity.this, cm_uname.getText(),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -308,7 +303,7 @@ public class MinifeedActivity extends BaseActivity {
     /**
      * 获取点赞人字符串
      */
-    public String getLikeStr(List<Like> likes) {
+    public String getLikeStr(List<MiniFeeds.Data.MiniFeed.Like> likes) {
         String likeStr = "";
         for (int i = 0; i < likes.size(); i++) {
             if (i == likes.size() - 1) {
@@ -377,7 +372,7 @@ public class MinifeedActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         loadingProgress.dismiss();
                         Log.d(TAG, "onResponse: " + response);
-                        Toast.makeText(MinifeedActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(MinifeedActivity.this, "评论成功");
                     }
                 });
     }
@@ -403,7 +398,7 @@ public class MinifeedActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         loadingProgress.dismiss();
-                        Toast.makeText(MinifeedActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(MinifeedActivity.this, "回复成功");
                         mMfCommentNum.setText(String.valueOf(Integer.valueOf(mMfCommentNum.getText().toString()) + 1));
                     }
                 });
@@ -423,7 +418,7 @@ public class MinifeedActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         loadingProgress.dismiss();
-                        Toast.makeText(MinifeedActivity.this, R.string.toast_getmf_error, Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(MinifeedActivity.this, R.string.toast_getmf_error);
                     }
 
                     @Override
@@ -517,12 +512,12 @@ public class MinifeedActivity extends BaseActivity {
             TextView cm_uname = ViewHolder.get(convertView, R.id.cm_uname);
             TextView cm_time = ViewHolder.get(convertView, R.id.cm_time);
             EmojiconTextView cm_comment = ViewHolder.get(convertView, R.id.comment);
-            Comment comment = commentList.get(position);
+            Comments.Data.Comment comment = commentList.get(position);
             setUserImg(comment.uname, comment.url, mfuser_img);
             cm_uname.setText(comment.uname);
             cm_time.setText(comment.cm_time);
             cm_comment.setText(comment.comment);
-            ArrayList<Reply> replys = (ArrayList<Reply>) comment.replylist;
+            ArrayList<Comments.Data.Comment.Reply> replys = (ArrayList<Comments.Data.Comment.Reply>) comment.replylist;
             MyListView replyList = ViewHolder.get(convertView, R.id.cm_reply_list);
             ReplyAdapter replyAdaptre = new ReplyAdapter(replys);
             replyList.setAdapter(replyAdaptre);
@@ -553,12 +548,14 @@ public class MinifeedActivity extends BaseActivity {
      */
     private class ReplyAdapter extends BaseAdapter {
 
-        private ArrayList<Reply> replyList = new ArrayList<>();
+        private ArrayList<Comments.Data.Comment.Reply> replyList = new ArrayList<>();
 
         @SuppressWarnings("unchecked")
-        public ReplyAdapter(ArrayList<Reply> replyList) {
-            this.replyList = (ArrayList<Reply>) replyList.clone();
+        public ReplyAdapter(ArrayList<Comments.Data.Comment.Reply> replyList) {
+            this.replyList = (ArrayList<Comments.Data.Comment.Reply>) replyList.clone();
         }
+
+
 
         @Override
         public int getCount() {
@@ -582,7 +579,7 @@ public class MinifeedActivity extends BaseActivity {
                 convertView = inflater.inflate(R.layout.cmt_reply_itme, null);
             }
             EmojiconTextView rp_reply = ViewHolder.get(convertView, R.id.reply);
-            Reply reply = replyList.get(position);
+            Comments.Data.Comment.Reply reply = replyList.get(position);
             String replyStr = "{" + reply.uname + "}回复{" + reply.touname + "}：" + reply.reply;
             CharSequence chars = ColorPhrase.from(replyStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
             rp_reply.setText(chars);
@@ -618,5 +615,93 @@ public class MinifeedActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+
+    public static class MiniFeeds  implements Serializable{
+
+        public int ret;
+        public Data data;
+
+        public static final class Data  implements Serializable{
+
+            public List<MiniFeed> minifeedlist;
+            public int totalnum;
+
+            public static final class MiniFeed implements Serializable{
+
+                public int lcid;
+                public int uid;
+                public String uname;
+                public String url;
+                public boolean im_ability;
+                public String lc_info;
+                public String pl_time;
+                public int viewnum;
+                public int likenum;
+                public int cmtnum;
+                public boolean islike;
+                public List<Like> likelist;
+
+
+                public void setLikenum(int likenum) {
+                    this.likenum = likenum;
+                }
+
+                public void setIslike(boolean islike) {
+                    this.islike = islike;
+                }
+
+                public void setLikelist(List<Like> likelist) {
+                    this.likelist = likelist;
+                }
+
+                public static class Like implements Serializable {
+
+                    public int uid;
+                    public String uname;
+
+                    public Like(int uid, String uname) {
+                        super();
+                        this.uid = uid;
+                        this.uname = uname;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    public static class Comments {
+
+        public int ret;
+        public Data data;
+
+        public static final class Data {
+            public int totalnum;
+            public List<Comment> cmtlist;
+
+            public static final class Comment {
+                public int cmid;
+                public int uid;
+                public String uname;
+                public String url;
+                public String comment;
+                public String cm_time;
+                public List<Reply> replylist;
+
+                public static final class Reply {
+                    public int rpid;
+                    public int cmid;
+                    public int uid;
+                    public String uname;
+                    public int touid;
+                    public String touname;
+                    public String reply;
+                    public String rp_time;
+                }
+            }
+        }
     }
 }

@@ -7,10 +7,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.lingci.R;
 import com.lingci.common.Api;
+import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
 import com.lingci.module.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -54,25 +54,25 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void goRegister(View view) {
-        registerProgress = new CustomProgressDialog(this, R.string.dialog_loading_reg, R.drawable.frame_loadin);
+        registerProgress = new CustomProgressDialog(this, R.string.dialog_loading_reg);
         String uName = mUsername.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();
         String uDoPwd = mDoPassword.getText().toString().trim();
         String uPhone = mPhone.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
-            Toast.makeText(this, R.string.toast_reg_null, Toast.LENGTH_SHORT).show();
+            Utils.toastShow(this, R.string.toast_reg_null);
         } else {
             if (uPwd.equals(uDoPwd)) {
                 if (uPhone.length() == 11) {
                     if (isMobileNum(uPhone)) {
                         postRegister(uName, uPwd, uPhone);
                     }
-                    Toast.makeText(this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
+                    Utils.toastShow(this, "请输入正确的手机号码");
                 } else {
-                    Toast.makeText(this, R.string.toast_phone_error, Toast.LENGTH_SHORT).show();
+                    Utils.toastShow(this, R.string.toast_phone_error);
                 }
             } else {
-                Toast.makeText(this, R.string.toast_again_error, Toast.LENGTH_SHORT).show();
+                Utils.toastShow(this, R.string.toast_again_error);
             }
         }
     }
@@ -109,7 +109,7 @@ public class RegisterActivity extends BaseActivity {
                     public void onError(Call call, Exception e, int id) {
                         registerProgress.dismiss();
                         Log.d(TAG, "onError: " + id);
-                        Toast.makeText(RegisterActivity.this, R.string.toast_reg_error, Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(RegisterActivity.this, R.string.toast_reg_error);
                     }
 
                     @Override
@@ -121,17 +121,17 @@ public class RegisterActivity extends BaseActivity {
                             int tag = json.getInt("ret");
                             switch (tag) {
                                 case 0:
-                                    Toast.makeText(RegisterActivity.this, R.string.toast_reg_ok, Toast.LENGTH_SHORT).show();
+                                    Utils.toastShow(RegisterActivity.this, R.string.toast_reg_ok);
                                     Intent intent = new Intent(RegisterActivity.this,
                                             LoginActivity.class);
                                     startActivity(intent);
                                     finish();
                                     break;
                                 case 2:
-                                    Toast.makeText(RegisterActivity.this, R.string.toast_uname_being, Toast.LENGTH_SHORT).show();
+                                    Utils.toastShow(RegisterActivity.this, R.string.toast_uname_being);
                                     break;
                                 case 3:
-                                    Toast.makeText(RegisterActivity.this, R.string.toast_phone_being, Toast.LENGTH_SHORT).show();
+                                    Utils.toastShow(RegisterActivity.this, R.string.toast_phone_being);
                                     break;
                             }
                         } catch (JSONException e) {

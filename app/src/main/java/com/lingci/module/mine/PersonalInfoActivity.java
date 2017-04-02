@@ -19,7 +19,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lingci.R;
 import com.lingci.common.Api;
@@ -72,7 +71,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
     private void init() {
         setupToolbar(mToolbar, "个人信息", true, 0, null);
-        loadingProgress = new CustomProgressDialog(this, "修改头像中...", R.drawable.frame_loadin);
+        loadingProgress = new CustomProgressDialog(this, "修改头像中...");
         mPersonImg.setOnClickListener(this);
 
         int x = (int) (Math.random() * 5) + 1;
@@ -240,7 +239,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
                     public void onResponse(String response, int id) {
                         loadingProgress.dismiss();
                         Log.d(TAG, "onResponse: " + response);
-                        Toast.makeText(PersonalInfoActivity.this, "头像更新成功", Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(PersonalInfoActivity.this, "头像更新成功");
                     }
                 });
     }

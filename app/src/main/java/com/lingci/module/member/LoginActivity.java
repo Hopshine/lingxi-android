@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity {
     public void login(View view) {
         String uname = mUsername.getText().toString().trim();
         String upwd = mPassword.getText().toString().trim();
-        loginProgress = new CustomProgressDialog(this, R.string.dialog_loading_lg, R.drawable.frame_loadin);
+        loginProgress = new CustomProgressDialog(this, R.string.dialog_loading_lg);
         if (!TextUtils.isEmpty(uname) && !TextUtils.isEmpty(upwd)) {
             postLogin(uname, upwd);
         } else {

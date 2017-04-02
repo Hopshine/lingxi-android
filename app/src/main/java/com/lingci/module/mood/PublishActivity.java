@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.lingci.R;
 import com.lingci.common.Api;
 import com.lingci.common.util.SPUtils;
-import com.lingci.common.util.ToastUtil;
+import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
 import com.lingci.emojicon.EmojiconEditText;
 import com.lingci.module.BaseActivity;
@@ -47,18 +47,18 @@ public class PublishActivity extends BaseActivity {
 
     private void init() {
         setupToolbar(mToolbar, "发布新动态", true, 0, null);
-        shareProgress = new CustomProgressDialog(this, "发布中...",R.drawable.frame_loadin);
+        shareProgress = new CustomProgressDialog(this, "发布中...");
     }
 
     @OnClick(R.id.iv_submit)
     public void onClick() {
         String moodInfo = mMoodInfo.getText().toString().trim();
         if (TextUtils.isEmpty(moodInfo)){
-            ToastUtil.showSingleton(this, "好歹写点什么吧！");
+            Utils.toastShow(this, "好歹写点什么吧！");
         }else {
             String uName = SPUtils.getInstance(this).getString("username", null);
             if(TextUtils.isEmpty(uName)){
-                ToastUtil.showSingleton(this, "请重新登陆");
+                Utils.toastShow(this, "请重新登陆");
             }else{
                 postSubmitMood(uName, moodInfo);
             }
@@ -76,7 +76,7 @@ public class PublishActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         shareProgress.dismiss();
-                        ToastUtil.showSingleton(PublishActivity.this, "发布失败");
+                        Utils.toastShow(PublishActivity.this, "发布失败");
                     }
 
                     @Override
@@ -88,7 +88,7 @@ public class PublishActivity extends BaseActivity {
                             switch (tag) {
                                 case 0:
                                     mMoodInfo.setText(null);
-                                    ToastUtil.showSingleton(PublishActivity.this, "发布成功");
+                                    Utils.toastShow(PublishActivity.this, "发布成功");
                                     onBackPressed();
                                     break;
                             }

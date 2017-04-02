@@ -7,10 +7,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.lingci.R;
 import com.lingci.common.Api;
+import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
 import com.lingci.module.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -51,23 +51,22 @@ public class UpdatePwdActivity extends BaseActivity {
     }
 
     public void goUpdatePwd(View view) {
-        updateProgress = new CustomProgressDialog(this, R.string.dialog_loading_upwd, R.drawable.frame_loadin);
+        updateProgress = new CustomProgressDialog(this, R.string.dialog_loading_upwd);
         String uName = mUsername.getText().toString().trim();
         String uPhone = mPhone.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();
         String uDoPwd = mDoPassword.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
-            Toast.makeText(this, R.string.toast_reg_null, Toast.LENGTH_SHORT).show();
+            Utils.toastShow(this, R.string.toast_reg_null);
         } else {
             if (uPwd.equals(uDoPwd)) {
                 if (uPhone.length() == 11) {
                     postUpdatePwd(uName, uPwd, uPhone);
                 } else {
-                    Toast.makeText(this, R.string.toast_phone_error, Toast.LENGTH_SHORT)
-                            .show();
+                    Utils.toastShow(this, R.string.toast_phone_error);
                 }
             } else {
-                Toast.makeText(this, R.string.toast_again_error, Toast.LENGTH_SHORT).show();
+                Utils.toastShow(this, R.string.toast_again_error);
             }
         }
     }
@@ -84,7 +83,7 @@ public class UpdatePwdActivity extends BaseActivity {
                     public void onError(Call call, Exception e, int id) {
                         updateProgress.dismiss();
                         Log.d(TAG, "onError: " + id);
-                        Toast.makeText(UpdatePwdActivity.this, R.string.toast_upwd_error, Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(UpdatePwdActivity.this, R.string.toast_upwd_error);
                     }
 
                     @Override
@@ -96,16 +95,16 @@ public class UpdatePwdActivity extends BaseActivity {
                             int tag = json.getInt("ret");
                             switch (tag) {
                                 case 0:
-                                    Toast.makeText(UpdatePwdActivity.this, R.string.toast_uped_ok, Toast.LENGTH_SHORT).show();
+                                    Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uped_ok);
                                     Intent intent = new Intent(UpdatePwdActivity.this, LoginActivity.class);
                                     startActivity(intent);
                                     finish();
                                     break;
                                 case 2:
-                                    Toast.makeText(UpdatePwdActivity.this, R.string.toast_uname_error, Toast.LENGTH_SHORT).show();
+                                    Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uname_error);
                                     break;
                                 case 3:
-                                    Toast.makeText(UpdatePwdActivity.this, R.string.toast_uphone_error, Toast.LENGTH_SHORT).show();
+                                    Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uphone_error);
                                     break;
                             }
                         } catch (JSONException e) {

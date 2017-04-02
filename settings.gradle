@@ -1,1 +1,1 @@
-include ':app', ':pulltorefresh', ':IMKit'
+include ':app', ':IMKit'

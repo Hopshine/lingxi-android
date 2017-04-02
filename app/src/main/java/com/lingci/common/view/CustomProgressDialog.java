@@ -21,12 +21,12 @@ public class CustomProgressDialog extends ProgressDialog {
 	private int mResid;
 
 
-	public CustomProgressDialog(Context context, int tipId, int id) {
-		this(context, context.getResources().getString(tipId), id);
+	public CustomProgressDialog(Context context, int tipId) {
+		this(context, context.getResources().getString(tipId));
 	}
 
-	public  CustomProgressDialog(Context context, CharSequence tip, int id) {
-        this(context, R.style.dialog, tip, id);
+	public  CustomProgressDialog(Context context, CharSequence tip) {
+        this(context, R.style.dialog, tip, R.drawable.frame_loadin);
 	}
 
 	public CustomProgressDialog(Context context, int theme, CharSequence tip, int id) {

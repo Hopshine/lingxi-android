@@ -25,7 +25,6 @@ import com.lingci.R;
 import com.lingci.common.Api;
 import com.lingci.common.Constants;
 import com.lingci.common.util.SPUtils;
-import com.lingci.common.util.ToastUtil;
 import com.lingci.common.util.Utils;
 import com.lingci.module.BaseFragment;
 import com.lingci.module.member.LoginActivity;
@@ -139,7 +138,7 @@ public class MineFragment extends BaseFragment implements OnClickListener {
                 if (Api.isDebug) {
                     boolean isjoin = joinQQGroup("U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
                     if (!isjoin) {
-                        ToastUtil.showSingleton(getActivity(), "未安装手Q或安装的版本不支持");
+                        Utils.toastShow(getActivity(), "未安装手Q或安装的版本不支持");
                     }
                 }
                 break;

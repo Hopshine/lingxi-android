@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.common.Api;
 import com.lingci.common.BaseApplication;
 import com.lingci.common.Constants;
+import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
-import com.lingci.common.util.ToastUtil;
 import com.lingci.common.util.Utils;
-import com.lingci.entity.Users;
+import com.lingci.entity.Result;
+import com.lingci.entity.User;
+import com.lingci.entity.UserBean;
 import com.lingci.module.main.MainActivity;
 import com.lingci.module.member.LoginActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -24,7 +26,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.lang.reflect.Type;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
@@ -53,7 +55,7 @@ public class WelcomeActivity extends BaseActivity {
         String im_token = SPUtils.getInstance(WelcomeActivity.this).getString("im_token", "");
         if (isLogin) {
             if (im_token == null || im_token.length() == 0) {
-                ToastUtil.showSingleton(this, "登录过期，请重新登陆");
+                Utils.toastShow(this, "登录过期，请重新登陆");
                 goLogin();
             } else {
                 connect(im_token);
@@ -93,22 +95,26 @@ public class WelcomeActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         Log.d(TAG, "onResponse: " + response);
                         SPUtils.getInstance(WelcomeActivity.this).putString("im_User", response);
-                        Users users = getUsers(response);
-                        int tag = users.ret;
-                        switch (tag) {
-                            case 0:
-                                List<Users.Data.User> userList = users.data.userlist;
-                                for (Users.Data.User user : userList) {
-                                    UserInfo userInfo = new UserInfo(String.valueOf(user.uid), user.uname, Uri.parse(Api.Url + user.url));
-                                    if (!Constants.uidList.contains(String.valueOf(user.uid))) {
-                                        Constants.uidList.add(String.valueOf(user.uid));
+                        Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
+                        GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<UserBean<User>>() {
+
+                            @Override
+                            public void onTrue(Result<UserBean<User>> result) {
+                                for (User user: result.getData().getUserlist()){
+                                    UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
+                                    if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
+                                        Constants.uidList.add(String.valueOf(user.getUid()));
                                         Constants.userList.add(userInfo);
                                     }
                                 }
-                                break;
-                            default:
-                                break;
-                        }
+                            }
+
+                            @Override
+                            public void onErr(Result<Object> result, Exception e) {
+
+                            }
+                        });
+
                         goHome();
                     }
                 });
@@ -150,13 +156,6 @@ public class WelcomeActivity extends BaseActivity {
                         }
                     }
                 });
-    }
-
-    /**
-     * 解析数据
-     */
-    public Users getUsers(String json) {
-        return new Gson().fromJson(json, Users.class);
     }
 
     private void goHome() {
@@ -201,25 +200,11 @@ public class WelcomeActivity extends BaseActivity {
                     if (imUserStr == null || imUserStr.length() == 0) {
                         getImUser();
                     } else {
-                        Users users = getUsers(imUserStr);
-                        int tag = users.ret;
-                        switch (tag) {
-                            case 0:
-                                List<Users.Data.User> userList = users.data.userlist;
-                                for (Users.Data.User user : userList) {
-                                    UserInfo userInfo = new UserInfo(String.valueOf(user.uid), user.uname, Uri.parse(Api.Url + user.url));
-                                    if (!Constants.uidList.contains(String.valueOf(user.uid))) {
-                                        Constants.uidList.add(String.valueOf(user.uid));
-                                        Constants.userList.add(userInfo);
-                                    }
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        goHome();
+                        jsonToObeject(imUserStr);
+
                     }
                 }
+
 
                 /**
                  * 连接融云失败
@@ -231,5 +216,29 @@ public class WelcomeActivity extends BaseActivity {
                 }
             });
         }
+    }
+    private void jsonToObeject(String imUserStr) {
+        Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
+        GsonUtil.fromJson(imUserStr, type, new GsonUtil.GsonResult<UserBean<User>>() {
+
+            @Override
+            public void onTrue(Result<UserBean<User>> result) {
+                for (User user: result.getData().getUserlist()){
+                    UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
+                    if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
+                        Constants.uidList.add(String.valueOf(user.getUid()));
+                        Constants.userList.add(userInfo);
+                    }
+                }
+
+                goHome();
+            }
+
+            @Override
+            public void onErr(Result<Object> result, Exception e) {
+
+                goHome();
+            }
+        });
     }
 }

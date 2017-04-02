@@ -55,6 +55,8 @@
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 
+        <activity android:name=".module.mood.MoodActivity">
+        </activity>
     </application>
 
 </manifest>

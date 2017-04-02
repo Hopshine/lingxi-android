@@ -6,21 +6,7 @@
     tools:context=".module.mine.RelevantActivity" >
 
     <include layout="@layout/toolbar" />
-    
-   <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pull_relevant_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerHeight="6dp"
-        android:divider="#f0f0f0"
-    	android:background="#f0f0f0"
-        android:fadingEdge="none"
-        android:fastScrollEnabled="false"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        android:smoothScrollbar="true"
-        ptr:ptrShowIndicator="false"
-        ptr:ptrMode="both" />
+
+    <include layout="@layout/recycler_view"/>
 
 </LinearLayout>

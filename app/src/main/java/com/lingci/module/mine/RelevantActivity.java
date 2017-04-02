@@ -2,62 +2,50 @@ package com.lingci.module.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.ILoadingLayout;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
+import com.lingci.adapter.RelevantAdapter;
 import com.lingci.common.Api;
-import com.lingci.common.util.DateComparUtil;
+import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
-import com.lingci.common.util.ViewHolder;
 import com.lingci.common.view.CustomProgressDialog;
-import com.lingci.emojicon.EmojiconTextView;
-import com.lingci.entity.MiniFeeds.Data.MiniFeed;
-import com.lingci.entity.UnReadMf;
-import com.lingci.entity.UnReadMf.Data.Unread;
+import com.lingci.entity.Like;
+import com.lingci.entity.Mood;
+import com.lingci.entity.Relevant;
+import com.lingci.entity.RelevantBean;
+import com.lingci.entity.Result;
 import com.lingci.module.BaseActivity;
-import com.lingci.module.mood.MinifeedActivity;
+import com.lingci.module.mood.MoodActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 
-import static com.lingci.R.id.pull_relevant_list;
-
 public class RelevantActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(pull_relevant_list)
-    PullToRefreshListView mPullRelevantList;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
 
-    private RelevantAdapter relevantAdapter;
+    private RelevantAdapter mAdapter;
     private CustomProgressDialog loadingProgress;
-    private String savename;
-    private List<Unread> unreadlist;
+    private String saveName;
+    private List<Relevant<Mood<Like>>> mRelevantList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,46 +56,36 @@ public class RelevantActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "与我相关",true,0,null);
-        savename = SPUtils.getInstance(RelevantActivity.this).getString("username", "");
+        setupToolbar(mToolbar, "与我相关", true, 0, null);
+        saveName = SPUtils.getInstance(RelevantActivity.this).getString("username", "");
         int x = (int) (Math.random() * 4) + 1;
         if (x == 1) {
             MoeToast.makeText(this, "你能找到这个秘密吗？");
         }
-        loadingProgress = new CustomProgressDialog(this, "正在加载...", R.drawable.frame_loadin);
-        relevantAdapter = new RelevantAdapter();
-        loadingProgress.show();
-        getRelevantsnAsyncHttpPost(savename);
+        loadingProgress = new CustomProgressDialog(this, "正在加载...");
 
-        mPullRelevantList.setMode(Mode.BOTH);
-        initPullToRefresh();
-        mPullRelevantList.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new RelevantAdapter(this, mRelevantList);
+        mRecyclerView.setAdapter(mAdapter);
 
+        mAdapter.setOnItemListener(new RelevantAdapter.OnItemListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                getRelevantsnAsyncHttpPost(savename);
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+            public void onItemClick(View view, Relevant<Mood<Like>> relevant) {
+                switch (view.getId()) {
+                    case R.id.user_img:
+                        break;
+                    case R.id.mood_body:
+                        break;
+                }
             }
         });
+
+        loadingProgress.show();
+        getRelevantList(saveName);
     }
 
-    private void initPullToRefresh() {
-        ILoadingLayout startLabels = mPullRelevantList.getLoadingLayoutProxy(true, false);
-        startLabels.setPullLabel("下拉刷新...");
-        startLabels.setRefreshingLabel("正在刷新...");
-        startLabels.setReleaseLabel("放开刷新...");
-
-        ILoadingLayout endLabels = mPullRelevantList.getLoadingLayoutProxy(false, true);
-        endLabels.setPullLabel("上拉加载...");
-        endLabels.setRefreshingLabel("正在加载...");
-        endLabels.setReleaseLabel("放开加载...");
-    }
-
-    public void getRelevantsnAsyncHttpPost(String name) {
+    public void getRelevantList(String name) {
         OkHttpUtils.post()
                 .url(Api.Url + "/unReadList")
                 .addParams("uname", name)
@@ -116,98 +94,40 @@ public class RelevantActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         loadingProgress.dismiss();
-                        Toast.makeText(RelevantActivity.this, "加载失败，下拉重新加载", Toast.LENGTH_LONG).show();
+                        Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d(TAG, "onResponse: " + response);
-                        Gson gson = new Gson();
-                        UnReadMf unReadMf = gson.fromJson(response, UnReadMf.class);
-                        int tag = unReadMf.ret;
-                        List<Unread> unReads = unReadMf.data.unreadlist;
                         loadingProgress.dismiss();
-                        switch (tag) {
-                            case 0:
-                                unreadlist = unReads;
-                                mPullRelevantList.setAdapter(relevantAdapter);
-                                break;
-                            default:
-                                break;
-                        }
-                        mPullRelevantList.onRefreshComplete();
+                        Type type = new TypeToken<Result<RelevantBean<Relevant<Mood<Like>>>>>() {
+                        }.getType();
+                        GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<RelevantBean<Relevant<Mood<Like>>>>() {
+                            @Override
+                            public void onTrue(Result<RelevantBean<Relevant<Mood<Like>>>> result) {
+                                updateData(result.getData().getUnreadlist());
+                            }
+
+                            @Override
+                            public void onErr(Result<Object> result, Exception e) {
+
+                            }
+                        });
                     }
                 });
     }
 
-    /**
-     * 适配器
-     */
-    private class RelevantAdapter extends BaseAdapter {
+    private void updateData(List<Relevant<Mood<Like>>> relevantList){
+        mAdapter.updateData(relevantList);
+    }
 
-        @Override
-        public int getCount() {
-            return unreadlist == null ? 0 : unreadlist.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return unreadlist == null ? null : unreadlist.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(RelevantActivity.this);
-                convertView = inflater.inflate(R.layout.list_item_relevant, null);
-            }
-            ImageView rluser_img = ViewHolder.get(convertView, R.id.rluser_img);
-            TextView rl_uname = ViewHolder.get(convertView, R.id.rl_uname);
-            TextView rl_time = ViewHolder.get(convertView, R.id.rl_time);
-            EmojiconTextView rl_comment = ViewHolder.get(convertView, R.id.rl_comment);
-            LinearLayout rl_lc = ViewHolder.get(convertView, R.id.rl_lc);
-            TextView rl_lcuname = ViewHolder.get(convertView, R.id.rl_lcuname);
-            EmojiconTextView rl_minifeed = ViewHolder.get(convertView, R.id.rl_minifeed);
-            Unread unread = null;
-            if (unreadlist != null) {
-                unread = unreadlist.get(position);
-                rl_uname.setText(unread.uname);
-                rl_time.setText(DateComparUtil.getInterval(unread.cm_time));
-                rl_comment.setText(unread.comment);
-                rl_lcuname.setText(unread.minifeed.uname);
-                rl_minifeed.setText(unread.minifeed.lc_info);
-                if (unread.uname.equals(savename)) {
-                    Utils.setPersonImg(savename, rluser_img);
-                } else {
-                    if (unread.url != null) {
-                        Glide.with(RelevantActivity.this)
-                                .load(Api.Url + unread.url)
-                                .skipMemoryCache(true)
-                                .into(rluser_img);
-                    } else {
-                        rluser_img.setImageResource(R.mipmap.userimg);
-                    }
-                }
-            }
-            final MiniFeed mfd = unread.minifeed;
-            rl_lc.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(RelevantActivity.this, MinifeedActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("minifeed", mfd);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-            return convertView;
-        }
+    private void gotoMood(Mood<Like> mood){
+        Intent intent = new Intent(RelevantActivity.this, MoodActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("mood", mood);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
