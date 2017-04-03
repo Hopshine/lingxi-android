@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.adapter.MoodAdapter;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
@@ -44,14 +44,12 @@ import okhttp3.Call;
  */
 public class MoodFragment extends BaseFragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String MOOD_TYPE = "mood_type";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    private String mParam1;
-    private String mParam2;
+    private String mType;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -77,11 +75,10 @@ public class MoodFragment extends BaseFragment {
 
     }
 
-    public static MoodFragment newInstance(String param1, String param2) {
+    public static MoodFragment newInstance(String moodType) {
         MoodFragment fragment = new MoodFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(MOOD_TYPE, moodType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,8 +87,7 @@ public class MoodFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mType = getArguments().getString(MOOD_TYPE);
         }
     }
 
@@ -121,9 +117,9 @@ public class MoodFragment extends BaseFragment {
         mAdapter = new MoodAdapter(getActivity(), mList);
         mRecyclerView.setAdapter(mAdapter);
 
-        getMoodList("0", "10");
-
         initEvent();
+
+        getMoodList("0", "10");
     }
 
     //初始化事件
@@ -270,7 +266,7 @@ public class MoodFragment extends BaseFragment {
 
     //获取动态列表
     private void getMoodList(String lcid, String count) {
-        if (!mSwipeRefreshLayout.isRefreshing()) mSwipeRefreshLayout.setRefreshing(true);
+        if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH) mSwipeRefreshLayout.setRefreshing(true);
         OkHttpUtils.post()
                 .url(Api.Url + "/minifeedList")
                 .addParams("startlcid", lcid)
@@ -292,13 +288,20 @@ public class MoodFragment extends BaseFragment {
                         GsonUtil.fromJson(response, jsonType, new GsonUtil.GsonResult<MoodBean<Mood<Like>>>() {
                             @Override
                             public void onTrue(Result<MoodBean<Mood<Like>>> result) {
-                                if (RefreshMODE == MOD_LOADING) load_length = load_length + result.getData().getTotalnum();
-                                else load_length = result.getData().getTotalnum();
-                                if (result.getData().getTotalnum() == 0 ){
-                                    mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
-                                    return;
+                                switch (RefreshMODE) {
+                                    case MOD_LOADING:
+                                        load_length = load_length + result.getData().getTotalnum();
+                                        if (result.getData().getTotalnum() == 0 ){
+                                            mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
+                                            return;
+                                        }
+                                        updateData(result.getData().getMinifeedlist());
+                                        break;
+                                    default:
+                                        load_length = result.getData().getTotalnum();
+                                        mAdapter.setData(result.getData().getMinifeedlist());
+                                        break;
                                 }
-                                updateData(result.getData().getMinifeedlist());
                             }
 
                             @Override

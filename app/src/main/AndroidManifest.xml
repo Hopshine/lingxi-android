@@ -7,33 +7,32 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".common.BaseApplication"
+        android:name=".common.config.BaseApplication"
         android:allowBackup="true"
-        android:anyDensity="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:logo="@android:color/transparent"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".module.WelcomeActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".module.member.LoginActivity"/>
         <activity android:name=".module.member.RegisterActivity"/>
         <activity android:name=".module.member.UpdatePwdActivity"/>
-        <activity
-            android:name=".module.main.MainActivity"
+        <activity android:name=".module.main.MainActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".module.mood.MinifeedActivity"/>
         <activity android:name=".module.mood.PublishActivity"/>
         <activity android:name=".module.mine.PersonalInfoActivity"/>
         <activity android:name=".module.mine.RelevantActivity"/>
         <activity android:name=".module.setting.AboutActivity"/>
+        <activity android:name=".module.mood.MoodActivity"/>
         <activity
             android:name=".module.conversation.ConversationActivity"
             android:label="@string/title_activity_conversation"
@@ -51,12 +50,12 @@
             </intent-filter>
         </activity>
 
+        <meta-data android:name="com.lingci.common.config.GlideModule" android:value="GlideModule" />
+
         <meta-data
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 
-        <activity android:name=".module.mood.MoodActivity">
-        </activity>
     </application>
 
 </manifest>

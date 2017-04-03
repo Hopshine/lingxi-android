@@ -1,6 +1,7 @@
 package com.lingci.module.main;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,18 @@ import com.lingci.R;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
-/**
- * Created by bafsj on 16/1/22.
- */
 public class ContactsFragment extends Fragment{
 
     private RelativeLayout dletec;
+
+    public static ContactsFragment newInstance() {
+        return new ContactsFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

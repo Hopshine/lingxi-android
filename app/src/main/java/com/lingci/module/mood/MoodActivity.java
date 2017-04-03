@@ -14,8 +14,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.adapter.EvaluateAdapter;
-import com.lingci.common.Api;
-import com.lingci.common.util.ColorPhrase;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.Utils;
 import com.lingci.emojicon.EmojiconTextView;
@@ -76,6 +75,10 @@ public class MoodActivity extends BaseActivity {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    private int MSG_MODE;
+    private final int MSG_EVALUATE = 0;
+    private final int MSG_REPLY = 1;
+
     private EvaluateAdapter mAdapter;
 
     @Override
@@ -98,12 +101,17 @@ public class MoodActivity extends BaseActivity {
             public void onItemClick(View view, Evaluate<Reply> evaluate) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        Utils.toastShow(view.getContext(),"头像");
+                        Utils.toastShow(view.getContext(), "头像");
                         break;
                     case R.id.evaluate_body:
-                        Utils.toastShow(view.getContext(),"评论");
+                        Utils.toastShow(view.getContext(), "评论");
                         break;
                 }
+            }
+
+            @Override
+            public void onItemChildClick(View view, Reply reply) {
+                Utils.toastShow(view.getContext(), reply.getUname());
             }
         });
 
@@ -131,16 +139,14 @@ public class MoodActivity extends BaseActivity {
         mMfLikeNum.setText(String.valueOf(mood.getLikenum()));
         //是否已经点赞
         if (mood.islike()) {
-            mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like);
+            mMfLikeIcon.setSelected(true);
             mMfLike.setClickable(false);
-            mMfLike.setEnabled(false);
         } else {
-            mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like_nor);
+            mMfLikeIcon.setSelected(false);
             mMfLike.setClickable(true);
-            mMfLike.setEnabled(true);
         }
         //点赞列表
-        String likeStr = Utils.getLikeStr(mood.getLikelist());
+        String likeStr = Utils.getLongLikeStr(mood.getLikelist());
         switch (mood.getLikenum()) {
             case 0:
                 mMfLikeNum.setText("赞");
@@ -151,9 +157,7 @@ public class MoodActivity extends BaseActivity {
                 likeStr = likeStr + "觉得很赞";
                 break;
         }
-        //突出颜色
-        CharSequence chars = ColorPhrase.from(likeStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
-        mLikePeople.setText(chars);
+        mLikePeople.setText(Utils.getCharSequence(likeStr));
 
         getEvaluateList(String.valueOf(mood.getLcid()));
     }
@@ -164,6 +168,7 @@ public class MoodActivity extends BaseActivity {
             case R.id.user_img:
                 break;
             case R.id.mf_like:
+                Utils.toastShow(this, "点赞");
                 break;
         }
     }
@@ -186,7 +191,8 @@ public class MoodActivity extends BaseActivity {
                     @Override
                     public void onResponse(final String response, int id) {
                         Log.d(TAG, "onResponse: " + response);
-                        Type type = new TypeToken<Result<EvaluateBean<Evaluate<Reply>>>>(){}.getType();
+                        Type type = new TypeToken<Result<EvaluateBean<Evaluate<Reply>>>>() {
+                        }.getType();
                         GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<EvaluateBean<Evaluate<Reply>>>() {
                             @Override
                             public void onTrue(Result<EvaluateBean<Evaluate<Reply>>> result) {

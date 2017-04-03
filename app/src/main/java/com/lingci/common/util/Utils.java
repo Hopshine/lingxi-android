@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.lingci.R;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.entity.Like;
 
 import java.io.File;
@@ -32,6 +32,11 @@ public class Utils {
 
     private static Toast toast;
 
+    /**
+     * 土司
+     * @param context
+     * @param info
+     */
     public static void toastShow(Context context, String info) {
         if (toast == null)
             toast = Toast.makeText(context, info, Toast.LENGTH_SHORT);
@@ -59,6 +64,9 @@ public class Utils {
         void onLoading();
     }
 
+    /**
+     * 加载延时
+     */
     public static void loadingTime(final Handler handler, final OnLoading loading) {
         time = System.currentTimeMillis() - time;
         if (time < loadTime) {
@@ -85,9 +93,6 @@ public class Utils {
 
     /**
      * 手机验证
-     *
-     * @param mobiles
-     * @return
      */
     public static boolean isMobileNum(String mobiles) {
         Pattern p = Pattern.compile("1[34578]\\d{9}$");
@@ -95,7 +100,9 @@ public class Utils {
         return m.matches();
     }
 
-    // 隐藏虚拟键盘
+    /**
+     * 隐藏虚拟键盘
+      */
     public static void HideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -131,6 +138,13 @@ public class Utils {
             }
         }
         return likeStr;
+    }
+
+    /**
+     * 突出颜色
+     */
+    public static CharSequence getCharSequence(String str){
+        return ColorPhrase.from(str).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
     }
 
     /**

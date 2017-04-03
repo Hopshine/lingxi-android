@@ -12,8 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lingci.R;
-import com.lingci.common.Api;
-import com.lingci.common.util.ColorPhrase;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.Utils;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Like;
@@ -96,6 +95,12 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void updateLoadStatus(int status) {
         this.mStatus = status;
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<Mood<Like>> data) {
+        mList = data;
+        mStatus = LOAD_END;
         notifyDataSetChanged();
     }
 
@@ -211,16 +216,14 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mMfLikeNum.setText(String.valueOf(mood.getLikenum()));
             //是否已经点赞
             if (mood.islike()) {
-                mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like);
+                mMfLikeIcon.setSelected(true);
                 mMfLike.setClickable(false);
-                mMfLike.setEnabled(false);
             } else {
-                mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like_nor);
+                mMfLikeIcon.setSelected(false);
                 mMfLike.setClickable(true);
-                mMfLike.setEnabled(true);
             }
             //点赞列表
-            String likeStr = Utils.getLongLikeStr(mood.getLikelist());
+            String likeStr = Utils.getLikeStr(mood.getLikelist());
             switch (mood.getLikenum()) {
                 case 0:
                     mMfLikeNum.setText("赞");
@@ -237,9 +240,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     likeStr = likeStr + "等" + mood.getLikenum() + "人觉得很赞";
                     break;
             }
-            //突出颜色
-            CharSequence chars = ColorPhrase.from(likeStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
-            mLikePeople.setText(chars);
+            mLikePeople.setText(Utils.getCharSequence(likeStr));
         }
 
 

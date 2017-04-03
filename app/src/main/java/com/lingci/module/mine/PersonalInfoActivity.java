@@ -21,8 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lingci.R;
-import com.lingci.common.Api;
-import com.lingci.common.Constants;
+import com.lingci.common.config.Api;
+import com.lingci.common.config.Constants;
 import com.lingci.common.util.MD5Util;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
@@ -56,7 +56,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     TextView mPersonName;
 
     private Bitmap bitmap;
-    private String savename;
+    private String saveName;
     private String imgStr;
     private File fileDir;
     private CustomProgressDialog loadingProgress;
@@ -78,13 +78,13 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         if (x == 1) {
             MoeToast.makeText(this, "是谁，是谁在那里？");
         }
-        savename = SPUtils.getInstance(PersonalInfoActivity.this).getString("username", "");
-        mPersonName.setText(savename);
+        saveName = SPUtils.getInstance(PersonalInfoActivity.this).getString("username", "");
+        mPersonName.setText(saveName);
         fileDir = new File(Environment.getExternalStorageDirectory() + "/lingci/image/avatar");
         if (!fileDir.exists()) {
             fileDir.mkdirs(); // 如果该目录不存在,则创建一个这样的目录
         }
-        Utils.setPersonImg(savename, mPersonImg);
+        Utils.setPersonImg(saveName, mPersonImg);
     }
 
     @Override
@@ -96,9 +96,9 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
                 LinearLayout ll_photograph = (LinearLayout) dialog.findViewById(R.id.ll_photograph);
                 LinearLayout ll_getPicture = (LinearLayout) dialog.findViewById(R.id.ll_getPicture);
                 LinearLayout ll_cancel = (LinearLayout) dialog.findViewById(R.id.ll_cancel);
-                layouSetClickListener(ll_photograph, dialog);
-                layouSetClickListener(ll_getPicture, dialog);
-                layouSetClickListener(ll_cancel, dialog);
+                layoutSetClickListener(ll_photograph, dialog);
+                layoutSetClickListener(ll_getPicture, dialog);
+                layoutSetClickListener(ll_cancel, dialog);
                 dialog.show();
                 break;
             default:
@@ -132,11 +132,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
     /**
      * dialog点击事件
-     *
-     * @param layout
-     * @param dialog
      */
-    public void layouSetClickListener(final LinearLayout layout, final Dialog dialog) {
+    public void layoutSetClickListener(final LinearLayout layout, final Dialog dialog) {
         layout.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -224,8 +221,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         loadingProgress.show();
         OkHttpUtils.post()
                 .url(Api.Url + "/uploadPrimg")
-                .addParams("MD5name", MD5Util.MD5(savename))
-                .addParams("uname", savename)
+                .addParams("MD5name", MD5Util.MD5(saveName))
+                .addParams("uname", saveName)
                 .addParams("imgStr", imgStr)
                 .build()
                 .execute(new StringCallback() {
@@ -278,9 +275,6 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
     /**
      * 通过Base32将Bitmap转换成Base64字符串
-     *
-     * @param bit
-     * @return
      */
     public String Bitmap2StrByBase64(Bitmap bit) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

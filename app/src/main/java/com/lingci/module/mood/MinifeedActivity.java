@@ -27,14 +27,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.lingci.R;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.ColorPhrase;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.util.ViewHolder;
 import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.common.view.JellyScrollView;
 import com.lingci.common.view.MyListView;
-import com.lingci.common.view.MyScrollView;
 import com.lingci.emojicon.EmojiconEditText;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.module.BaseActivity;
@@ -62,7 +62,8 @@ import static com.lingci.R.id.tv_uname;
 
 public class MinifeedActivity extends BaseActivity {
 
-    private final int MSG_COMMRNT = 0;
+    private int MSG_MODE;
+    private final int MSG_EVALUATE = 0;
     private final int MSG_REPLY = 1;
 
     @BindView(R.id.toolbar)
@@ -102,7 +103,7 @@ public class MinifeedActivity extends BaseActivity {
     @BindView(R.id.cmt_lv)
     MyListView mCmtLv;
     @BindView(R.id.cmt_scroll)
-    MyScrollView mCmtScroll;
+    JellyScrollView mCmtScroll;
     @BindView(R.id.cmt_edit)
     EmojiconEditText mCmtEdit;
     @BindView(R.id.cmt_share)
@@ -111,7 +112,6 @@ public class MinifeedActivity extends BaseActivity {
     View mMfMask;
 
 
-    private int MSG_MODE;
     private String savename;
     private String lcid;
     private String save_uname;
@@ -143,11 +143,11 @@ public class MinifeedActivity extends BaseActivity {
         mMfCommentNum.setText(String.valueOf(mf.cmtnum));
         mMfLikeNum.setText(String.valueOf(mf.likenum));
         if (mf.islike) {
-            mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like);
+            mMfLikeIcon.setImageResource(R.mipmap.icon_like);
             mMfLike.setClickable(false);
             mMfLike.setEnabled(false);
         } else {
-            mMfLikeIcon.setImageResource(R.mipmap.list_item_icon_like_nor);
+            mMfLikeIcon.setImageResource(R.mipmap.icon_like_nor);
             mMfLike.setClickable(true);
             mMfLike.setEnabled(true);
         }
@@ -185,7 +185,7 @@ public class MinifeedActivity extends BaseActivity {
 
     private void initEdit() {
         /* 输入状态模式默认为评论 */
-        MSG_MODE = MSG_COMMRNT;
+        MSG_MODE = MSG_EVALUATE;
         save_uname = SPUtils.getInstance(MinifeedActivity.this).getString("username");
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mCmtEdit.addTextChangedListener(new EditTextWatcher());
@@ -206,7 +206,7 @@ public class MinifeedActivity extends BaseActivity {
             public void onClick(View v) {
                 String msg = mCmtEdit.getText().toString();
                 switch (MSG_MODE) {
-                    case MSG_COMMRNT:
+                    case MSG_EVALUATE:
                         //评论
                         loadingProgress = new CustomProgressDialog(MinifeedActivity.this, "评论中...");
                         postAddComment(lcid, save_uname, msg);
@@ -244,7 +244,7 @@ public class MinifeedActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mCmtEdit.setHint("吐槽一下");
-                MSG_MODE = MSG_COMMRNT;
+                MSG_MODE = MSG_EVALUATE;
                 openSofInput(mCmtEdit);
                 mMfMask.setVisibility(View.VISIBLE);
             }

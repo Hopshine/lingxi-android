@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.lingci.R;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
 import com.lingci.module.BaseActivity;

@@ -10,7 +10,7 @@
         android:id="@+id/ll_photograph"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/pcamera_sel_bc"
+        android:background="@drawable/shape_sel_item"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">
@@ -35,7 +35,7 @@
         android:id="@+id/ll_getPicture"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/pcamera_sel_bc"
+        android:background="@drawable/shape_sel_item"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">
@@ -60,7 +60,7 @@
         android:id="@+id/ll_cancel"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/pcamera_sel_bc"
+        android:background="@drawable/shape_sel_item"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">

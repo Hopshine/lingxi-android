@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lingci.R;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.ColorPhrase;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Like;

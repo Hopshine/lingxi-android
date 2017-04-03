@@ -8,9 +8,9 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
-import com.lingci.common.Api;
-import com.lingci.common.BaseApplication;
-import com.lingci.common.Constants;
+import com.lingci.common.config.Api;
+import com.lingci.common.config.BaseApplication;
+import com.lingci.common.config.Constants;
 import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;

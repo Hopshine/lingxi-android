@@ -9,7 +9,7 @@
 
     <include layout="@layout/toolbar" />
 
-    <com.lingci.common.view.MyScrollView
+    <com.lingci.common.view.JellyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -129,6 +129,6 @@
             </RelativeLayout>
             
         </LinearLayout>
-    </com.lingci.common.view.MyScrollView>
+    </com.lingci.common.view.JellyScrollView>
 
 </LinearLayout>

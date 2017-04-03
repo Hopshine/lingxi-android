@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" >
 
-        <com.lingci.common.view.MyScrollView
+        <com.lingci.common.view.JellyScrollView
             android:id="@+id/cmt_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,7 +34,7 @@
                     android:divider="@null"
                     android:fadingEdge="none" />
             </LinearLayout>
-        </com.lingci.common.view.MyScrollView>
+        </com.lingci.common.view.JellyScrollView>
 
         <View
             android:id="@+id/mf_mask"

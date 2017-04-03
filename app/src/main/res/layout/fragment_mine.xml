@@ -1,131 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e8e8e8"
+    android:background="#f2f2f2"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
-    <com.lingci.common.view.MyScrollView
+    <com.lingci.common.view.JellyScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/mine_top_bc"
+                android:id="@+id/mine_top"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@drawable/mine_img_bc">
 
-                <RelativeLayout
-                    android:id="@+id/mine_top"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_centerInParent="true" >
+                <LinearLayout
+                    android:id="@+id/user_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_centerInParent="true">
 
                     <ImageView
-                        android:id="@+id/mine_user_img"
+                        android:id="@+id/user_img"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginRight="15dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/userimg" />
+                        android:adjustViewBounds="true"
+                        android:src="@mipmap/userimg"/>
 
                     <TextView
-                        android:id="@+id/mine_tv_uname"
-                        android:layout_width="match_parent"
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/mine_user_img"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:text="@string/app_name"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
-                </RelativeLayout>
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/user_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:gravity="center"
+                        android:textColor="#ffffff"
+                        android:paddingLeft="@dimen/activity_padding"
+                        android:paddingRight="@dimen/activity_padding"
+                        android:text="签名：暂无签名"/>
+                </LinearLayout>
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/mine_like"
+                android:id="@+id/mine_reply"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/mine_item_selector"
+                style="@style/mine_item"
                 android:drawableLeft="@mipmap/mine_item_like"
-                android:drawablePadding="15dp"
                 android:drawableRight="@mipmap/mine_item_right"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="我的回复"
-                android:textSize="16sp" />
+                android:text="我的回复"/>
 
             <TextView
-                android:id="@+id/mine_aet"
+                android:id="@+id/mine_relevant"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
-                android:background="@drawable/mine_item_selector"
+                style="@style/mine_item"
                 android:drawableLeft="@mipmap/mine_item_aet"
-                android:drawablePadding="15dp"
                 android:drawableRight="@mipmap/mine_item_right"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="与我相关"
-                android:textSize="16sp" />
+                android:text="与我相关"/>
 
             <TextView
-                android:id="@+id/mine_set"
+                android:id="@+id/mine_setting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/mine_item_selector"
+                style="@style/mine_item"
                 android:drawableLeft="@mipmap/mine_item_setting"
-                android:drawablePadding="15dp"
                 android:drawableRight="@mipmap/mine_item_right"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="设置"
-                android:textSize="16sp" />
+                android:text="设置"/>
 
             <TextView
-                android:id="@+id/mine_appinfo"
+                android:id="@+id/mine_about"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/mine_item_selector"
+                style="@style/mine_item"
                 android:drawableLeft="@mipmap/mine_item_info"
-                android:drawablePadding="15dp"
                 android:drawableRight="@mipmap/mine_item_right"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="关于lingci"
-                android:textSize="16sp" />
+                android:text="关于lingci"/>
 
             <TextView
-                android:id="@+id/mine_exit"
+                android:id="@+id/mine_sign_out"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/mine_item_selector"
+                style="@style/mine_item"
                 android:drawableLeft="@mipmap/mine_item_exit"
-                android:drawablePadding="15dp"
                 android:drawableRight="@mipmap/mine_item_right"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="退出登录"
-                android:textSize="16sp" />
+                android:text="退出登录"/>
         </LinearLayout>
-    </com.lingci.common.view.MyScrollView>
+    </com.lingci.common.view.JellyScrollView>
 
 </LinearLayout>

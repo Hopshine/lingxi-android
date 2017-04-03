@@ -1,4 +1,4 @@
-package com.lingci.common;
+package com.lingci.common.config;
 
 /**
  * api

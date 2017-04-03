@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lingci.R;
-import com.lingci.common.util.ColorPhrase;
+import com.lingci.common.util.Utils;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Reply;
 
@@ -69,11 +69,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
         public void bindItem(Context context, Reply reply) {
             mReply = reply;
             String replyStr = "{" + reply.getUname() + "}回复{" + reply.getTouname() + "}：" + reply.getReply();
-            CharSequence chars = ColorPhrase.from(replyStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
-            mReplyInfo.setText(chars);
+            mReplyInfo.setText(Utils.getCharSequence(replyStr));
         }
 
-        @OnClick(R.id.reply)
+        @OnClick(R.id.reply_info)
         void onClick(View view){
             if (mOnItemListener != null) mOnItemListener.onItemClick(view, mReply);
         }

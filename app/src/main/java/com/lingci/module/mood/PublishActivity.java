@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.lingci.R;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;

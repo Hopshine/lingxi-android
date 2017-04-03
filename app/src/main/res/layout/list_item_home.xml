@@ -56,7 +56,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
-                android:src="@mipmap/icon_home_chat"
+                android:src="@mipmap/icon_chat"
                 android:visibility="gone"/>
         </RelativeLayout>
 
@@ -109,7 +109,7 @@
                 android:contentDescription="@string/main_mine"
                 android:focusable="false"
                 android:scaleType="centerInside"
-                android:src="@mipmap/list_item_icon_see"/>
+                android:src="@mipmap/icon_see"/>
 
             <TextView
                 android:id="@+id/mf_see_num"
@@ -137,7 +137,7 @@
                 android:contentDescription="@string/main_mine"
                 android:focusable="false"
                 android:scaleType="centerInside"
-                android:src="@mipmap/list_item_icon_comment"/>
+                android:src="@mipmap/icon_comment"/>
 
             <TextView
                 android:id="@+id/mf_comment_num"
@@ -166,7 +166,7 @@
                 android:contentDescription="@string/main_mine"
                 android:focusable="false"
                 android:scaleType="centerInside"
-                android:src="@mipmap/list_item_icon_like_nor"/>
+                android:src="@mipmap/icon_like_nor"/>
 
             <TextView
                 android:id="@+id/mf_like_num"

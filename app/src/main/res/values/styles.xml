@@ -24,6 +24,15 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="mine_item">
+        <item name="android:background">@drawable/selector_item</item>
+        <item name="android:drawablePadding">@dimen/activity_padding</item>
+        <item name="android:paddingRight">@dimen/activity_padding</item>
+        <item name="android:paddingLeft">@dimen/activity_padding</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

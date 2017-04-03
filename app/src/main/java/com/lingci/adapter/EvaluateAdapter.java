@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lingci.R;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Evaluate;
 import com.lingci.entity.Reply;
@@ -45,6 +45,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface OnItemListener {
         void onItemClick(View view, Evaluate<Reply> evaluate);
+        void onItemChildClick(View view, Reply reply);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -179,6 +180,12 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mEvaluateInfo.setText(evaluate.getComment());
             ReplyAdapter adapter = new ReplyAdapter(context, evaluate.getReplylist());
             mRecyclerView.setAdapter(adapter);
+            adapter.setOnItemListener(new ReplyAdapter.OnItemListener() {
+                @Override
+                public void onItemClick(View view, Reply reply) {
+                    if (mOnItemListener != null) mOnItemListener.onItemChildClick(view, reply);
+                }
+            });
         }
 
         @OnClick({R.id.user_img, R.id.evaluate_body})

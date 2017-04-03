@@ -11,7 +11,7 @@ import android.view.KeyEvent;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.lingci.R;
-import com.lingci.common.Constants;
+import com.lingci.common.config.Constants;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.module.BaseActivity;
@@ -29,7 +29,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     @BindView(R.id.bottom_navigation)
     BottomNavigationBar mBottomNavigation;
 
-    private long mExitTime = 0;
     private FragmentManager fragmentManager;
     private HomeFragment homefragment;
     private MoodFragment mMoodFragment;
@@ -37,6 +36,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private MineFragment minefragment;
 
     private String exit = "MM";
+    private long mExitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +44,20 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
-        initBottomNavigation();
-        RongIM.setUserInfoProvider(this, true);
-        RongIM.getInstance().setMessageAttachedUserInfo(true);
     }
 
+    private void init() {
+        RongIM.setUserInfoProvider(this, true);
+        RongIM.getInstance().setMessageAttachedUserInfo(true);
+
+        initBottomNavigation();
+
+        int num = this.getIntent().getFlags();
+        fragmentManager = getSupportFragmentManager();
+        setTabSelection(0);
+    }
+
+    //底部导航
     private void initBottomNavigation() {
         BottomNavigationItem home = new BottomNavigationItem(R.mipmap.icon_home, "主页").setInactiveIconResource(R.mipmap.icon_home_nor);
         BottomNavigationItem camera = new BottomNavigationItem(R.mipmap.icon_camera, "圈子").setInactiveIconResource(R.mipmap.icon_camera_nor);
@@ -76,22 +85,17 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         });
     }
 
-    private void init() {
-        int num = this.getIntent().getFlags();
-        fragmentManager = getSupportFragmentManager();
-        setTabSelection(0);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //传递回调
         Fragment f = fragmentManager.findFragmentByTag("minefragment");
         f.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
      * 根据传入的index参数来设置选中的tab页。
-     * @param index 每个tab页对应的下标。0表示首页，1表示分享，2表示用户
+     * @param index 每个tab页对应的下标。0表示首页，1表示圈子，2表示消息，3表示用户
      */
     private void setTabSelection(int index) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -105,7 +109,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
             }
         } else if (index == 1) {
             if (mMoodFragment == null){
-                mMoodFragment = MoodFragment.newInstance("", "");
+                mMoodFragment = MoodFragment.newInstance("home");
                 transaction.add(R.id.fragment_container, mMoodFragment);
             } else {
                 transaction.show(mMoodFragment);

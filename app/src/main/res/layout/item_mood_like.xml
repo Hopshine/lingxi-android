@@ -15,7 +15,7 @@
         android:layout_height="@dimen/icon_size"
         android:focusable="false"
         android:scaleType="centerInside"
-        android:src="@mipmap/list_item_icon_like"/>
+        android:src="@mipmap/icon_like"/>
 
     <TextView
         android:id="@+id/like_people"

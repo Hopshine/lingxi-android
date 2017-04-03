@@ -44,12 +44,11 @@
 
         <ImageView
             android:id="@+id/lc_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:src="@mipmap/icon_home_chat"
+            android:padding="@dimen/mini_padding"
+            android:src="@mipmap/icon_chat"
             android:visibility="gone"/>
     </RelativeLayout>
 

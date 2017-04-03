@@ -23,6 +23,7 @@
     <dimen name="evaluate_recycler_margin">60dp</dimen>
 
     <!--text size-->
+    <dimen name="text_size">16sp</dimen>
     <dimen name="mood_action_size">12sp</dimen>
 
     <dimen name="evaluate_title">14sp</dimen>

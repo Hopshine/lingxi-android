@@ -11,7 +11,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.adapter.RelevantAdapter;
-import com.lingci.common.Api;
+import com.lingci.common.config.Api;
 import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
@@ -76,6 +76,7 @@ public class RelevantActivity extends BaseActivity {
                     case R.id.user_img:
                         break;
                     case R.id.mood_body:
+                        gotoMood(relevant.getMinifeed());
                         break;
                 }
             }
@@ -85,6 +86,7 @@ public class RelevantActivity extends BaseActivity {
         getRelevantList(saveName);
     }
 
+    //请求与我相关
     public void getRelevantList(String name) {
         OkHttpUtils.post()
                 .url(Api.Url + "/unReadList")
@@ -101,8 +103,7 @@ public class RelevantActivity extends BaseActivity {
                     public void onResponse(String response, int id) {
                         Log.d(TAG, "onResponse: " + response);
                         loadingProgress.dismiss();
-                        Type type = new TypeToken<Result<RelevantBean<Relevant<Mood<Like>>>>>() {
-                        }.getType();
+                        Type type = new TypeToken<Result<RelevantBean<Relevant<Mood<Like>>>>>() {}.getType();
                         GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<RelevantBean<Relevant<Mood<Like>>>>() {
                             @Override
                             public void onTrue(Result<RelevantBean<Relevant<Mood<Like>>>> result) {
@@ -122,6 +123,7 @@ public class RelevantActivity extends BaseActivity {
         mAdapter.updateData(relevantList);
     }
 
+    //前往详情页
     private void gotoMood(Mood<Like> mood){
         Intent intent = new Intent(RelevantActivity.this, MoodActivity.class);
         Bundle bundle = new Bundle();

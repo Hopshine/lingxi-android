@@ -20,7 +20,7 @@
             android:contentDescription="@string/main_mine"
             android:focusable="false"
             android:scaleType="centerInside"
-            android:src="@mipmap/list_item_icon_see"/>
+            android:src="@mipmap/icon_see"/>
 
         <TextView
             android:id="@+id/mf_see_num"
@@ -47,7 +47,7 @@
             android:contentDescription="@string/main_mine"
             android:focusable="false"
             android:scaleType="centerInside"
-            android:src="@mipmap/list_item_icon_comment"/>
+            android:src="@mipmap/icon_comment"/>
 
         <TextView
             android:id="@+id/mf_comment_num"
@@ -75,7 +75,7 @@
             android:contentDescription="@string/main_mine"
             android:focusable="false"
             android:scaleType="centerInside"
-            android:src="@mipmap/list_item_icon_like_nor"/>
+            android:src="@drawable/selector_like"/>
 
         <TextView
             android:id="@+id/mf_like_num"
