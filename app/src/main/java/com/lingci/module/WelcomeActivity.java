@@ -9,12 +9,12 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.common.config.Api;
-import com.lingci.common.config.BaseApplication;
+import com.lingci.common.config.App;
 import com.lingci.common.config.Constants;
 import com.lingci.common.util.GsonUtil;
-import com.lingci.common.util.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
+import com.lingci.common.view.MoeToast;
 import com.lingci.entity.Result;
 import com.lingci.entity.User;
 import com.lingci.entity.UserBean;
@@ -176,7 +176,7 @@ public class WelcomeActivity extends BaseActivity {
      * @param token Token
      */
     private void connect(String token) {
-        if (getApplicationInfo().packageName.equals(BaseApplication.getCurProcessName(getApplicationContext()))) {
+        if (getApplicationInfo().packageName.equals(App.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */

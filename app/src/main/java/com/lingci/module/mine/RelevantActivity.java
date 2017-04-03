@@ -13,7 +13,7 @@ import com.lingci.R;
 import com.lingci.adapter.RelevantAdapter;
 import com.lingci.common.config.Api;
 import com.lingci.common.util.GsonUtil;
-import com.lingci.common.util.MoeToast;
+import com.lingci.common.view.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;

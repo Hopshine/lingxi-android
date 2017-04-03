@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         emojicon:emojiconAlignment="baseline"
         android:lineSpacingExtra="3dp"
-        android:text="零次回复十兵卫：回复才是本体\ue32d，这个回复一定要高大上，比上面的评论一点要牛逼去了，不然都不好意思回复。" />
+        android:text="零次回复十兵卫：回复才是本体\ue32d，这个回复一定要高大上。" />
 
 </RelativeLayout>

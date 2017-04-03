@@ -99,6 +99,11 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    public void setDate(List<Evaluate<Reply>> data) {
+        mList = data;
+        notifyDataSetChanged();
+    }
+
     public void updateData(List<Evaluate<Reply>> data) {
         mList.addAll(data);
         notifyDataSetChanged();

@@ -1,11 +1,17 @@
 package com.lingci.module.mood;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +22,10 @@ import com.lingci.R;
 import com.lingci.adapter.EvaluateAdapter;
 import com.lingci.common.config.Api;
 import com.lingci.common.util.GsonUtil;
+import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
+import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.emojicon.EmojiconEditText;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Evaluate;
 import com.lingci.entity.EvaluateBean;
@@ -74,12 +83,23 @@ public class MoodActivity extends BaseActivity {
     LinearLayout mLikeWindow;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.edit_mask)
+    View mEditMask;
+    @BindView(R.id.edit_tu_cao)
+    EmojiconEditText mEditTuCao;
+    @BindView(R.id.btn_publish)
+    Button mBtnPublish;
 
     private int MSG_MODE;
     private final int MSG_EVALUATE = 0;
     private final int MSG_REPLY = 1;
 
+    private String saveName;
+    private String mMid;
+    private String toName;
+    private InputMethodManager imm;
     private EvaluateAdapter mAdapter;
+    private CustomProgressDialog loadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +112,18 @@ public class MoodActivity extends BaseActivity {
     private void init() {
         setupToolbar(mToolbar, R.string.title_activity_minifeed, true, 0, null);
 
+        saveName = SPUtils.getInstance(this).getString("username");
+
+        //输入状态模式默认为评论
+        MSG_MODE = MSG_EVALUATE;
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mEditTuCao.addTextChangedListener(new EditTextWatcher());
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new EvaluateAdapter(this, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
+
         mAdapter.setOnItemListener(new EvaluateAdapter.OnItemListener() {
             @Override
             public void onItemClick(View view, Evaluate<Reply> evaluate) {
@@ -104,14 +132,22 @@ public class MoodActivity extends BaseActivity {
                         Utils.toastShow(view.getContext(), "头像");
                         break;
                     case R.id.evaluate_body:
-                        Utils.toastShow(view.getContext(), "评论");
+                        MSG_MODE = MSG_REPLY;
+                        toName = evaluate.getUname();
+                        mEditTuCao.setHint("回复：" + toName);
+                        openSofInput(mEditTuCao);
+                        mEditMask.setVisibility(View.VISIBLE);
                         break;
                 }
             }
 
             @Override
             public void onItemChildClick(View view, Reply reply) {
-                Utils.toastShow(view.getContext(), reply.getUname());
+                MSG_MODE = MSG_REPLY;
+                toName = reply.getUname();
+                mEditTuCao.setHint("回复：" + toName);
+                openSofInput(mEditTuCao);
+                mEditMask.setVisibility(View.VISIBLE);
             }
         });
 
@@ -122,6 +158,8 @@ public class MoodActivity extends BaseActivity {
         Bundle bundle = this.getIntent().getExtras();
         Mood<Like> mood = (Mood<Like>) bundle.getSerializable("mood");
         if (mood == null) return;
+
+        mMid = String.valueOf(mood.getLcid());
         //动态详情
         Glide.with(this)
                 .load(Api.Url + mood.getUrl())
@@ -162,7 +200,7 @@ public class MoodActivity extends BaseActivity {
         getEvaluateList(String.valueOf(mood.getLcid()));
     }
 
-    @OnClick({R.id.user_img, R.id.mf_like})
+    @OnClick({R.id.user_img, R.id.mf_like, R.id.mf_comment, R.id.edit_mask, R.id.edit_tu_cao, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -170,17 +208,102 @@ public class MoodActivity extends BaseActivity {
             case R.id.mf_like:
                 Utils.toastShow(this, "点赞");
                 break;
+            case R.id.mf_comment:
+                mEditTuCao.setHint("吐槽一下");
+                MSG_MODE = MSG_EVALUATE;
+                openSofInput(mEditTuCao);
+                mEditMask.setVisibility(View.VISIBLE);
+                break;
+            case R.id.edit_mask:
+                mEditMask.setVisibility(View.GONE);
+                hideSoftInput(mEditTuCao);
+                break;
+            case R.id.edit_tu_cao:
+                mEditMask.setVisibility(View.VISIBLE);
+                break;
+            case R.id.btn_publish:
+                String msg = mEditTuCao.getText().toString().trim();
+                switch (MSG_MODE) {
+                    case MSG_EVALUATE:
+                        //评论
+                        loadingProgress = new CustomProgressDialog(MoodActivity.this, "评论中...");
+                        addEvaluate(mMid, saveName, msg);
+//                        Utils.toastShow(this, saveName +":"+ msg);
+                        mEditTuCao.setText(null);
+                        hideSoftInput(mEditTuCao);
+                        break;
+                    case MSG_REPLY:
+                        //回复
+                        loadingProgress = new CustomProgressDialog(MoodActivity.this, "回复中...");
+                        addReply(mMid, saveName, toName, msg);
+//                        Utils.toastShow(this, toName +":"+ msg);
+                        mEditTuCao.setText(null);
+                        hideSoftInput(mEditTuCao);
+                        break;
+                    default:
+                        break;
+                }
+                getEvaluateList(mMid);
+                break;
         }
+    }
+
+    /**
+     * 添加评论
+     */
+    public void addEvaluate(String mid, String uName, String evaluate) {
+        OkHttpUtils.post()
+                .url(Api.Url + "/addComment")
+                .addParams("lcid", mid)
+                .addParams("uname", uName)
+                .addParams("comment", evaluate)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.d(TAG, "onError: " + id);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d(TAG, "onResponse: " + response);
+                        Utils.toastShow(MoodActivity.this, "评论成功");
+                        mMfCommentNum.setText(String.valueOf(Integer.valueOf(mMfCommentNum.getText().toString()) + 1));
+                    }
+                });
+    }
+
+    /**
+     * 添加回复
+     */
+    public void addReply(String eid, String uName, String toName, String reply) {
+        OkHttpUtils.post()
+                .url(Api.Url + "/addReply")
+                .addParams("cmid", eid)
+                .addParams("uname", uName)
+                .addParams("touname", toName)
+                .addParams("reply", reply)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Utils.toastShow(MoodActivity.this, "回复成功");
+                    }
+                });
     }
 
     /**
      * 获取评论数据
      */
-    public void getEvaluateList(String lcid) {
+    public void getEvaluateList(String mid) {
         Utils.setTime();
         OkHttpUtils.post()
                 .url(Api.Url + "/commentList")
-                .addParams("lcid", lcid)
+                .addParams("lcid", mid)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -208,7 +331,51 @@ public class MoodActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 调用输入法
+     */
+    public void openSofInput(EditText edit) {
+        edit.setText(null);
+        edit.requestFocus();
+//        edit.setFocusable(true);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     * 隐藏输入法
+     */
+    public void hideSoftInput(EditText edit) {
+//        edit.setFocusable(false);
+        imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
+    }
+
     public void setData(List<Evaluate<Reply>> data) {
-        mAdapter.updateData(data);
+        mAdapter.setDate(data);
+    }
+
+    /**
+     * EditText 监听
+     */
+    private class EditTextWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            boolean isEdit = mEditTuCao.getText().length() > 0;
+            if (isEdit) {
+                mBtnPublish.setEnabled(true);
+                mBtnPublish.setSelected(true);
+            } else {
+                mBtnPublish.setEnabled(false);
+                mBtnPublish.setSelected(false);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
     }
 }

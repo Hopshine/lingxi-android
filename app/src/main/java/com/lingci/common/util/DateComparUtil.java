@@ -35,7 +35,6 @@ public class DateComparUtil {
 			daytime = (Date) sdfday.parse(sdfday.format(date));
 			beforeday = (Date) sdfday.parse(time);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (date.before(before)) {

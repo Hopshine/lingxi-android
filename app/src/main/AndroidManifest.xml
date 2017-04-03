@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".common.config.BaseApplication"
+        android:name=".common.config.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,7 +27,6 @@
         <activity android:name=".module.member.UpdatePwdActivity"/>
         <activity android:name=".module.main.MainActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".module.mood.MinifeedActivity"/>
         <activity android:name=".module.mood.PublishActivity"/>
         <activity android:name=".module.mine.PersonalInfoActivity"/>
         <activity android:name=".module.mine.RelevantActivity"/>

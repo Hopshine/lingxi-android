@@ -208,7 +208,7 @@ public class MineFragment extends BaseFragment {
     private void signOut() {
         String content = "", certain = "", cancel = "";
         final Dialog dialog = new Dialog(getActivity(), R.style.dialog);
-        dialog.setContentView(R.layout.prompt_dialog);
+        dialog.setContentView(R.layout.dialog_prompt);
         TextView prompt_info = (TextView) dialog.findViewById(R.id.prompt_info);
         Button prompt_ok = (Button) dialog.findViewById(R.id.prompt_ok);
         Button prompt_cancel = (Button) dialog.findViewById(R.id.prompt_cancel);

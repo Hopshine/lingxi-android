@@ -71,10 +71,12 @@
         <Button
             android:id="@+id/btn_publish"
             android:layout_width="wrap_content"
-            android:layout_height="39dp"
+            android:layout_height="40dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="4dp"
-            android:background="@drawable/shape_edit"
+            android:background="@drawable/selector_publish"
+            android:textColor="@color/selector_text"
+            android:textSize="16sp"
             android:text="发送"/>
     </LinearLayout>
 </LinearLayout>

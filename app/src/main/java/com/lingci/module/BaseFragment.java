@@ -7,10 +7,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.lingci.R;
 
-/**
- * Created by bafsj on 17/3/11.
- */
-
 public class BaseFragment extends Fragment {
 
     public static final String TAG = "lcDev";

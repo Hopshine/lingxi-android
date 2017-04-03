@@ -12,7 +12,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.lingci.R;
 import com.lingci.common.config.Constants;
-import com.lingci.common.util.MoeToast;
+import com.lingci.common.view.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.module.BaseActivity;
 

@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import com.lingci.R;
 import com.lingci.common.config.Api;
-import com.lingci.common.config.BaseApplication;
-import com.lingci.common.util.MoeToast;
+import com.lingci.common.config.App;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.common.view.MoeToast;
 import com.lingci.module.BaseActivity;
 import com.lingci.module.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity {
      * @param token
      */
     private void connect(String token) {
-        if (getApplicationInfo().packageName.equals(BaseApplication.getCurProcessName(getApplicationContext()))) {
+        if (getApplicationInfo().packageName.equals(App.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */

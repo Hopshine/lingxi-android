@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lingci.R;
-import com.lingci.common.util.MoeToast;
+import com.lingci.common.view.MoeToast;
 import com.lingci.module.BaseActivity;
 
 import butterknife.BindView;

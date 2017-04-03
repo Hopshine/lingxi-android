@@ -24,7 +24,7 @@ import com.lingci.R;
 import com.lingci.common.config.Api;
 import com.lingci.common.config.Constants;
 import com.lingci.common.util.MD5Util;
-import com.lingci.common.util.MoeToast;
+import com.lingci.common.view.MoeToast;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
@@ -92,7 +92,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         switch (v.getId()) {
             case R.id.person_img:
                 final Dialog dialog = new Dialog(PersonalInfoActivity.this, R.style.dialog);
-                dialog.setContentView(R.layout.photo_camera_dialog);
+                dialog.setContentView(R.layout.dialog_photo_camera);
                 LinearLayout ll_photograph = (LinearLayout) dialog.findViewById(R.id.ll_photograph);
                 LinearLayout ll_getPicture = (LinearLayout) dialog.findViewById(R.id.ll_getPicture);
                 LinearLayout ll_cancel = (LinearLayout) dialog.findViewById(R.id.ll_cancel);

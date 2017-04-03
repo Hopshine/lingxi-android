@@ -39,7 +39,7 @@ public class CustomProgressDialog extends ProgressDialog {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.progress_dialog);
+        setContentView(R.layout.dialog_progress);
 		init();
 	}
 
