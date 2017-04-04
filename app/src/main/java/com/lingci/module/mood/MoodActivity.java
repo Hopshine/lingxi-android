@@ -96,6 +96,7 @@ public class MoodActivity extends BaseActivity {
 
     private String saveName;
     private String mMid;
+    private String mEid;
     private String toName;
     private InputMethodManager imm;
     private EvaluateAdapter mAdapter;
@@ -142,8 +143,9 @@ public class MoodActivity extends BaseActivity {
             }
 
             @Override
-            public void onItemChildClick(View view, Reply reply) {
+            public void onItemChildClick(View view, String eid, Reply reply) {
                 MSG_MODE = MSG_REPLY;
+                mEid = eid;
                 toName = reply.getUname();
                 mEditTuCao.setHint("回复：" + toName);
                 openSofInput(mEditTuCao);
@@ -235,12 +237,10 @@ public class MoodActivity extends BaseActivity {
                     case MSG_REPLY:
                         //回复
                         loadingProgress = new CustomProgressDialog(MoodActivity.this, "回复中...");
-                        addReply(mMid, saveName, toName, msg);
-//                        Utils.toastShow(this, toName +":"+ msg);
+                        addReply(mEid, saveName, toName, msg);
+//                        Utils.toastShow(this,mEid + ":" + saveName +  ":"+  toName +":"+ msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
-                        break;
-                    default:
                         break;
                 }
                 getEvaluateList(mMid);
@@ -300,7 +300,6 @@ public class MoodActivity extends BaseActivity {
      * 获取评论数据
      */
     public void getEvaluateList(String mid) {
-        Utils.setTime();
         OkHttpUtils.post()
                 .url(Api.Url + "/commentList")
                 .addParams("lcid", mid)

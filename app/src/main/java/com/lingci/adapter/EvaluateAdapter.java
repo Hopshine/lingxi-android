@@ -45,7 +45,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface OnItemListener {
         void onItemClick(View view, Evaluate<Reply> evaluate);
-        void onItemChildClick(View view, Reply reply);
+        void onItemChildClick(View view,String eid, Reply reply);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -185,10 +185,12 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mEvaluateInfo.setText(evaluate.getComment());
             ReplyAdapter adapter = new ReplyAdapter(context, evaluate.getReplylist());
             mRecyclerView.setAdapter(adapter);
+
+            final String eid = String.valueOf(evaluate.getCmid());
             adapter.setOnItemListener(new ReplyAdapter.OnItemListener() {
                 @Override
                 public void onItemClick(View view, Reply reply) {
-                    if (mOnItemListener != null) mOnItemListener.onItemChildClick(view, reply);
+                    if (mOnItemListener != null) mOnItemListener.onItemChildClick(view, eid, reply);
                 }
             });
         }
