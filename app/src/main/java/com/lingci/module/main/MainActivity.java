@@ -31,6 +31,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
 
     private FragmentManager fragmentManager;
     private HomeFragment homefragment;
+    private DliFragment mDliFragment;
     private MoodFragment mMoodFragment;
     private MessageFragment messagefragment;
     private MineFragment minefragment;
@@ -100,34 +101,47 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private void setTabSelection(int index) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         hideFragments(transaction);
-        if (index == 0) {
-            if (homefragment == null) {
-                homefragment = new HomeFragment();
-                transaction.add(R.id.fragment_container, homefragment);
-            } else {
-                transaction.show(homefragment);
-            }
-        } else if (index == 1) {
-            if (mMoodFragment == null){
-                mMoodFragment = MoodFragment.newInstance("home");
-                transaction.add(R.id.fragment_container, mMoodFragment);
-            } else {
-                transaction.show(mMoodFragment);
-            }
-        } else if (index == 2) {
-            if (messagefragment == null) {
-                messagefragment = new MessageFragment();
-                transaction.add(R.id.fragment_container, messagefragment, "messagefragment");
-            } else {
-                transaction.show(messagefragment);
-            }
-        } else if (index == 3) {
-            if (minefragment == null) {
-                minefragment = new MineFragment();
-                transaction.add(R.id.fragment_container, minefragment, "minefragment");
-            } else {
-                transaction.show(minefragment);
-            }
+        switch (index) {
+            case -1:
+                if (homefragment == null) {
+                    homefragment = new HomeFragment();
+                    transaction.add(R.id.fragment_container, homefragment);
+                } else {
+                    transaction.show(homefragment);
+                }
+                break;
+            case 0:
+                if (mDliFragment == null){
+                    mDliFragment = new DliFragment();
+                    transaction.add(R.id.fragment_container, mDliFragment);
+                }else {
+                    transaction.show(mDliFragment);
+                }
+                break;
+            case 1:
+                if (mMoodFragment == null){
+                    mMoodFragment = MoodFragment.newInstance("home");
+                    transaction.add(R.id.fragment_container, mMoodFragment);
+                } else {
+                    transaction.show(mMoodFragment);
+                }
+                break;
+            case 2:
+                if (messagefragment == null) {
+                    messagefragment = new MessageFragment();
+                    transaction.add(R.id.fragment_container, messagefragment, "messagefragment");
+                } else {
+                    transaction.show(messagefragment);
+                }
+                break;
+            case 3:
+                if (minefragment == null) {
+                    minefragment = new MineFragment();
+                    transaction.add(R.id.fragment_container, minefragment, "minefragment");
+                } else {
+                    transaction.show(minefragment);
+                }
+                break;
         }
         transaction.commit();
     }
@@ -140,17 +154,19 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         if (homefragment != null) {
             transaction.hide(homefragment);
         }
+        if (mDliFragment != null) {
+            transaction.hide(mDliFragment);
+        }
+        if (mMoodFragment != null) {
+            transaction.hide(mMoodFragment);
+        }
         if (messagefragment != null) {
             transaction.hide(messagefragment);
         }
         if (minefragment != null) {
             transaction.hide(minefragment);
         }
-        if (mMoodFragment != null) {
-            transaction.hide(mMoodFragment);
-        }
     }
-
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

@@ -134,6 +134,7 @@ public class MoodActivity extends BaseActivity {
                         break;
                     case R.id.evaluate_body:
                         MSG_MODE = MSG_REPLY;
+                        mEid = String.valueOf(evaluate.getCmid());
                         toName = evaluate.getUname();
                         mEditTuCao.setHint("回复：" + toName);
                         openSofInput(mEditTuCao);
@@ -243,7 +244,6 @@ public class MoodActivity extends BaseActivity {
                         hideSoftInput(mEditTuCao);
                         break;
                 }
-                getEvaluateList(mMid);
                 break;
         }
     }
@@ -269,6 +269,8 @@ public class MoodActivity extends BaseActivity {
                         Log.d(TAG, "onResponse: " + response);
                         Utils.toastShow(MoodActivity.this, "评论成功");
                         mMfCommentNum.setText(String.valueOf(Integer.valueOf(mMfCommentNum.getText().toString()) + 1));
+
+                        getEvaluateList(mMid);
                     }
                 });
     }
@@ -292,6 +294,8 @@ public class MoodActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Utils.toastShow(MoodActivity.this, "回复成功");
+
+                        getEvaluateList(mMid);
                     }
                 });
     }
