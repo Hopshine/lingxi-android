@@ -5,6 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import com.lingci.entity.Result;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Gson工具类
@@ -17,7 +19,7 @@ public class GsonUtil {
         void onErr(Result<Object> result, Exception e);
     }
 
-    private Gson gson = new Gson();
+    private static Gson gson = new Gson();
     private String jsonStr = new String();
     private Type jsonType;
 
@@ -49,7 +51,6 @@ public class GsonUtil {
     }
 
     public static <T> void fromJson(String json, Type type, GsonResult<T> listener) {
-        Gson gson = new Gson();
         try {
             Result<T> result = gson.fromJson(json, type);
             listener.onTrue(result);
@@ -59,5 +60,35 @@ public class GsonUtil {
             Result<Object> result = gson.fromJson(json, jsonType);
             listener.onErr(result, e);
         }
+    }
+
+    /**
+     * 解析json
+     * @param json json字符串
+     * @param clazz class
+     * @return 对象
+     */
+    public static <T> T toObject(String json, Class<T> clazz) {
+        return gson.fromJson(json, clazz);
+    }
+
+    /**
+     * 解析json数组
+     * @param json json字符串
+     * @param clazz 示例 T[].class
+     * @return 集合
+     */
+    public static <T> List<T> toList(String json, Class<T[]> clazz) {
+        T[] array = gson.fromJson(json, clazz);
+        return Arrays.asList(array);
+    }
+
+    /**
+     * 将Object转为json
+     * @param src Object
+     * @return json字符串
+     */
+    public static String toJson(Object src) {
+        return gson.toJson(src);
     }
 }
