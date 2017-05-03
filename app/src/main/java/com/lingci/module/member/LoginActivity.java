@@ -104,9 +104,9 @@ public class LoginActivity extends BaseActivity {
                         try {
                             JSONObject json = new JSONObject(response);
                             int tag = json.getInt("ret");
-                            String im_token = json.getString("data");
                             switch (tag) {
                                 case 0:
+                                    String im_token = json.getString("data");
                                     SPUtils.getInstance(LoginActivity.this).putBoolean("islogin", true);
                                     SPUtils.getInstance(LoginActivity.this).putString("username", saveuname);
                                     SPUtils.getInstance(LoginActivity.this).putString("im_token", im_token);
@@ -130,7 +130,6 @@ public class LoginActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
-//				Toast.makeText(this,R.string.toast_again_exit, Toast.LENGTH_SHORT).show();
                 MoeToast.makeText(this, R.string.toast_again_exit);
                 mExitTime = System.currentTimeMillis();
             } else {
@@ -179,6 +178,7 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
                     Log.d("WelcomeActivity", "--onError" + errorCode);
+                    goHome();
                 }
             });
         }

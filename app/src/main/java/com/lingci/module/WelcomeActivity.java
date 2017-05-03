@@ -213,6 +213,7 @@ public class WelcomeActivity extends BaseActivity {
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
                     Log.d("WelcomeActivity", "--onError" + errorCode);
+                    goHome();
                 }
             });
         }

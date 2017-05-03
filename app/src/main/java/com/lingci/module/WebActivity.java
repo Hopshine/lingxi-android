@@ -35,6 +35,11 @@ public class WebActivity extends BaseActivity {
         }
 
         setupToolbar(mToolbar, mTittle, true, 0, null);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         mWebView.loadUrl(mUrl);
     }
 

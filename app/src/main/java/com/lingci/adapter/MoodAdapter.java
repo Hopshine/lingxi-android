@@ -1,6 +1,7 @@
 package com.lingci.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.lingci.R;
 import com.lingci.common.config.Api;
+import com.lingci.common.config.Constants;
 import com.lingci.common.util.Utils;
 import com.lingci.emojicon.EmojiconTextView;
 import com.lingci.entity.Like;
@@ -23,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imlib.model.UserInfo;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
@@ -197,8 +200,18 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bindItem(Context context, Mood<Like> mood) {
             mMood = mood;
             //是否能够聊天
-            if (mood.isIm_ability()) mLcChat.setVisibility(View.VISIBLE);
-            else mLcChat.setVisibility(View.GONE);
+            if (mood.isIm_ability()) {
+                mLcChat.setVisibility(View.VISIBLE);
+                String uid = String.valueOf(mood.getUid());
+                String uname = mood.getUname();
+                String img_url = Api.Url + mood.getUrl();
+                if (!Constants.uidList.contains(uid)) {
+                    Constants.uidList.add(uid);
+                    Constants.userList.add(new UserInfo(uid, uname, Uri.parse(img_url)));
+                }
+            } else {
+                mLcChat.setVisibility(View.GONE);
+            }
             //动态详情
             Glide.with(context)
                     .load(Api.Url + mood.getUrl())

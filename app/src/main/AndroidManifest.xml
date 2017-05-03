@@ -57,8 +57,9 @@
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 
-        <activity android:name=".module.WebActivity">
-        </activity>
+        <activity android:name=".module.WebActivity"
+                  android:hardwareAccelerated="true"
+            />
     </application>
 
 </manifest>

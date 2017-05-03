@@ -210,8 +210,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
 
     private void saveTime() {
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateStr = sdf.format(date);
+        String dateStr = SimpleDateFormat.getDateInstance().format(date);
         SPUtils.getInstance(MainActivity.this).putString("save_date", dateStr);
     }
 
