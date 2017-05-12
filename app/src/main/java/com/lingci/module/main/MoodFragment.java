@@ -13,11 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.adapter.MoodAdapter;
 import com.lingci.common.config.Api;
-import com.lingci.common.util.GsonUtil;
+import com.lingci.common.config.JsonCallback;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.entity.Like;
@@ -30,7 +29,6 @@ import com.lingci.module.mood.PublishActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -273,43 +271,30 @@ public class MoodFragment extends BaseFragment {
                 .addParams("count", count)
                 .addParams("uname", SPUtils.getInstance(getActivity()).getString("username", ""))
                 .build()
-                .execute(new StringCallback() {
+                .execute(new JsonCallback<Result<MoodBean<Mood<Like>>>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
                         Utils.toastShow(getActivity(), R.string.toast_getmf_error);
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.d(TAG, "get mood list: " + response);
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        Type jsonType = new TypeToken<Result<MoodBean<Mood<Like>>>>() {}.getType();
-                        GsonUtil.fromJson(response, jsonType, new GsonUtil.GsonResult<MoodBean<Mood<Like>>>() {
-                            @Override
-                            public void onTrue(Result<MoodBean<Mood<Like>>> result) {
-                                switch (RefreshMODE) {
-                                    case MOD_LOADING:
-                                        load_length = load_length + result.getData().getTotalnum();
-                                        if (result.getData().getTotalnum() == 0 ){
-                                            mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
-                                            return;
-                                        }
-                                        updateData(result.getData().getMinifeedlist());
-                                        break;
-                                    default:
-                                        load_length = result.getData().getTotalnum();
-                                        mAdapter.setData(result.getData().getMinifeedlist());
-                                        break;
+                    public void onResponse(Result<MoodBean<Mood<Like>>> response, int id) {
+                        switch (RefreshMODE) {
+                            case MOD_LOADING:
+                                load_length = load_length + response.getData().getTotalnum();
+                                if (response.getData().getTotalnum() == 0 ){
+                                    mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
+                                    return;
                                 }
-                            }
-
-                            @Override
-                            public void onErr(Result<Object> result, Exception e) {
-                                Log.d(TAG, "gson mood onErr: " + result.getMsg());
-                                mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
-                            }
-                        });
+                                updateData(response.getData().getMinifeedlist());
+                                break;
+                            default:
+                                load_length = response.getData().getTotalnum();
+                                mAdapter.setData(response.getData().getMinifeedlist());
+                                break;
+                        }
                     }
                 });
     }

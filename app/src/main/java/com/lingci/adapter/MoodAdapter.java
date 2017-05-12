@@ -98,7 +98,8 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void updateLoadStatus(int status) {
         this.mStatus = status;
-        notifyDataSetChanged();
+        notifyItemChanged(getItemCount());
+//        notifyDataSetChanged();
     }
 
     public void setData(List<Mood<Like>> data) {

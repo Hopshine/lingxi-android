@@ -17,11 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.adapter.EvaluateAdapter;
 import com.lingci.common.config.Api;
-import com.lingci.common.util.GsonUtil;
+import com.lingci.common.config.JsonCallback;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
@@ -37,7 +36,6 @@ import com.lingci.module.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -308,28 +306,15 @@ public class MoodActivity extends BaseActivity {
                 .url(Api.Url + "/commentList")
                 .addParams("lcid", mid)
                 .build()
-                .execute(new StringCallback() {
+                .execute(new JsonCallback<Result<EvaluateBean<Evaluate<Reply>>>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Utils.toastShow(MoodActivity.this, R.string.toast_getmf_error);
                     }
 
                     @Override
-                    public void onResponse(final String response, int id) {
-                        Log.d(TAG, "onResponse: " + response);
-                        Type type = new TypeToken<Result<EvaluateBean<Evaluate<Reply>>>>() {
-                        }.getType();
-                        GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<EvaluateBean<Evaluate<Reply>>>() {
-                            @Override
-                            public void onTrue(Result<EvaluateBean<Evaluate<Reply>>> result) {
-                                setData(result.getData().getCmtlist());
-                            }
-
-                            @Override
-                            public void onErr(Result<Object> result, Exception e) {
-                                Log.d(TAG, "onErr: " + result.getMsg());
-                            }
-                        });
+                    public void onResponse(Result<EvaluateBean<Evaluate<Reply>>> response, int id) {
+                        setData(response.getData().getCmtlist());
                     }
                 });
     }

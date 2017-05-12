@@ -11,6 +11,7 @@ import com.lingci.R;
 import com.lingci.common.config.Api;
 import com.lingci.common.config.App;
 import com.lingci.common.config.Constants;
+import com.lingci.common.config.JsonCallback;
 import com.lingci.common.util.GsonUtil;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
@@ -21,10 +22,6 @@ import com.lingci.entity.UserBean;
 import com.lingci.module.main.MainActivity;
 import com.lingci.module.member.LoginActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
@@ -65,12 +62,11 @@ public class WelcomeActivity extends BaseActivity {
 //			connect("YBoE5TbZRoxjyANO7PhPZmxxQZ3l7/ZMl8kUNMlzTysfsGEocvBjJ6uALHKWwrhkiemqgLCrNkE=");
 //			goHome();
         } else {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (isLogin) {
-                        goHome();
+                        goHome(0);
                     } else {
                         goLogin();
                     }
@@ -85,37 +81,21 @@ public class WelcomeActivity extends BaseActivity {
                 .url(Api.Url + "/getImUser")
                 .addParams("lctoken", lctoken)
                 .build()
-                .execute(new StringCallback() {
+                .execute(new JsonCallback<Result<UserBean<User>>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        goHome();
+                        goHome(0);
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.d(TAG, "onResponse: " + response);
-                        SPUtils.getInstance(WelcomeActivity.this).putString("im_User", response);
-                        Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
-                        GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<UserBean<User>>() {
-
-                            @Override
-                            public void onTrue(Result<UserBean<User>> result) {
-                                for (User user: result.getData().getUserlist()){
-                                    UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
-                                    if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
-                                        Constants.uidList.add(String.valueOf(user.getUid()));
-                                        Constants.userList.add(userInfo);
-                                    }
-                                }
+                    public void onResponse(Result<UserBean<User>> response, int id) {
+                        for (User user: response.getData().getUserlist()){
+                            UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
+                            if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
+                                Constants.uidList.add(String.valueOf(user.getUid()));
+                                Constants.userList.add(userInfo);
                             }
-
-                            @Override
-                            public void onErr(Result<Object> result, Exception e) {
-
-                            }
-                        });
-
-                        goHome();
+                        }
                     }
                 });
     }
@@ -128,38 +108,22 @@ public class WelcomeActivity extends BaseActivity {
                 .url(Api.Url + "/unSeeNum")
                 .addParams("uname", uname)
                 .build()
-                .execute(new StringCallback() {
+                .execute(new JsonCallback<Result<Integer>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        goHome();
+                        goHome(0);
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.d(TAG, "onResponse: " + response);
-                        try {
-                            JSONObject json = new JSONObject(response);
-                            int tag = json.getInt("ret");
-                            int num = json.getInt("data");
-                            switch (tag) {
-                                case 0:
-                                    Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                                    intent.addFlags(num);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                case 1:
-                                    goHome();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onResponse(Result<Integer> response, int id) {
+                        goHome(response.getData());
                     }
                 });
     }
 
-    private void goHome() {
+    private void goHome(int num) {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        intent.addFlags(num);
         startActivity(intent);
         finish();
     }
@@ -175,7 +139,7 @@ public class WelcomeActivity extends BaseActivity {
      *
      * @param token Token
      */
-    private void connect(String token) {
+    private void connect(final String token) {
         if (getApplicationInfo().packageName.equals(App.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
@@ -200,8 +164,16 @@ public class WelcomeActivity extends BaseActivity {
                     if (imUserStr == null || imUserStr.length() == 0) {
                         getImUser();
                     } else {
-                        jsonToObeject(imUserStr);
-
+                        Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
+                        com.lingci.entity.Result<UserBean<User>> userResult = GsonUtil.toObject(imUserStr, type);
+                        for (User user: userResult.getData().getUserlist()){
+                            UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
+                            if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
+                                Constants.uidList.add(String.valueOf(user.getUid()));
+                                Constants.userList.add(userInfo);
+                            }
+                        }
+                        goHome(0);
                     }
                 }
 
@@ -213,33 +185,9 @@ public class WelcomeActivity extends BaseActivity {
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
                     Log.d("WelcomeActivity", "--onError" + errorCode);
-                    goHome();
+                    goHome(0);
                 }
             });
         }
-    }
-    private void jsonToObeject(String imUserStr) {
-        Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
-        GsonUtil.fromJson(imUserStr, type, new GsonUtil.GsonResult<UserBean<User>>() {
-
-            @Override
-            public void onTrue(Result<UserBean<User>> result) {
-                for (User user: result.getData().getUserlist()){
-                    UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
-                    if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
-                        Constants.uidList.add(String.valueOf(user.getUid()));
-                        Constants.userList.add(userInfo);
-                    }
-                }
-
-                goHome();
-            }
-
-            @Override
-            public void onErr(Result<Object> result, Exception e) {
-
-                goHome();
-            }
-        });
     }
 }

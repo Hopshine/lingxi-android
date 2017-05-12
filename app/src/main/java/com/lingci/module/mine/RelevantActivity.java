@@ -5,18 +5,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
-import com.google.gson.reflect.TypeToken;
 import com.lingci.R;
 import com.lingci.adapter.RelevantAdapter;
 import com.lingci.common.config.Api;
-import com.lingci.common.util.GsonUtil;
-import com.lingci.common.view.MoeToast;
+import com.lingci.common.config.JsonCallback;
 import com.lingci.common.util.SPUtils;
 import com.lingci.common.util.Utils;
 import com.lingci.common.view.CustomProgressDialog;
+import com.lingci.common.view.MoeToast;
 import com.lingci.entity.Like;
 import com.lingci.entity.Mood;
 import com.lingci.entity.Relevant;
@@ -25,9 +23,7 @@ import com.lingci.entity.Result;
 import com.lingci.module.BaseActivity;
 import com.lingci.module.mood.MoodActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +88,7 @@ public class RelevantActivity extends BaseActivity {
                 .url(Api.Url + "/unReadList")
                 .addParams("uname", name)
                 .build()
-                .execute(new StringCallback() {
+                .execute(new JsonCallback<Result<RelevantBean<Relevant<Mood<Like>>>>>() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         loadingProgress.dismiss();
@@ -100,21 +96,9 @@ public class RelevantActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.d(TAG, "onResponse: " + response);
+                    public void onResponse(Result<RelevantBean<Relevant<Mood<Like>>>> response, int id) {
                         loadingProgress.dismiss();
-                        Type type = new TypeToken<Result<RelevantBean<Relevant<Mood<Like>>>>>() {}.getType();
-                        GsonUtil.fromJson(response, type, new GsonUtil.GsonResult<RelevantBean<Relevant<Mood<Like>>>>() {
-                            @Override
-                            public void onTrue(Result<RelevantBean<Relevant<Mood<Like>>>> result) {
-                                updateData(result.getData().getUnreadlist());
-                            }
-
-                            @Override
-                            public void onErr(Result<Object> result, Exception e) {
-
-                            }
-                        });
+                        updateData(response.getData().getUnreadlist());
                     }
                 });
     }
