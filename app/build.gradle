@@ -6,11 +6,11 @@ android {
     buildToolsVersion "25.0.1"
 
     defaultConfig {
-        applicationId "com.lingci"
+        applicationId "me.cl.lingxi"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 180
-        versionName "1.0.5"
+        versionCode 181
+        versionName "1.0.6 bate"
     }
     buildTypes {
         release {

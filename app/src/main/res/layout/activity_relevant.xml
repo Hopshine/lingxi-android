@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.mine.RelevantActivity" >
+    tools:context="me.cl.lingxi.module.mine.RelevantActivity" >
 
     <include layout="@layout/toolbar" />
 

@@ -44,7 +44,7 @@
             android:text="@string/app_name"
             android:textSize="10sp"/>
 
-        <com.lingci.emojicon.EmojiconTextView
+        <me.cl.lingxi.emojicon.EmojiconTextView
             android:id="@+id/relevant_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
         android:paddingRight="5dp"
         android:paddingTop="10dp">
 
-        <com.lingci.emojicon.EmojiconTextView
+        <me.cl.lingxi.emojicon.EmojiconTextView
             android:id="@+id/mood_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

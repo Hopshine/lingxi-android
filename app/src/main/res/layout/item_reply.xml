@@ -6,7 +6,7 @@
     android:background="#f5f5f5"
     android:padding="2dp" >
 
-    <com.lingci.emojicon.EmojiconTextView
+    <me.cl.lingxi.emojicon.EmojiconTextView
         android:id="@+id/reply_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

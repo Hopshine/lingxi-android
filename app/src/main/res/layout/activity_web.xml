@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.WebActivity">
+    tools:context="me.cl.lingxi.module.WebActivity">
 
     <include layout="@layout/toolbar"/>
 
-    <com.lingci.common.view.MoeWebView
+    <me.cl.lingxi.common.view.MoeWebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

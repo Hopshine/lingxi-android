@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.conversation.ConversationActivity">
+    tools:context="me.cl.lingxi.module.conversation.ConversationActivity">
 
     <include layout="@layout/toolbar"/>
 

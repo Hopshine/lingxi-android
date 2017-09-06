@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.mood.PublishActivity">
+    tools:context="me.cl.lingxi.module.mood.PublishActivity">
 
     <include layout="@layout/toolbar"/>
 
-    <com.lingci.emojicon.EmojiconEditText
+    <me.cl.lingxi.emojicon.EmojiconEditText
         android:id="@+id/mood_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -52,7 +52,7 @@
             android:visibility="gone"/>
     </RelativeLayout>
 
-    <com.lingci.emojicon.EmojiconTextView
+    <me.cl.lingxi.emojicon.EmojiconTextView
         android:id="@+id/mood_info"
         app:emojiconAlignment="baseline"
         app:emojiconSize="28sp"

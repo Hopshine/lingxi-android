@@ -4,10 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="app_name">普通的APP</string>
+    <string name="app_name">灵悉</string>
     <string name="action_settings">设置</string>
-    <string name="reg_agree">同意普通的APP的普通的注册邀请，因为没有不普通的选择</string>
-    <string name="share_text">分享到普通的APP</string>
+    <string name="reg_agree">同意灵悉的普通的注册邀请，因为没有不普通的选择</string>
+    <string name="share_text">分享到灵悉</string>
     <string name="item_num">0</string>
     <string name="title_activity_minifeed">动态详情</string>
     <string name="title_activity_personal_info">个人信息</string>
