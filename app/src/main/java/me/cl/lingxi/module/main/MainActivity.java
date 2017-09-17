@@ -3,7 +3,6 @@ package me.cl.lingxi.module.main;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
@@ -11,16 +10,12 @@ import android.view.KeyEvent;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.module.BaseActivity;
 
@@ -89,9 +84,24 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case Constants.ACTIVITY_PUBLISH:
+                int index = data.getIntExtra(Constants.GO_INDEX, 0);
+                setTabSelection(index);
+                // 非导航本身事件，手动切换
+                mBottomNavigation.selectTab(index);
+//                mMoodFragment.onActivityResult(requestCode, resultCode, data);
+                break;
+            case Constants.ACTIVITY_PERSONAL:
+                minefragment.onActivityResult(requestCode, resultCode, data);
+                break;
+            default:
+                break;
+        }
+
         //传递回调
-        Fragment f = fragmentManager.findFragmentByTag("minefragment");
-        f.onActivityResult(requestCode, resultCode, data);
+//        Fragment f = fragmentManager.findFragmentByTag("minefragment");
+//        f.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -197,21 +207,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        String save_date = SPUtils.getInstance(MainActivity.this).getString("save_date",null);
-//        if(save_date == null || save_date.length() == 0){
-//            saveTiem();
-//            ToastUtil.showSingleton(this,DateComparUtil.getDuration(save_date));
-//        }else if(DateComparUtil.getDuration(save_date).equals("7")){
-//            ImageLoader.getInstance().clearMemoryCache();
-//            ImageLoader.getInstance().clearDiscCache();
-//            saveTiem();
-//        }
-    }
-
-    private void saveTime() {
-        Date date = new Date();
-        String dateStr = SimpleDateFormat.getDateInstance().format(date);
-        SPUtils.getInstance(MainActivity.this).putString("save_date", dateStr);
     }
 
     @Override

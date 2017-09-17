@@ -1,13 +1,13 @@
 package me.cl.lingxi.module.mood;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.EvaluateAdapter;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.JsonCallback;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
@@ -43,7 +42,7 @@ import me.cl.lingxi.entity.Mood;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
-import okhttp3.Call;
+import me.cl.lingxi.module.member.UserActivity;
 
 public class MoodActivity extends BaseActivity {
 
@@ -129,7 +128,7 @@ public class MoodActivity extends BaseActivity {
             public void onItemClick(View view, Evaluate<Reply> evaluate) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        Utils.toastShow(view.getContext(), "头像");
+                        gotoUser();
                         break;
                     case R.id.evaluate_body:
                         MSG_MODE = MSG_REPLY;
@@ -156,6 +155,11 @@ public class MoodActivity extends BaseActivity {
         initView();
     }
 
+    private void gotoUser() {
+        Intent intent = new Intent(this, UserActivity.class);
+        startActivity(intent);
+    }
+
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
         Mood<Like> mood = (Mood<Like>) bundle.getSerializable("mood");
@@ -164,8 +168,7 @@ public class MoodActivity extends BaseActivity {
         mMid = String.valueOf(mood.getLcid());
         //动态详情
         Glide.with(this)
-                .load(Api.Url + mood.getUrl())
-                .skipMemoryCache(true)
+                .load(Api.baseUrl + mood.getUrl())
                 .placeholder(R.mipmap.userimg)
                 .error(R.mipmap.userimg)
                 .bitmapTransform(new CropCircleTransformation(this))
@@ -251,25 +254,22 @@ public class MoodActivity extends BaseActivity {
      * 添加评论
      */
     public void addEvaluate(String mid, int uid, String evaluate) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/addComment")
-                .addParams("lcid", mid)
-                .addParams("uid", String.valueOf(uid))
-                .addParams("comment", evaluate)
-                .build()
-                .execute(new StringCallback() {
+        OkGo.<Result>post(Api.addComment)
+                .params("lcid", mid)
+                .params("uid", uid)
+                .params("comment", evaluate)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.d(TAG, "onError: " + id);
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Log.d(TAG, "onResponse: " + response);
+                    public void onSuccess(Response<Result> response) {
                         Utils.toastShow(MoodActivity.this, "评论成功");
                         mMfCommentNum.setText(String.valueOf(Integer.valueOf(mMfCommentNum.getText().toString()) + 1));
 
                         getEvaluateList(mMid);
+                    }
+
+                    @Override
+                    public void onError(Response<Result> response) {
+                        Utils.toastShow(MoodActivity.this, "评论失败");
                     }
                 });
     }
@@ -278,23 +278,21 @@ public class MoodActivity extends BaseActivity {
      * 添加回复
      */
     public void addReply(String eid, int uid, int toUid, String reply) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/addReply")
-                .addParams("cmid", eid)
-                .addParams("uid", String.valueOf(uid))
-                .addParams("touid", String.valueOf(toUid))
-                .addParams("reply", reply)
-                .build()
-                .execute(new StringCallback() {
+        OkGo.<Result>post(Api.addReply)
+                .params("cmid", eid)
+                .params("uid", uid)
+                .params("touid", toUid)
+                .params("reply", reply)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
+                    public void onSuccess(Response<Result> response) {
+                        Utils.toastShow(MoodActivity.this, "回复成功");
+                        getEvaluateList(mMid);
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Utils.toastShow(MoodActivity.this, "回复成功");
-
-                        getEvaluateList(mMid);
+                    public void onError(Response<Result> response) {
+                        Utils.toastShow(MoodActivity.this, "回复失败");
                     }
                 });
     }
@@ -303,19 +301,17 @@ public class MoodActivity extends BaseActivity {
      * 获取评论数据
      */
     public void getEvaluateList(String mid) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/commentList")
-                .addParams("lcid", mid)
-                .build()
-                .execute(new JsonCallback<Result<EvaluateBean<Evaluate<Reply>>>>() {
+        OkGo.<Result<EvaluateBean<Evaluate<Reply>>>>post(Api.commentList)
+                .params("lcid", mid)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<EvaluateBean<Evaluate<Reply>>>>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Utils.toastShow(MoodActivity.this, R.string.toast_getmf_error);
+                    public void onSuccess(Response<Result<EvaluateBean<Evaluate<Reply>>>> response) {
+                        setData(response.body().getData().getCmtlist());
                     }
 
                     @Override
-                    public void onResponse(Result<EvaluateBean<Evaluate<Reply>>> response, int id) {
-                        setData(response.getData().getCmtlist());
+                    public void onError(Response<Result<EvaluateBean<Evaluate<Reply>>>> response) {
+                        Utils.toastShow(MoodActivity.this, R.string.toast_getmf_error);
                     }
                 });
     }

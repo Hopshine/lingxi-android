@@ -2,7 +2,9 @@ package me.cl.lingxi.common.util;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -51,6 +53,10 @@ public class Utils {
         else
             toast.setText(infoId);
         toast.show();
+    }
+
+    public static int dp2px(float dpValue) {
+        return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);
     }
 
     private static final long loadTime = 1500;
@@ -117,7 +123,7 @@ public class Utils {
      */
     public static String getLikeStr(List<Like> likes) {
         String likeStr = "";
-        for (int i = 0; i < likes.size(); i++) {
+        for (int i = 0, size = likes.size(); i < size; i++) {
             if (i == 3) break;
             likeStr = likeStr + "{" + likes.get(i).getUname() + "、}" + "";
         }
@@ -153,7 +159,7 @@ public class Utils {
     public static void setPersonImg(String uName, ImageView imgView) {
         String pathName = Environment.getExternalStorageDirectory() + "/lingci/image/avatar/headportraits.png";
         if (!new File(pathName).exists()) {
-            pathName = Api.Url + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
+            pathName = Api.baseUrl + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
         }
         Glide.with(imgView.getContext())
                 .load(pathName)
@@ -185,5 +191,29 @@ public class Utils {
             e.printStackTrace();
         }
         return metaValue;
+    }
+
+    // 获取版本名称
+    public static String getAppVersionName(Context context) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            return pi == null ? null : pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 获取版本号
+    public static int getAppVersionCode(Context context) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            return pi == null ? -1 : pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }

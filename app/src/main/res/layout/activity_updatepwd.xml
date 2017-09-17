@@ -5,7 +5,7 @@
     android:background="#ffffff"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="me.cl.lingxi.module.member.UpdatePwdActivity" >
+    tools:context=".module.member.UpdatePwdActivity" >
 
     <include layout="@layout/toolbar" />
 

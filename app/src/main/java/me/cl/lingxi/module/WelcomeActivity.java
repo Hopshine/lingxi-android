@@ -8,7 +8,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.zhy.http.okhttp.OkHttpUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.lang.reflect.Type;
 
@@ -17,9 +18,8 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.App;
+import me.cl.lingxi.common.config.Aplication;
 import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.config.JsonCallback;
 import me.cl.lingxi.common.util.GsonUtil;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
@@ -29,7 +29,6 @@ import me.cl.lingxi.entity.User;
 import me.cl.lingxi.entity.UserBean;
 import me.cl.lingxi.module.main.MainActivity;
 import me.cl.lingxi.module.member.LoginActivity;
-import okhttp3.Call;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -49,53 +48,44 @@ public class WelcomeActivity extends BaseActivity {
             MoeToast.makeText(this, "然而一切都指向大结局！");
         }
         isLogin = SPUtils.getInstance(WelcomeActivity.this).getBoolean("islogin", false);
-        String im_token = SPUtils.getInstance(WelcomeActivity.this).getString("im_token", "");
-        if (isLogin) {
-            if (TextUtils.isEmpty(im_token)) {
-                Utils.toastShow(this, "登录过期，请重新登陆");
-                goLogin();
-            } else {
-                connect(im_token);
-            }
-
-//			getUnRead(uname);
-//			connect("YBoE5TbZRoxjyANO7PhPZmxxQZ3l7/ZMl8kUNMlzTysfsGEocvBjJ6uALHKWwrhkiemqgLCrNkE=");
-//			goHome();
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isLogin) {
-                        goHome(0);
-                    } else {
+        final String im_token = SPUtils.getInstance(WelcomeActivity.this).getString("im_token", "");
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isLogin) {
+                    if (TextUtils.isEmpty(im_token)) {
+                        Utils.toastShow(WelcomeActivity.this, "登录过期，请重新登录");
                         goLogin();
+                    } else {
+                        connect(im_token);
                     }
+                } else {
+                    goLogin();
                 }
-            }, 2000);
-        }
+            }
+        }, 1500);
     }
 
     public void getImUser() {
         String lctoken = Utils.getMetaValue(this, "LINGCI_APP_KEY");
-        OkHttpUtils.post()
-                .url(Api.Url + "/getImUser")
-                .addParams("lctoken", lctoken)
-                .build()
-                .execute(new JsonCallback<Result<UserBean<User>>>() {
+        OkGo.<Result<UserBean<User>>>post(Api.imUser)
+                .params("lctoken", lctoken)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<UserBean<User>>>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-                        goHome(0);
-                    }
-
-                    @Override
-                    public void onResponse(Result<UserBean<User>> response, int id) {
-                        for (User user: response.getData().getUserlist()){
-                            UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
+                    public void onSuccess(Response<Result<UserBean<User>>> response) {
+                        for (User user: response.body().getData().getUserlist()){
+                            UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.baseUrl + user.getUrl()));
                             if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
                                 Constants.uidList.add(String.valueOf(user.getUid()));
                                 Constants.userList.add(userInfo);
                             }
                         }
+                        goHome(0);
+                    }
+
+                    @Override
+                    public void onError(Response<Result<UserBean<User>>> response) {
                         goHome(0);
                     }
                 });
@@ -105,19 +95,17 @@ public class WelcomeActivity extends BaseActivity {
      * 获取未读条数
      */
     public void getUnRead(String uname) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/unSeeNum")
-                .addParams("uname", uname)
-                .build()
-                .execute(new JsonCallback<Result<Integer>>() {
+        OkGo.<Result<Integer>>post(Api.unSeeNum)
+                .params("uname", uname)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<Integer>>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-                        goHome(0);
+                    public void onSuccess(Response<Result<Integer>> response) {
+                        goHome(response.body().getData());
                     }
 
                     @Override
-                    public void onResponse(Result<Integer> response, int id) {
-                        goHome(response.getData());
+                    public void onError(Response<Result<Integer>> response) {
+                        goHome(0);
                     }
                 });
     }
@@ -141,7 +129,7 @@ public class WelcomeActivity extends BaseActivity {
      * @param token Token
      */
     private void connect(final String token) {
-        if (getApplicationInfo().packageName.equals(App.getCurProcessName(getApplicationContext()))) {
+        if (getApplicationInfo().packageName.equals(Aplication.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */
@@ -168,7 +156,7 @@ public class WelcomeActivity extends BaseActivity {
                         Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
                         me.cl.lingxi.entity.Result<UserBean<User>> userResult = GsonUtil.toObject(imUserStr, type);
                         for (User user: userResult.getData().getUserlist()){
-                            UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.Url + user.getUrl()));
+                            UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.baseUrl + user.getUrl()));
                             if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
                                 Constants.uidList.add(String.valueOf(user.getUid()));
                                 Constants.userList.add(userInfo);

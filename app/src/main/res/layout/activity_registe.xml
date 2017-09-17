@@ -5,7 +5,7 @@
     android:background="#ffffff"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="me.cl.lingxi.module.member.RegisterActivity" >
+    tools:context=".module.member.RegisterActivity" >
 
     <include layout="@layout/toolbar" />
 

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="me.cl.lingxi.module.member.LoginActivity" >
+    tools:context=".module.member.LoginActivity" >
 
     <include layout="@layout/toolbar" />
 
@@ -55,7 +55,7 @@
             android:maxLength="15"
             android:maxLines="1"
             android:padding="7dp"
-            android:singleLine="true"
+            android:lines="1"
             android:textSize="16sp" />
 
         <TextView

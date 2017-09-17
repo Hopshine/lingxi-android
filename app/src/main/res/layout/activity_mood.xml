@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context="me.cl.lingxi.module.mood.MoodActivity">
+    tools:context=".module.mood.MoodActivity">
 
     <include layout="@layout/toolbar"/>
 
@@ -16,31 +16,70 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <LinearLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <include layout="@layout/item_mood_info"/>
-
-            <include layout="@layout/item_mood_action"/>
-
-            <include layout="@layout/item_mood_like"/>
-
-            <View
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/mood_margin"
-                android:background="#f2f2f2"/>
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:elevation="0dp"
+                android:fitsSystemWindows="true">
 
-            <include layout="@layout/recycler_view"/>
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="32dp"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:statusBarScrim="@android:color/transparent">
 
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="32dp"
+                        app:layout_collapseMode="parallax">
+
+                        <include layout="@layout/item_mood_info"/>
+
+                        <include layout="@layout/item_mood_action"/>
+
+                        <include layout="@layout/item_mood_like"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:background="#f2f2f2"
+                        android:layout_gravity="bottom"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/activity_padding"
+                        android:text="全部评论"
+                        app:layout_collapseMode="pin"/>
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        </android.support.design.widget.CoordinatorLayout>
 
         <View
             android:id="@+id/edit_mask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"/>
+
     </FrameLayout>
 
     <LinearLayout
@@ -75,8 +114,8 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="4dp"
             android:background="@drawable/selector_publish"
+            android:text="发送"
             android:textColor="@color/selector_text"
-            android:textSize="16sp"
-            android:text="发送"/>
+            android:textSize="16sp"/>
     </LinearLayout>
 </LinearLayout>

@@ -10,7 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.zhy.http.okhttp.OkHttpUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,8 +19,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.App;
-import me.cl.lingxi.common.config.JsonCallback;
+import me.cl.lingxi.common.config.Aplication;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
 import me.cl.lingxi.common.view.MoeToast;
@@ -27,7 +27,6 @@ import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.BaseActivity;
 import me.cl.lingxi.module.main.MainActivity;
-import okhttp3.Call;
 
 public class LoginActivity extends BaseActivity {
 
@@ -86,25 +85,17 @@ public class LoginActivity extends BaseActivity {
     public void postLogin(final String userName, String userPwd) {
         loginProgress.show();
         saveuname = userName;
-        OkHttpUtils.post()
-                .url(Api.Url + "/Login")
-                .addParams("username", userName)
-                .addParams("password", userPwd)
-                .build()
-                .execute(new JsonCallback<Result<User>>() {
+        OkGo.<Result<User>>post(Api.login)
+                .params("username", userName)
+                .params("password", userPwd)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<User>>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
+                    public void onSuccess(Response<Result<User>> response) {
                         loginProgress.dismiss();
-                        Toast.makeText(LoginActivity.this, R.string.toast_login_error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResponse(Result<User> response, int id) {
-                        loginProgress.dismiss();
-                        int tag = response.getRet();
+                        int tag = response.body().getRet();
                         switch (tag) {
                             case 0:
-                                User user = response.getData();
+                                User user = response.body().getData();
                                 String im_token = user.getIm_token();
                                 SPUtils.getInstance(LoginActivity.this).putBoolean("islogin", true);
                                 SPUtils.getInstance(LoginActivity.this).putInt("uid", user.getUid());
@@ -121,6 +112,12 @@ public class LoginActivity extends BaseActivity {
                             default:
                                 break;
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<Result<User>> response) {
+                        loginProgress.dismiss();
+                        Toast.makeText(LoginActivity.this, R.string.toast_login_error, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -144,7 +141,7 @@ public class LoginActivity extends BaseActivity {
      * @param token
      */
     private void connect(String token) {
-        if (getApplicationInfo().packageName.equals(App.getCurProcessName(getApplicationContext()))) {
+        if (getApplicationInfo().packageName.equals(Aplication.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */

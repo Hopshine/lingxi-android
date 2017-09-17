@@ -1,6 +1,5 @@
 package me.cl.lingxi.adapter;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +32,6 @@ import me.cl.lingxi.entity.Mood;
  */
 public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
     private List<Mood<Like>> mList;
 
     private FooterViewHolder mFooterViewHolder;
@@ -48,15 +46,14 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
-        void onItemClick(View view, Mood<Like> mood);
+        void onItemClick(View view, Mood<Like> mood, int position);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
         this.mOnItemListener = onItemListener;
     }
 
-    public MoodAdapter(Context context, List<Mood<Like>> list) {
-        this.mContext = context;
+    public MoodAdapter(List<Mood<Like>> list) {
         this.mList = list;
     }
 
@@ -88,7 +85,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             footerViewHolder.bindItem(LOAD_END);
         } else {
             MoodViewHolder moodViewHolder = (MoodViewHolder) holder;
-            moodViewHolder.bindItem(mContext, mList.get(position));
+            moodViewHolder.bindItem(mList.get(position), position);
         }
     }
 
@@ -104,19 +101,21 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // 设置数据
     public void setData(List<Mood<Like>> data) {
         mList = data;
-        mFooterViewHolder.bindItem(LOAD_END);
         notifyDataSetChanged();
+        mFooterViewHolder.bindItem(LOAD_END);
     }
 
     // 添加数据
-    public void updateData(List<Mood<Like>> data) {
+    public void addData(List<Mood<Like>> data) {
         mList.addAll(data);
-        mFooterViewHolder.bindItem(LOAD_PULL_TO);
         notifyDataSetChanged();
+        mFooterViewHolder.bindItem(LOAD_PULL_TO);
     }
 
-    public void addLike(Mood<Like> mood){
-        mList.contains(mood);
+    // 更新item
+    public void updateItem(Mood<Like> mood, int position) {
+        mList.set(position, mood);
+        notifyItemChanged(position);
     }
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
@@ -192,21 +191,24 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout mLikeWindow;
         @BindView(R.id.mood_card)
         LinearLayout mMoodCard;
+
         private Mood<Like> mMood;
+        private int mPosition;
 
         public MoodViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindItem(Context context, Mood<Like> mood) {
+        public void bindItem(Mood<Like> mood, int position) {
             mMood = mood;
+            mPosition = position;
             //是否能够聊天
             if (mood.isIm_ability()) {
                 mLcChat.setVisibility(View.VISIBLE);
                 String uid = String.valueOf(mood.getUid());
                 String uname = mood.getUname();
-                String img_url = Api.Url + mood.getUrl();
+                String img_url = Api.baseUrl + mood.getUrl();
                 if (!Constants.uidList.contains(uid)) {
                     Constants.uidList.add(uid);
                     Constants.userList.add(new UserInfo(uid, uname, Uri.parse(img_url)));
@@ -215,28 +217,26 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mLcChat.setVisibility(View.GONE);
             }
             //动态详情
-            Glide.with(context)
-                    .load(Api.Url + mood.getUrl())
+            Glide.with(mUserImg.getContext())
+                    .load(Api.baseUrl + mood.getUrl())
                     .placeholder(R.mipmap.userimg)
                     .error(R.mipmap.userimg)
-                    .bitmapTransform(new CropCircleTransformation(context))
+                    .bitmapTransform(new CropCircleTransformation(mUserImg.getContext()))
                     .into(mUserImg);
             mUserName.setText(mood.getUname());
             mMoodTime.setText(mood.getPl_time());
             mMoodInfo.setText(mood.getLc_info());
-            //查看评论点赞数
+            // 查看评论点赞数
             mMfSeeNum.setText(String.valueOf(mood.getViewnum()));
             mMfCommentNum.setText(String.valueOf(mood.getCmtnum()));
             mMfLikeNum.setText(String.valueOf(mood.getLikenum()));
-            //是否已经点赞
+            // 是否已经点赞
             if (mood.islike()) {
                 mMfLikeIcon.setSelected(true);
-                mMfLike.setClickable(false);
             } else {
                 mMfLikeIcon.setSelected(false);
-                mMfLike.setClickable(true);
             }
-            //点赞列表
+            // 点赞列表
             String likeStr = Utils.getLikeStr(mood.getLikelist());
             switch (mood.getLikenum()) {
                 case 0:
@@ -260,7 +260,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @OnClick({R.id.user_img, R.id.lc_chat, R.id.mf_comment, R.id.mf_like, R.id.mood_card})
         public void onClick(View view) {
-            if (mOnItemListener != null) mOnItemListener.onItemClick(view, mMood);
+            if (mOnItemListener != null) mOnItemListener.onItemClick(view, mMood, mPosition);
         }
     }
 }

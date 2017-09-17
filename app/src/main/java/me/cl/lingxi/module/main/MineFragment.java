@@ -22,8 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,12 +36,12 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.module.BaseFragment;
 import me.cl.lingxi.module.member.LoginActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
 import me.cl.lingxi.module.mine.RelevantActivity;
 import me.cl.lingxi.module.setting.AboutActivity;
-import okhttp3.Call;
 
 public class MineFragment extends BaseFragment {
 
@@ -130,11 +130,9 @@ public class MineFragment extends BaseFragment {
                 gotoRelevant();
                 break;
             case R.id.mine_setting:
-                if (Api.isDebug) {
-                    boolean isJoin = joinQQGroup("U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
-                    if (!isJoin) {
-                        Utils.toastShow(getActivity(), "未安装手Q或安装的版本不支持");
-                    }
+                boolean isJoin = joinQQGroup("U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
+                if (!isJoin) {
+                    Utils.toastShow(getActivity(), "未安装手Q或安装的版本不支持");
                 }
                 break;
             case R.id.mine_about:
@@ -147,21 +145,14 @@ public class MineFragment extends BaseFragment {
     }
 
     private void loadUserImage() {
-        OkHttpUtils.post()
-                .url(Api.Url + "/getImgbase")
-                .addParams("imgid", "1")
-                .build()
-                .execute(new StringCallback() {
+        OkGo.<String>post(Api.imgBase)
+                .params("imgid", "1")
+                .execute(new JsonCallback<String>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
+                    public void onSuccess(Response<String> response) {
                         String imgBase64 = null;
                         try {
-                            JSONObject json = new JSONObject(response);
+                            JSONObject json = new JSONObject(response.body());
                             imgBase64 = json.getString("data");
                         } catch (JSONException e) {
                             e.printStackTrace();

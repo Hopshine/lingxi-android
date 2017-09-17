@@ -93,8 +93,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
         public void bindItem(Context context, Relevant<Mood<Like>> relevant) {
             mRelevant = relevant;
             Glide.with(context)
-                    .load(Api.Url + relevant.getUrl())
-                    .skipMemoryCache(true)
+                    .load(Api.baseUrl + relevant.getUrl())
                     .placeholder(R.mipmap.userimg)
                     .error(R.mipmap.userimg)
                     .bitmapTransform(new CropCircleTransformation(context))

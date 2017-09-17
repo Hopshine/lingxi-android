@@ -6,14 +6,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +23,19 @@ import io.rong.imkit.RongIM;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.MoodAdapter;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.JsonCallback;
+import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.OnLoadMoreListener;
+import me.cl.lingxi.common.widget.ItemAnimator;
+import me.cl.lingxi.common.widget.OnLoadMoreListener;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.Mood;
 import me.cl.lingxi.entity.MoodBean;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseFragment;
+import me.cl.lingxi.module.member.UserActivity;
 import me.cl.lingxi.module.mood.MoodActivity;
 import me.cl.lingxi.module.mood.PublishActivity;
-import okhttp3.Call;
 
 /**
  * 圈子动态
@@ -48,6 +48,8 @@ public class MoodFragment extends BaseFragment {
     Toolbar mToolbar;
 
     private String mType;
+    private int saveUid;
+    private String saveUName;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -98,16 +100,20 @@ public class MoodFragment extends BaseFragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.action_share:
-                        startActivity(new Intent(getActivity(), PublishActivity.class));
+                        gotoPublish();
                         break;
                 }
                 return false;
             }
         });
 
+        saveUid = SPUtils.getInstance(getActivity()).getInt("uid", 0);
+        saveUName = SPUtils.getInstance(getActivity()).getString("username", "");
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new MoodAdapter(getActivity(), mList);
+        mRecyclerView.setItemAnimator(new ItemAnimator());
+        mAdapter = new MoodAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
 
         initEvent();
@@ -129,28 +135,23 @@ public class MoodFragment extends BaseFragment {
         //item点击
         mAdapter.setOnItemListener(new MoodAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view, Mood<Like> mood) {
+            public void onItemClick(View view, Mood<Like> mood, int position) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        Utils.toastShow(view.getContext(), "头像");
+                        goToUser();
                         break;
                     case R.id.lc_chat:
-                        Utils.toastShow(view.getContext(), "聊天");
                         if (RongIM.getInstance() != null)
                             RongIM.getInstance().startPrivateChat(getActivity(), String.valueOf(mood.getUid()), mood.getUname());
                         break;
+                    case R.id.mood_card:
                     case R.id.mf_comment:
-                        Utils.toastShow(view.getContext(), "评论");
                         gotoMood(mood);
                         break;
                     case R.id.mf_like:
-                        Utils.toastShow(view.getContext(), "点赞");
-                        String lcid = String.valueOf(mood.getLcid());
-                        int uid = SPUtils.getInstance(getActivity()).getInt("uid");
-                        postAddLike(lcid, uid);
-                        break;
-                    case R.id.mood_card:
-                        Utils.toastShow(view.getContext(), "点我点我");
+                        if (mood.islike()) return;
+                        // 未点赞点赞
+                        postAddLike(mood, position);
                         break;
                 }
             }
@@ -176,81 +177,107 @@ public class MoodFragment extends BaseFragment {
         });
     }
 
-    //前往动态详情
+    // 前往动态发布
+    private void gotoPublish() {
+        Intent intent = new Intent(getActivity(), PublishActivity.class);
+        startActivityForResult(intent, Constants.ACTIVITY_PUBLISH);
+    }
+
+    // 前往动态详情
     private void gotoMood(Mood<Like> mood) {
         Intent intent = new Intent(getActivity(), MoodActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("mood", mood);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivityForResult(intent, Constants.ACTIVITY_MOOD);
     }
 
-    //点赞
-    private void postAddLike(String lcid, int uid) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/addLike")
-                .addParams("lcid", lcid)
-                .addParams("uid", String.valueOf(uid))
-                .build()
-                .execute(new StringCallback() {
+    // 点赞
+    private void postAddLike(final Mood<Like> mood, final int position) {
+        String lcId = String.valueOf(mood.getLcid());
+        OkGo.<String>post(Api.addLike)
+                .params("lcid", lcId)
+                .params("uid", saveUid)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<String>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-
+                    public void onSuccess(Response<String> response) {
+                        // 刷新UI，本地模拟数据，等待下一次刷新获取
+                        mood.setLikenum(mood.getLikenum() + 1);
+                        mood.setIslike(true);
+                        List<Like> likes = new ArrayList<>(mood.getLikelist());
+                        Like like = new Like(saveUid, saveUName);
+                        likes.add(like);
+                        mood.setLikelist(likes);
+                        mAdapter.updateItem(mood, position);
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
-                        Log.d(TAG, "add like: " + response);
-                        // TODO 刷新UI
+                    public void onError(Response<String> response) {
+                        Utils.toastShow(getActivity(), "点赞失败");
                     }
                 });
     }
 
-    //获取动态列表
+    // 获取动态列表
     private void getMoodList(String lcid, String count) {
         if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH) mSwipeRefreshLayout.setRefreshing(true);
         int uid = SPUtils.getInstance(getActivity()).getInt("uid", -1);
-        OkHttpUtils.post()
-                .url(Api.Url + "/minifeedList")
-                .addParams("startlcid", lcid)
-                .addParams("count", count)
-                .addParams("uid", String.valueOf(uid))
-                .build()
-                .execute(new JsonCallback<Result<MoodBean<Mood<Like>>>>() {
+        OkGo.<Result<MoodBean<Mood<Like>>>>post(Api.moodList)
+                .params("startlcid", lcid)
+                .params("count", count)
+                .params("uid", uid)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<MoodBean<Mood<Like>>>>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
+                    public void onSuccess(Response<Result<MoodBean<Mood<Like>>>> response) {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
-                        Utils.toastShow(getActivity(), R.string.toast_getmf_error);
-                    }
-
-                    @Override
-                    public void onResponse(Result<MoodBean<Mood<Like>>> response, int id) {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        MoodBean<Mood<Like>> moodBean = response.body().getData();
                         switch (RefreshMODE) {
                             case MOD_LOADING:
-                                load_length = load_length + response.getData().getTotalnum();
-                                if (response.getData().getTotalnum() == 0 ){
+                                load_length = load_length + moodBean.getTotalnum();
+                                if (moodBean.getTotalnum() == 0 ){
                                     mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
                                     return;
                                 }
-                                updateData(response.getData().getMinifeedlist());
+                                updateData(moodBean.getMinifeedlist());
                                 break;
                             default:
-                                load_length = response.getData().getTotalnum();
-                                mAdapter.setData(response.getData().getMinifeedlist());
+                                load_length = moodBean.getTotalnum();
+                                mAdapter.setData(moodBean.getMinifeedlist());
                                 break;
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<Result<MoodBean<Mood<Like>>>> response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
+                        Utils.toastShow(getActivity(), R.string.toast_getmf_error);
                     }
                 });
     }
 
     //更新数据
     public void updateData(List<Mood<Like>> data) {
-        mAdapter.updateData(data);
+        mAdapter.addData(data);
     }
 
-    private void goToMember(){
+    // 刷新数据
+    private void onRefresh(){
+        RefreshMODE = MOD_REFRESH;
+        getMoodList("0", "10");
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 发布动态回退则掉调起刷新
+        if (resultCode == Constants.ACTIVITY_PUBLISH)
+            onRefresh();
+    }
+
+    // 前往用户页面
+    private void goToUser(){
+        Intent intent = new Intent(getActivity(), UserActivity.class);
+        startActivity(intent);
     }
 }

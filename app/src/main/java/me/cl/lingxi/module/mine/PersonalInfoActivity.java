@@ -20,8 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,8 +39,9 @@ import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
 import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.common.widget.JsonCallback;
+import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
-import okhttp3.Call;
 
 public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 
@@ -221,24 +222,20 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
     private void upPhoto() {
         loadingProgress.show();
-        OkHttpUtils.post()
-                .url(Api.Url + "/uploadPrimg")
-                .addParams("MD5name", MD5Util.MD5(saveName))
-                .addParams("uid", String.valueOf(saveId))
-                .addParams("imgStr", imgStr)
-                .build()
-                .execute(new StringCallback() {
+        OkGo.<Result>post(Api.uploadPrimg)
+                .params("MD5name", MD5Util.MD5(saveName))
+                .params("uid", saveId)
+                .params("imgStr", imgStr)
+                .execute(new JsonCallback<Result>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
+                    public void onSuccess(Response<Result> response) {
                         loadingProgress.dismiss();
-                        Log.d(TAG, "onError: " + id);
+                        Utils.toastShow(PersonalInfoActivity.this, "头像更新成功");
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
+                    public void onError(Response<Result> response) {
                         loadingProgress.dismiss();
-                        Log.d(TAG, "onResponse: " + response);
-                        Utils.toastShow(PersonalInfoActivity.this, "头像更新成功");
                     }
                 });
     }

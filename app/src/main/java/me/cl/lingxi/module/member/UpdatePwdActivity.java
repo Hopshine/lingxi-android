@@ -4,15 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,8 +16,9 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.widget.JsonCallback;
+import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
-import okhttp3.Call;
 
 public class UpdatePwdActivity extends BaseActivity {
 
@@ -72,44 +69,34 @@ public class UpdatePwdActivity extends BaseActivity {
     }
 
     public void postUpdatePwd(String userName, String userPwd, String phone) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/updatePwd")
-                .addParams("username", userName)
-                .addParams("password", userPwd)
-                .addParams("phone", phone)
-                .build()
-                .execute(new StringCallback() {
+        OkGo.<Result>post(Api.updatePwd)
+                .params("username", userName)
+                .params("password", userPwd)
+                .params("phone", phone)
+                .execute(new JsonCallback<Result>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
-                        updateProgress.dismiss();
-                        Log.d(TAG, "onError: " + id);
-                        Utils.toastShow(UpdatePwdActivity.this, R.string.toast_upwd_error);
+                    public void onSuccess(Response<Result> response) {
+                        int tag = response.body().getRet();
+                        switch (tag) {
+                            case 0:
+                                Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uped_ok);
+                                Intent intent = new Intent(UpdatePwdActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            case 2:
+                                Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uname_error);
+                                break;
+                            case 3:
+                                Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uphone_error);
+                                break;
+                        }
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
+                    public void onError(Response<Result> response) {
                         updateProgress.dismiss();
-                        Log.d(TAG, "onResponse: " + response);
-                        try {
-                            JSONObject json = new JSONObject(response);
-                            int tag = json.getInt("ret");
-                            switch (tag) {
-                                case 0:
-                                    Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uped_ok);
-                                    Intent intent = new Intent(UpdatePwdActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                case 2:
-                                    Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uname_error);
-                                    break;
-                                case 3:
-                                    Utils.toastShow(UpdatePwdActivity.this, R.string.toast_uphone_error);
-                                    break;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Utils.toastShow(UpdatePwdActivity.this, R.string.toast_upwd_error);
                     }
                 });
     }

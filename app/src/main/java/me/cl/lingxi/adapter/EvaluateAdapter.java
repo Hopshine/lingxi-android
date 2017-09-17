@@ -174,8 +174,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bindItem(Context context, Evaluate<Reply> evaluate) {
             mEvaluate = evaluate;
             Glide.with(context)
-                    .load(Api.Url + evaluate.getUrl())
-                    .skipMemoryCache(true)
+                    .load(Api.baseUrl + evaluate.getUrl())
                     .placeholder(R.mipmap.userimg)
                     .error(R.mipmap.userimg)
                     .bitmapTransform(new CropCircleTransformation(context))

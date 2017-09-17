@@ -7,7 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.zhy.http.okhttp.OkHttpUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import butterknife.ButterKnife;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.RelevantAdapter;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.JsonCallback;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
@@ -29,7 +29,6 @@ import me.cl.lingxi.entity.RelevantBean;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
 import me.cl.lingxi.module.mood.MoodActivity;
-import okhttp3.Call;
 
 public class RelevantActivity extends BaseActivity {
 
@@ -79,26 +78,24 @@ public class RelevantActivity extends BaseActivity {
         });
 
         loadingProgress.show();
-        getRelevantList(saveId);
+        getRelevantList();
     }
 
     //请求与我相关
-    public void getRelevantList(int uid) {
-        OkHttpUtils.post()
-                .url(Api.Url + "/unReadList")
-                .addParams("uid", String.valueOf(uid))
-                .build()
-                .execute(new JsonCallback<Result<RelevantBean<Relevant<Mood<Like>>>>>() {
+    public void getRelevantList() {
+        OkGo.<Result<RelevantBean<Relevant<Mood<Like>>>>>post(Api.unReadList)
+                .params("uid", saveId)
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<RelevantBean<Relevant<Mood<Like>>>>>() {
                     @Override
-                    public void onError(Call call, Exception e, int id) {
+                    public void onSuccess(Response<Result<RelevantBean<Relevant<Mood<Like>>>>> response) {
                         loadingProgress.dismiss();
-                        Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
+                        updateData(response.body().getData().getUnreadlist());
                     }
 
                     @Override
-                    public void onResponse(Result<RelevantBean<Relevant<Mood<Like>>>> response, int id) {
+                    public void onError(Response<Result<RelevantBean<Relevant<Mood<Like>>>>> response) {
                         loadingProgress.dismiss();
-                        updateData(response.getData().getUnreadlist());
+                        Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
                     }
                 });
     }

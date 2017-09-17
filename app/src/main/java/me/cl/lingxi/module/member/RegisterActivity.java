@@ -4,15 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +19,9 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.widget.JsonCallback;
+import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
-import okhttp3.Call;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -98,45 +95,37 @@ public class RegisterActivity extends BaseActivity {
      */
     public void postRegister(String userName, String userPwd, String phone) {
         registerProgress.show();
-        OkHttpUtils.post()
-                .url(Api.Url + "/register")
-                .addParams("username", userName)
-                .addParams("password", userPwd)
-                .addParams("phone", phone)
-                .build()
-                .execute(new StringCallback() {
+        OkGo.<Result>post(Api.register)
+                .params("username", userName)
+                .params("password", userPwd)
+                .params("phone", phone)
+                .execute(new JsonCallback<Result>() {
+
                     @Override
-                    public void onError(Call call, Exception e, int id) {
+                    public void onSuccess(Response<Result> response) {
                         registerProgress.dismiss();
-                        Log.d(TAG, "onError: " + id);
-                        Utils.toastShow(RegisterActivity.this, R.string.toast_reg_error);
+                        int tag = response.body().getRet();
+                        switch (tag) {
+                            case 0:
+                                Utils.toastShow(RegisterActivity.this, R.string.toast_reg_ok);
+                                Intent intent = new Intent(RegisterActivity.this,
+                                        LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            case 2:
+                                Utils.toastShow(RegisterActivity.this, R.string.toast_uname_being);
+                                break;
+                            case 3:
+                                Utils.toastShow(RegisterActivity.this, R.string.toast_phone_being);
+                                break;
+                        }
                     }
 
                     @Override
-                    public void onResponse(String response, int id) {
+                    public void onError(Response<Result> response) {
                         registerProgress.dismiss();
-                        Log.d(TAG, "onResponse: " + response);
-                        try {
-                            JSONObject json = new JSONObject(response);
-                            int tag = json.getInt("ret");
-                            switch (tag) {
-                                case 0:
-                                    Utils.toastShow(RegisterActivity.this, R.string.toast_reg_ok);
-                                    Intent intent = new Intent(RegisterActivity.this,
-                                            LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                case 2:
-                                    Utils.toastShow(RegisterActivity.this, R.string.toast_uname_being);
-                                    break;
-                                case 3:
-                                    Utils.toastShow(RegisterActivity.this, R.string.toast_phone_being);
-                                    break;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Utils.toastShow(RegisterActivity.this, R.string.toast_reg_error);
                     }
                 });
     }

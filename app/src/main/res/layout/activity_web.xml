@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="me.cl.lingxi.module.WebActivity">
+    tools:context=".module.WebActivity">
 
     <include layout="@layout/toolbar"/>
 
