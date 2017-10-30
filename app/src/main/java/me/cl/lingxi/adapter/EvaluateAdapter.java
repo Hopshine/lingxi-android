@@ -31,7 +31,7 @@ import me.cl.lingxi.entity.Reply;
 public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<Evaluate<Reply>> mList;
+    private List<Evaluate> mList;
 
     public static final int LOAD_MORE = 0;
     public static final int LOAD_PULL_TO = 1;
@@ -44,7 +44,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
-        void onItemClick(View view, Evaluate<Reply> evaluate);
+        void onItemClick(View view, Evaluate evaluate);
         void onItemChildClick(View view,String eid, Reply reply);
     }
 
@@ -52,7 +52,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mOnItemListener = onItemListener;
     }
 
-    public EvaluateAdapter(Context context, List<Evaluate<Reply>> list) {
+    public EvaluateAdapter(Context context, List<Evaluate> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -99,12 +99,12 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public void setDate(List<Evaluate<Reply>> data) {
+    public void setDate(List<Evaluate> data) {
         mList = data;
         notifyDataSetChanged();
     }
 
-    public void updateData(List<Evaluate<Reply>> data) {
+    public void updateData(List<Evaluate> data) {
         mList.addAll(data);
         notifyDataSetChanged();
     }
@@ -162,7 +162,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         EmojiconTextView mEvaluateInfo;
         @BindView(R.id.recycler_view)
         RecyclerView mRecyclerView;
-        private Evaluate<Reply> mEvaluate;
+        private Evaluate mEvaluate;
 
         public EvaluateViewHolder(View itemView) {
             super(itemView);
@@ -171,7 +171,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mRecyclerView.setLayoutManager(layoutManager);
         }
 
-        public void bindItem(Context context, Evaluate<Reply> evaluate) {
+        public void bindItem(Context context, Evaluate evaluate) {
             mEvaluate = evaluate;
             Glide.with(context)
                     .load(Api.baseUrl + evaluate.getUrl())

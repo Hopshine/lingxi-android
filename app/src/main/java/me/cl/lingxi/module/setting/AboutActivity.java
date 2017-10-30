@@ -1,19 +1,28 @@
 package me.cl.lingxi.module.setting;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.lingxi.R;
+import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.common.widget.JsonCallback;
+import me.cl.lingxi.entity.AppVersion;
+import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
 import me.cl.lingxi.module.WebActivity;
+import me.cl.lingxi.module.update.UpdateReceiver;
 
 public class AboutActivity extends BaseActivity {
 
@@ -21,6 +30,8 @@ public class AboutActivity extends BaseActivity {
     Toolbar mToolbar;
     @BindView(R.id.version)
     TextView mVersion;
+
+    private UpdateReceiver mUpdateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +51,30 @@ public class AboutActivity extends BaseActivity {
         String versionName = "V " + Utils.getAppVersionName(this);
         mVersion.setText(versionName);
 
+        registerBroadcast();
     }
 
-    @OnClick({R.id.public_license, R.id.learn_more})
+    // 注册广播
+    private void registerBroadcast() {
+        mUpdateReceiver = new UpdateReceiver();
+        IntentFilter mIntentFilter = new IntentFilter(UpdateReceiver.UPDATE_ACTION);
+        this.registerReceiver(mUpdateReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 注销广播
+        if (mUpdateReceiver != null)
+            unregisterReceiver(mUpdateReceiver);
+        super.onDestroy();
+    }
+
+    @OnClick({R.id.app_update, R.id.public_license, R.id.learn_more})
     public void onClick(View view){
         switch (view.getId()) {
+            case R.id.app_update:
+                getAppVersion();
+                break;
             case R.id.public_license:
                 gotoPublicLicense();
                 break;
@@ -53,6 +83,25 @@ public class AboutActivity extends BaseActivity {
                 gotoWeb("前世今生", url);
                 break;
         }
+    }
+
+    // 获取版本信息
+    public void getAppVersion() {
+        OkGo.<Result<AppVersion>>get(Api.appUpdate)
+                .execute(new JsonCallback<Result<AppVersion>>() {
+                    @Override
+                    public void onSuccess(Response<Result<AppVersion>> response) {
+                        Result<AppVersion> result = response.body();
+                        if (result.getRet() == 0 && result.getData() != null) {
+                            Intent intent = new Intent(UpdateReceiver.UPDATE_ACTION);
+                            intent.putExtra("app_version", result.getData());
+                            sendBroadcast(intent);
+                        } else {
+                            Utils.toastShow(AboutActivity.this, "版本信息获取失败");
+                        }
+                    }
+                });
+
     }
 
     private void gotoPublicLicense() {

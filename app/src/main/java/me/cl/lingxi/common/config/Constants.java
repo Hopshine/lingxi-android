@@ -18,8 +18,8 @@ public class Constants {
     public static boolean isRead = true;
 
     public static final String UPDATE_USERIMG = "com.lingci.updateimg";
-    public static final String DILI_ANIMATE = "dilianimate";
-    public static final String DILI_CACHE = "dilicache";
+    public static final String DILI_ANIMATE = "dili.animate";
+    public static final String DILI_CACHE = "dili.cache";
 
     public static List<UserInfo> userList = new ArrayList<>();
     public static List<String> uidList = new ArrayList<>();

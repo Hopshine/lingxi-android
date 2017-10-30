@@ -22,9 +22,9 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.DateUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.emojicon.EmojiconTextView;
-import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.Mood;
 
 /**
@@ -32,7 +32,7 @@ import me.cl.lingxi.entity.Mood;
  */
 public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Mood<Like>> mList;
+    private List<Mood> mList;
 
     private FooterViewHolder mFooterViewHolder;
 
@@ -46,14 +46,14 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
-        void onItemClick(View view, Mood<Like> mood, int position);
+        void onItemClick(View view, Mood mood, int position);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
         this.mOnItemListener = onItemListener;
     }
 
-    public MoodAdapter(List<Mood<Like>> list) {
+    public MoodAdapter(List<Mood> list) {
         this.mList = list;
     }
 
@@ -99,21 +99,21 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     // 设置数据
-    public void setData(List<Mood<Like>> data) {
+    public void setData(List<Mood> data) {
         mList = data;
         notifyDataSetChanged();
         mFooterViewHolder.bindItem(LOAD_END);
     }
 
     // 添加数据
-    public void addData(List<Mood<Like>> data) {
+    public void addData(List<Mood> data) {
         mList.addAll(data);
         notifyDataSetChanged();
         mFooterViewHolder.bindItem(LOAD_PULL_TO);
     }
 
     // 更新item
-    public void updateItem(Mood<Like> mood, int position) {
+    public void updateItem(Mood mood, int position) {
         mList.set(position, mood);
         notifyItemChanged(position);
     }
@@ -192,7 +192,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.mood_card)
         LinearLayout mMoodCard;
 
-        private Mood<Like> mMood;
+        private Mood mMood;
         private int mPosition;
 
         public MoodViewHolder(View itemView) {
@@ -200,7 +200,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindItem(Mood<Like> mood, int position) {
+        public void bindItem(Mood mood, int position) {
             mMood = mood;
             mPosition = position;
             //是否能够聊天
@@ -224,7 +224,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .bitmapTransform(new CropCircleTransformation(mUserImg.getContext()))
                     .into(mUserImg);
             mUserName.setText(mood.getUname());
-            mMoodTime.setText(mood.getPl_time());
+            mMoodTime.setText(DateUtil.showTime(mood.getPl_time()));
             mMoodInfo.setText(mood.getLc_info());
             // 查看评论点赞数
             mMfSeeNum.setText(String.valueOf(mood.getViewnum()));

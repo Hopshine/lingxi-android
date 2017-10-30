@@ -66,14 +66,16 @@ public class PublishActivity extends BaseActivity {
         }
     }
 
+    // 发布动态
     private void postSubmitMood(String uName, String moodInfo) {
-        shareProgress.show();
+        if (!shareProgress.isShowing()) shareProgress.show();
         OkGo.<Result>post(Api.publishMood)
                 .params("uname", uName)
                 .params("lcinfo", moodInfo)
                 .execute(new JsonCallback<Result>() {
                     @Override
                     public void onSuccess(Response<Result> response) {
+                        shareProgress.dismiss();
                         int tag = response.body().getRet();
                         switch (tag) {
                             case 0:
@@ -101,6 +103,5 @@ public class PublishActivity extends BaseActivity {
         intent.putExtras(bundle);
         setResult(Constants.ACTIVITY_PUBLISH, intent);
         finish();
-//        super.onBackPressed();
     }
 }

@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "me.cl.lingxi"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 181
         versionName "1.0.6 bate"

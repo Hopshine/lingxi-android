@@ -3,7 +3,7 @@ package me.cl.lingxi.entity;
 import java.io.Serializable;
 import java.util.List;
 
-public class Mood<T> implements Serializable {
+public class Mood implements Serializable {
 
     private int lcid;
     private int uid;
@@ -16,7 +16,7 @@ public class Mood<T> implements Serializable {
     private int likenum;
     private int cmtnum;
     private boolean islike;
-    private List<T> likelist;
+    private List<Like> likelist;
 
     public int getLcid() {
         return lcid;
@@ -106,11 +106,11 @@ public class Mood<T> implements Serializable {
         this.islike = islike;
     }
 
-    public List<T> getLikelist() {
+    public List<Like> getLikelist() {
         return likelist;
     }
 
-    public void setLikelist(List<T> likelist) {
+    public void setLikelist(List<Like> likelist) {
         this.likelist = likelist;
     }
 }

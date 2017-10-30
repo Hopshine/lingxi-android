@@ -55,8 +55,8 @@ public class DliFragment extends BaseFragment {
     }
 
     private void init() {
+        setupToolbar(mToolbar, "201710番剧", 0, null);
         initRecyclerView();
-//        SPUtils.getInstance(getContext()).putBoolean(Constants.DILI_CACHE, false);
         if (SPUtils.getInstance(getContext()).getBoolean(Constants.DILI_CACHE)) {
             mAdapter.setData(getData());
         } else {
@@ -64,13 +64,34 @@ public class DliFragment extends BaseFragment {
         }
     }
 
+    private void initRecyclerView() {
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            public void onRefresh() {
+                cleanData();
+                analysisDli();
+            }
+        });
+        mAdapter = new DliAnimationAdapter(getActivity(), this.mDliAnimationList);
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, 1));
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new DliAnimationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View paramView, Animation animation) {
+                gotoWeb(animation);
+            }
+        });
+    }
+
     // 解析网页获取番剧信息
     private void analysisDli() {
+        if (!mSwipeRefresh.isRefreshing())
+            mSwipeRefresh.setRefreshing(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Elements els = Jsoup.connect("http://www.dilidili.wang/anime/201707/").timeout(5000).get().select(".anime_list");
+                    Elements els = Jsoup.connect("http://www.dilidili.wang/anime/201710/").timeout(5000).get().select(".anime_list");
                     for (Element el : els) {
                         DliAnimation mDliAnimation = new DliAnimation();
                         List<Animation> animationList = new ArrayList<>();
@@ -126,6 +147,8 @@ public class DliFragment extends BaseFragment {
                     mRecyclerView.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (mSwipeRefresh.isRefreshing())
+                            mSwipeRefresh.setRefreshing(false);
                             saveData(mDliAnimationList);
                             mAdapter.setData(mDliAnimationList);
                         }
@@ -135,25 +158,6 @@ public class DliFragment extends BaseFragment {
                 }
             }
         }).start();
-    }
-
-    private void initRecyclerView() {
-        setupToolbar(mToolbar, "201707番剧", 0, null);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            public void onRefresh() {
-                mSwipeRefresh.setRefreshing(false);
-            }
-        });
-        mAdapter = new DliAnimationAdapter(getActivity(), this.mDliAnimationList);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, 1));
-        mRecyclerView.setAdapter(mAdapter);
-
-        mAdapter.setOnItemClickListener(new DliAnimationAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View paramView, Animation animation) {
-                gotoWeb(animation);
-            }
-        });
     }
 
     // 保存番剧信息
@@ -167,6 +171,12 @@ public class DliFragment extends BaseFragment {
     private List<DliAnimation> getData() {
         String json = SPUtils.getInstance(getContext()).getString(Constants.DILI_ANIMATE);
         return GsonUtil.toList(json, DliAnimation[].class);
+    }
+
+    // 清除保存信息
+    private void cleanData() {
+        SPUtils.getInstance(getContext()).putString(Constants.DILI_ANIMATE, "{}");
+        SPUtils.getInstance(getContext()).putBoolean(Constants.DILI_CACHE, false);
     }
 
     // 前往web页

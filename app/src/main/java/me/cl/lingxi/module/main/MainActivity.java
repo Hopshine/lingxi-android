@@ -90,7 +90,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                 setTabSelection(index);
                 // 非导航本身事件，手动切换
                 mBottomNavigation.selectTab(index);
-//                mMoodFragment.onActivityResult(requestCode, resultCode, data);
                 break;
             case Constants.ACTIVITY_PERSONAL:
                 minefragment.onActivityResult(requestCode, resultCode, data);
@@ -98,10 +97,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
             default:
                 break;
         }
-
-        //传递回调
-//        Fragment f = fragmentManager.findFragmentByTag("minefragment");
-//        f.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

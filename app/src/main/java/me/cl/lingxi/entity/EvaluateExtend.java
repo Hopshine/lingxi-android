@@ -2,10 +2,10 @@ package me.cl.lingxi.entity;
 
 import java.util.List;
 
-public class EvaluateBean<T> {
+public class EvaluateExtend {
 
     private int totalnum;
-    private List<T> cmtlist;
+    private List<Evaluate> cmtlist;
 
     private int getTotalnum() {
         return totalnum;
@@ -15,11 +15,11 @@ public class EvaluateBean<T> {
         this.totalnum = totalnum;
     }
 
-    public List<T> getCmtlist() {
+    public List<Evaluate> getCmtlist() {
         return cmtlist;
     }
 
-    public void setCmtlist(List<T> cmtlist) {
+    public void setCmtlist(List<Evaluate> cmtlist) {
         this.cmtlist = cmtlist;
     }
 }

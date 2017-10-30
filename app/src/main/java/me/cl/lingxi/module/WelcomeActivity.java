@@ -26,7 +26,7 @@ import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.User;
-import me.cl.lingxi.entity.UserBean;
+import me.cl.lingxi.entity.UserExtend;
 import me.cl.lingxi.module.main.MainActivity;
 import me.cl.lingxi.module.member.LoginActivity;
 
@@ -69,11 +69,11 @@ public class WelcomeActivity extends BaseActivity {
 
     public void getImUser() {
         String lctoken = Utils.getMetaValue(this, "LINGCI_APP_KEY");
-        OkGo.<Result<UserBean<User>>>post(Api.imUser)
+        OkGo.<Result<UserExtend<User>>>post(Api.imUser)
                 .params("lctoken", lctoken)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<UserBean<User>>>() {
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<UserExtend<User>>>() {
                     @Override
-                    public void onSuccess(Response<Result<UserBean<User>>> response) {
+                    public void onSuccess(Response<Result<UserExtend<User>>> response) {
                         for (User user: response.body().getData().getUserlist()){
                             UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.baseUrl + user.getUrl()));
                             if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
@@ -85,7 +85,7 @@ public class WelcomeActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError(Response<Result<UserBean<User>>> response) {
+                    public void onError(Response<Result<UserExtend<User>>> response) {
                         goHome(0);
                     }
                 });
@@ -153,8 +153,8 @@ public class WelcomeActivity extends BaseActivity {
                     if (imUserStr == null || imUserStr.length() == 0) {
                         getImUser();
                     } else {
-                        Type type = new TypeToken<Result<UserBean<User>>>() {}.getType();
-                        me.cl.lingxi.entity.Result<UserBean<User>> userResult = GsonUtil.toObject(imUserStr, type);
+                        Type type = new TypeToken<Result<UserExtend<User>>>() {}.getType();
+                        me.cl.lingxi.entity.Result<UserExtend<User>> userResult = GsonUtil.toObject(imUserStr, type);
                         for (User user: userResult.getData().getUserlist()){
                             UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.baseUrl + user.getUrl()));
                             if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {

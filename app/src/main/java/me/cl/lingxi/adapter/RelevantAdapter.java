@@ -20,7 +20,6 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.ColorPhrase;
 import me.cl.lingxi.emojicon.EmojiconTextView;
-import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.Mood;
 import me.cl.lingxi.entity.Relevant;
 
@@ -30,19 +29,19 @@ import me.cl.lingxi.entity.Relevant;
 public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.RelevantViewHolder> {
 
     private Context mContext;
-    private List<Relevant<Mood<Like>>> mList;
+    private List<Relevant> mList;
 
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
-        void onItemClick(View view, Relevant<Mood<Like>> relevant);
+        void onItemClick(View view, Relevant relevant);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
         this.mOnItemListener = onItemListener;
     }
 
-    public RelevantAdapter(Context context, List<Relevant<Mood<Like>>> list) {
+    public RelevantAdapter(Context context, List<Relevant> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -63,7 +62,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
         return mList.size();
     }
 
-    public void updateData(List<Relevant<Mood<Like>>> data) {
+    public void updateData(List<Relevant> data) {
         mList.addAll(data);
         notifyDataSetChanged();
     }
@@ -83,14 +82,14 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
         @BindView(R.id.mood_body)
         LinearLayout mMoodBody;
 
-        private Relevant<Mood<Like>> mRelevant;
+        private Relevant mRelevant;
 
         public RelevantViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindItem(Context context, Relevant<Mood<Like>> relevant) {
+        public void bindItem(Context context, Relevant relevant) {
             mRelevant = relevant;
             Glide.with(context)
                     .load(Api.baseUrl + relevant.getUrl())

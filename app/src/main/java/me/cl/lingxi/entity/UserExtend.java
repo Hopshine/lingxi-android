@@ -2,10 +2,10 @@ package me.cl.lingxi.entity;
 
 import java.util.List;
 
-public class UserBean<T> {
+public class UserExtend<T> {
 
     private int usernum;
-    private List<T> userlist;
+    private List<User> userlist;
 
     public int getUsernum() {
         return usernum;
@@ -15,11 +15,11 @@ public class UserBean<T> {
         this.usernum = usernum;
     }
 
-    public List<T> getUserlist() {
+    public List<User> getUserlist() {
         return userlist;
     }
 
-    public void setUserlist(List<T> userlist) {
+    public void setUserlist(List<User> userlist) {
         this.userlist = userlist;
     }
 }

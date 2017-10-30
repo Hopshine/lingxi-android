@@ -3,8 +3,8 @@
           package="me.cl.lingxi">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".common.config.Aplication"
@@ -34,6 +34,11 @@
         <activity android:name=".module.setting.AboutActivity"/>
         <activity android:name=".module.mood.MoodActivity"/>
         <activity
+            android:name=".module.WebActivity"
+            android:hardwareAccelerated="true"/>
+        <activity android:name=".module.setting.PublicLicenseActivity"/>
+        <activity android:name=".module.member.UserActivity"/>
+        <activity
             android:name=".module.conversation.ConversationActivity"
             android:label="@string/title_activity_conversation"
             android:screenOrientation="portrait"
@@ -57,13 +62,7 @@
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 
-        <activity
-            android:name=".module.WebActivity"
-            android:hardwareAccelerated="true"/>
-        <activity android:name=".module.setting.PublicLicenseActivity">
-        </activity>
-        <activity android:name=".module.member.UserActivity">
-        </activity>
+        <service android:name=".module.update.UpdateService" />
     </application>
 
 </manifest>

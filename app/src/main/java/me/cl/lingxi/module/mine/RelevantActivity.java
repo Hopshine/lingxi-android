@@ -22,10 +22,9 @@ import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.Mood;
 import me.cl.lingxi.entity.Relevant;
-import me.cl.lingxi.entity.RelevantBean;
+import me.cl.lingxi.entity.RelevantExtend;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
 import me.cl.lingxi.module.mood.MoodActivity;
@@ -40,7 +39,7 @@ public class RelevantActivity extends BaseActivity {
     private RelevantAdapter mAdapter;
     private CustomProgressDialog loadingProgress;
     private int saveId;
-    private List<Relevant<Mood<Like>>> mRelevantList = new ArrayList<>();
+    private List<Relevant> mRelevantList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class RelevantActivity extends BaseActivity {
 
         mAdapter.setOnItemListener(new RelevantAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view, Relevant<Mood<Like>> relevant) {
+            public void onItemClick(View view, Relevant relevant) {
                 switch (view.getId()) {
                     case R.id.user_img:
                         break;
@@ -83,29 +82,29 @@ public class RelevantActivity extends BaseActivity {
 
     //请求与我相关
     public void getRelevantList() {
-        OkGo.<Result<RelevantBean<Relevant<Mood<Like>>>>>post(Api.unReadList)
+        OkGo.<Result<RelevantExtend>>post(Api.unReadList)
                 .params("uid", saveId)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<RelevantBean<Relevant<Mood<Like>>>>>() {
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<RelevantExtend>>() {
                     @Override
-                    public void onSuccess(Response<Result<RelevantBean<Relevant<Mood<Like>>>>> response) {
+                    public void onSuccess(Response<Result<RelevantExtend>> response) {
                         loadingProgress.dismiss();
                         updateData(response.body().getData().getUnreadlist());
                     }
 
                     @Override
-                    public void onError(Response<Result<RelevantBean<Relevant<Mood<Like>>>>> response) {
+                    public void onError(Response<Result<RelevantExtend>> response) {
                         loadingProgress.dismiss();
                         Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
                     }
                 });
     }
 
-    private void updateData(List<Relevant<Mood<Like>>> relevantList){
+    private void updateData(List<Relevant> relevantList){
         mAdapter.updateData(relevantList);
     }
 
     //前往详情页
-    private void gotoMood(Mood<Like> mood){
+    private void gotoMood(Mood mood){
         Intent intent = new Intent(RelevantActivity.this, MoodActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("mood", mood);

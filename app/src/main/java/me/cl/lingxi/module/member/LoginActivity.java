@@ -23,6 +23,7 @@ import me.cl.lingxi.common.config.Aplication;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.view.CustomProgressDialog;
 import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.BaseActivity;
@@ -88,7 +89,7 @@ public class LoginActivity extends BaseActivity {
         OkGo.<Result<User>>post(Api.login)
                 .params("username", userName)
                 .params("password", userPwd)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<User>>() {
+                .execute(new JsonCallback<Result<User>>() {
                     @Override
                     public void onSuccess(Response<Result<User>> response) {
                         loginProgress.dismiss();

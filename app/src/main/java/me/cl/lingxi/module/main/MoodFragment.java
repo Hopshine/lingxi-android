@@ -30,7 +30,7 @@ import me.cl.lingxi.common.widget.ItemAnimator;
 import me.cl.lingxi.common.widget.OnLoadMoreListener;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.Mood;
-import me.cl.lingxi.entity.MoodBean;
+import me.cl.lingxi.entity.MoodExtend;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseFragment;
 import me.cl.lingxi.module.member.UserActivity;
@@ -56,7 +56,7 @@ public class MoodFragment extends BaseFragment {
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private List<Mood<Like>> mList = new ArrayList<>();
+    private List<Mood> mList = new ArrayList<>();
     private MoodAdapter mAdapter;
 
     private final int MOD_REFRESH = 1;
@@ -135,7 +135,7 @@ public class MoodFragment extends BaseFragment {
         //item点击
         mAdapter.setOnItemListener(new MoodAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view, Mood<Like> mood, int position) {
+            public void onItemClick(View view, Mood mood, int position) {
                 switch (view.getId()) {
                     case R.id.user_img:
                         goToUser();
@@ -184,7 +184,7 @@ public class MoodFragment extends BaseFragment {
     }
 
     // 前往动态详情
-    private void gotoMood(Mood<Like> mood) {
+    private void gotoMood(Mood mood) {
         Intent intent = new Intent(getActivity(), MoodActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("mood", mood);
@@ -193,7 +193,7 @@ public class MoodFragment extends BaseFragment {
     }
 
     // 点赞
-    private void postAddLike(final Mood<Like> mood, final int position) {
+    private void postAddLike(final Mood mood, final int position) {
         String lcId = String.valueOf(mood.getLcid());
         OkGo.<String>post(Api.addLike)
                 .params("lcid", lcId)
@@ -222,15 +222,15 @@ public class MoodFragment extends BaseFragment {
     private void getMoodList(String lcid, String count) {
         if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH) mSwipeRefreshLayout.setRefreshing(true);
         int uid = SPUtils.getInstance(getActivity()).getInt("uid", -1);
-        OkGo.<Result<MoodBean<Mood<Like>>>>post(Api.moodList)
+        OkGo.<Result<MoodExtend>>post(Api.moodList)
                 .params("startlcid", lcid)
                 .params("count", count)
                 .params("uid", uid)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<MoodBean<Mood<Like>>>>() {
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<MoodExtend>>() {
                     @Override
-                    public void onSuccess(Response<Result<MoodBean<Mood<Like>>>> response) {
+                    public void onSuccess(Response<Result<MoodExtend>> response) {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        MoodBean<Mood<Like>> moodBean = response.body().getData();
+                        MoodExtend moodBean = response.body().getData();
                         switch (RefreshMODE) {
                             case MOD_LOADING:
                                 load_length = load_length + moodBean.getTotalnum();
@@ -248,7 +248,7 @@ public class MoodFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(Response<Result<MoodBean<Mood<Like>>>> response) {
+                    public void onError(Response<Result<MoodExtend>> response) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
                         Utils.toastShow(getActivity(), R.string.toast_getmf_error);
@@ -257,7 +257,7 @@ public class MoodFragment extends BaseFragment {
     }
 
     //更新数据
-    public void updateData(List<Mood<Like>> data) {
+    public void updateData(List<Mood> data) {
         mAdapter.addData(data);
     }
 

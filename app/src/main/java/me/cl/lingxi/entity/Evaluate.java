@@ -3,7 +3,7 @@ package me.cl.lingxi.entity;
 import java.io.Serializable;
 import java.util.List;
 
-public class Evaluate<T> implements Serializable {
+public class Evaluate implements Serializable {
 
     private int cmid;
     private int uid;
@@ -11,7 +11,7 @@ public class Evaluate<T> implements Serializable {
     private String url;
     private String comment;
     private String cm_time;
-    private List<T> replylist;
+    private List<Reply> replylist;
 
     public int getCmid() {
         return cmid;
@@ -61,11 +61,11 @@ public class Evaluate<T> implements Serializable {
         this.cm_time = cm_time;
     }
 
-    public List<T> getReplylist() {
+    public List<Reply> getReplylist() {
         return replylist;
     }
 
-    public void setReplylist(List<T> replylist) {
+    public void setReplylist(List<Reply> replylist) {
         this.replylist = replylist;
     }
 }

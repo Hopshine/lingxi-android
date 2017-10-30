@@ -36,8 +36,7 @@ import me.cl.lingxi.common.view.CustomProgressDialog;
 import me.cl.lingxi.emojicon.EmojiconEditText;
 import me.cl.lingxi.emojicon.EmojiconTextView;
 import me.cl.lingxi.entity.Evaluate;
-import me.cl.lingxi.entity.EvaluateBean;
-import me.cl.lingxi.entity.Like;
+import me.cl.lingxi.entity.EvaluateExtend;
 import me.cl.lingxi.entity.Mood;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.Result;
@@ -117,6 +116,9 @@ public class MoodActivity extends BaseActivity {
         MSG_MODE = MSG_EVALUATE;
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mEditTuCao.addTextChangedListener(new EditTextWatcher());
+        // 开始禁用
+        mBtnPublish.setClickable(false);
+        mBtnPublish.setSelected(false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -125,7 +127,7 @@ public class MoodActivity extends BaseActivity {
 
         mAdapter.setOnItemListener(new EvaluateAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view, Evaluate<Reply> evaluate) {
+            public void onItemClick(View view, Evaluate evaluate) {
                 switch (view.getId()) {
                     case R.id.user_img:
                         gotoUser();
@@ -162,7 +164,7 @@ public class MoodActivity extends BaseActivity {
 
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
-        Mood<Like> mood = (Mood<Like>) bundle.getSerializable("mood");
+        Mood mood = (Mood) bundle.getSerializable("mood");
         if (mood == null) return;
 
         mMid = String.valueOf(mood.getLcid());
@@ -181,13 +183,8 @@ public class MoodActivity extends BaseActivity {
         mMfCommentNum.setText(String.valueOf(mood.getCmtnum()));
         mMfLikeNum.setText(String.valueOf(mood.getLikenum()));
         //是否已经点赞
-        if (mood.islike()) {
-            mMfLikeIcon.setSelected(true);
-            mMfLike.setClickable(false);
-        } else {
-            mMfLikeIcon.setSelected(false);
-            mMfLike.setClickable(true);
-        }
+        mMfLikeIcon.setSelected(mood.islike());
+        mMfLike.setClickable(mood.islike());
         //点赞列表
         String likeStr = Utils.getLongLikeStr(mood.getLikelist());
         switch (mood.getLikenum()) {
@@ -233,7 +230,6 @@ public class MoodActivity extends BaseActivity {
                         //评论
                         loadingProgress = new CustomProgressDialog(MoodActivity.this, "评论中...");
                         addEvaluate(mMid, saveId, msg);
-//                        Utils.toastShow(this, saveId +":"+ msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
                         break;
@@ -241,7 +237,6 @@ public class MoodActivity extends BaseActivity {
                         //回复
                         loadingProgress = new CustomProgressDialog(MoodActivity.this, "回复中...");
                         addReply(mEid, saveId, toUid, msg);
-//                        Utils.toastShow(this,mEid + ":" + saveId +  ":"+  toUid +":"+ msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
                         break;
@@ -301,16 +296,16 @@ public class MoodActivity extends BaseActivity {
      * 获取评论数据
      */
     public void getEvaluateList(String mid) {
-        OkGo.<Result<EvaluateBean<Evaluate<Reply>>>>post(Api.commentList)
+        OkGo.<Result<EvaluateExtend>>post(Api.commentList)
                 .params("lcid", mid)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<EvaluateBean<Evaluate<Reply>>>>() {
+                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<EvaluateExtend>>() {
                     @Override
-                    public void onSuccess(Response<Result<EvaluateBean<Evaluate<Reply>>>> response) {
+                    public void onSuccess(Response<Result<EvaluateExtend>> response) {
                         setData(response.body().getData().getCmtlist());
                     }
 
                     @Override
-                    public void onError(Response<Result<EvaluateBean<Evaluate<Reply>>>> response) {
+                    public void onError(Response<Result<EvaluateExtend>> response) {
                         Utils.toastShow(MoodActivity.this, R.string.toast_getmf_error);
                     }
                 });
@@ -334,7 +329,7 @@ public class MoodActivity extends BaseActivity {
         imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
     }
 
-    public void setData(List<Evaluate<Reply>> data) {
+    public void setData(List<Evaluate> data) {
         mAdapter.setDate(data);
     }
 
@@ -350,13 +345,8 @@ public class MoodActivity extends BaseActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             boolean isEdit = mEditTuCao.getText().length() > 0;
-            if (isEdit) {
-                mBtnPublish.setEnabled(true);
-                mBtnPublish.setSelected(true);
-            } else {
-                mBtnPublish.setEnabled(false);
-                mBtnPublish.setSelected(false);
-            }
+            mBtnPublish.setClickable(isEdit);
+            mBtnPublish.setSelected(isEdit);
         }
 
         @Override

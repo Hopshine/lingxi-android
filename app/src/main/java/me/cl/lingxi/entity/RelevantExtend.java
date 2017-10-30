@@ -2,10 +2,10 @@ package me.cl.lingxi.entity;
 
 import java.util.List;
 
-public class RelevantBean<T> {
+public class RelevantExtend {
 
     private int unreadnum;
-    private List<T> unreadlist ;
+    private List<Relevant> unreadlist ;
 
     public int getUnreadnum() {
         return unreadnum;
@@ -15,11 +15,11 @@ public class RelevantBean<T> {
         this.unreadnum = unreadnum;
     }
 
-    public List<T> getUnreadlist() {
+    public List<Relevant> getUnreadlist() {
         return unreadlist;
     }
 
-    public void setUnreadlist(List<T> unreadlist) {
+    public void setUnreadlist(List<Relevant> unreadlist) {
         this.unreadlist = unreadlist;
     }
 }

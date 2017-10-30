@@ -2,7 +2,7 @@ package me.cl.lingxi.entity;
 
 import java.io.Serializable;
 
-public class Relevant<T> implements Serializable {
+public class Relevant implements Serializable {
 
     private int uid;
     private String uname;
@@ -10,7 +10,7 @@ public class Relevant<T> implements Serializable {
     private int cmid;
     private String cm_time;
     private String comment;
-    private T minifeed;
+    private Mood minifeed;
 
     public int getUid() {
         return uid;
@@ -60,11 +60,11 @@ public class Relevant<T> implements Serializable {
         this.comment = comment;
     }
 
-    public T getMinifeed() {
+    public Mood getMinifeed() {
         return minifeed;
     }
 
-    public void setMinifeed(T minifeed) {
+    public void setMinifeed(Mood minifeed) {
         this.minifeed = minifeed;
     }
 }
