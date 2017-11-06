@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
@@ -36,7 +36,7 @@ public class RegisterActivity extends BaseActivity {
     @BindView(R.id.phone)
     EditText mPhone;
 
-    private CustomProgressDialog registerProgress;
+    private LoadingDialog registerProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void goRegister(View view) {
-        registerProgress = new CustomProgressDialog(this, R.string.dialog_loading_reg);
+        registerProgress = new LoadingDialog(this, R.string.dialog_loading_reg);
         String uName = mUsername.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();
         String uDoPwd = mDoPassword.getText().toString().trim();

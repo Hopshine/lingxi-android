@@ -3,13 +3,18 @@ package me.cl.lingxi.module.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -21,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.DliAnimationAdapter;
 import me.cl.lingxi.common.config.Constants;
@@ -38,10 +44,17 @@ public class DliFragment extends BaseFragment {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.animate_select)
+    TextView mAnimateSelect;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
+
+    private String baseAnimateUrl = "http://www.dilidili.wang/anime/";
+    private String[] selectAnimate = {"201710", "201707", "201704", "201701"};
+    private String animateUrl = baseAnimateUrl + selectAnimate[0];
+    private ListPopupWindow mPopupWindow;
 
     private DliAnimationAdapter mAdapter;
     private List<DliAnimation> mDliAnimationList = new ArrayList<>();
@@ -55,13 +68,45 @@ public class DliFragment extends BaseFragment {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "201710番剧", 0, null);
+        setupToolbar(mToolbar, "番剧", 0, null);
+        initAnimateSelect();
         initRecyclerView();
         if (SPUtils.getInstance(getContext()).getBoolean(Constants.DILI_CACHE)) {
             mAdapter.setData(getData());
         } else {
             analysisDli();
         }
+    }
+
+    @OnClick({R.id.animate_select})
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.animate_select:
+                mPopupWindow.show();
+                break;
+        }
+    }
+
+    private void initAnimateSelect() {
+        mAnimateSelect.setText(selectAnimate[0]);
+        mPopupWindow = new ListPopupWindow(getActivity());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, selectAnimate);
+        mPopupWindow.setAdapter(adapter);
+        mPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setModal(true);
+        mPopupWindow.setDropDownGravity(Gravity.END);
+        mPopupWindow.setAnchorView(mAnimateSelect);
+        mPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mAnimateSelect.setText(selectAnimate[position]);
+                animateUrl = baseAnimateUrl + selectAnimate[position];
+                cleanData();
+                analysisDli();
+                mPopupWindow.dismiss();
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -91,7 +136,7 @@ public class DliFragment extends BaseFragment {
             @Override
             public void run() {
                 try {
-                    Elements els = Jsoup.connect("http://www.dilidili.wang/anime/201710/").timeout(5000).get().select(".anime_list");
+                    Elements els = Jsoup.connect(animateUrl).timeout(5000).get().select(".anime_list");
                     for (Element el : els) {
                         DliAnimation mDliAnimation = new DliAnimation();
                         List<Animation> animationList = new ArrayList<>();
@@ -175,6 +220,7 @@ public class DliFragment extends BaseFragment {
 
     // 清除保存信息
     private void cleanData() {
+        mDliAnimationList.clear();
         SPUtils.getInstance(getContext()).putString(Constants.DILI_ANIMATE, "{}");
         SPUtils.getInstance(getContext()).putBoolean(Constants.DILI_CACHE, false);
     }

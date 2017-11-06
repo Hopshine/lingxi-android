@@ -34,11 +34,6 @@ public class Utils {
 
     private static Toast toast;
 
-    /**
-     * 土司
-     * @param context
-     * @param info
-     */
     public static void toastShow(Context context, String info) {
         if (toast == null)
             toast = Toast.makeText(context, info, Toast.LENGTH_SHORT);

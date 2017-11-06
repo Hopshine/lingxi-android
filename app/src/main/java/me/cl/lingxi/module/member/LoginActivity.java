@@ -21,7 +21,8 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Aplication;
 import me.cl.lingxi.common.util.SPUtils;
-import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
@@ -40,7 +41,7 @@ public class LoginActivity extends BaseActivity {
 
     private String saveuname;
     private long mExitTime = 0;
-    private CustomProgressDialog loginProgress;
+    private LoadingDialog loginProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class LoginActivity extends BaseActivity {
     public void login(View view) {
         String uname = mUsername.getText().toString().trim();
         String upwd = mPassword.getText().toString().trim();
-        loginProgress = new CustomProgressDialog(this, R.string.dialog_loading_lg);
+        loginProgress = new LoadingDialog(this, R.string.dialog_loading_lg);
         if (!TextUtils.isEmpty(uname) && !TextUtils.isEmpty(upwd)) {
             postLogin(uname, upwd);
         } else {
@@ -108,7 +109,7 @@ public class LoginActivity extends BaseActivity {
                                     connect(im_token);
                                 break;
                             case 2:
-                                Toast.makeText(LoginActivity.this, R.string.toast_pwd_error, Toast.LENGTH_SHORT).show();
+                                Utils.toastShow(LoginActivity.this, R.string.toast_pwd_error);
                                 break;
                             default:
                                 break;
@@ -118,7 +119,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Response<Result<User>> response) {
                         loginProgress.dismiss();
-                        Toast.makeText(LoginActivity.this, R.string.toast_login_error, Toast.LENGTH_SHORT).show();
+                        Utils.toastShow(LoginActivity.this, R.string.toast_login_error);
                     }
                 });
     }

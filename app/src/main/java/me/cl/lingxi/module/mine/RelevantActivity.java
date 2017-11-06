@@ -20,7 +20,7 @@ import me.cl.lingxi.adapter.RelevantAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.entity.Mood;
 import me.cl.lingxi.entity.Relevant;
@@ -37,7 +37,7 @@ public class RelevantActivity extends BaseActivity {
     RecyclerView mRecyclerView;
 
     private RelevantAdapter mAdapter;
-    private CustomProgressDialog loadingProgress;
+    private LoadingDialog loadingProgress;
     private int saveId;
     private List<Relevant> mRelevantList = new ArrayList<>();
 
@@ -56,7 +56,7 @@ public class RelevantActivity extends BaseActivity {
         if (x == 1) {
             MoeToast.makeText(this, "你能找到这个秘密吗？");
         }
-        loadingProgress = new CustomProgressDialog(this, "正在加载...");
+        loadingProgress = new LoadingDialog(this, "正在加载...");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);

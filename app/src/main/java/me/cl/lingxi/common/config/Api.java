@@ -14,7 +14,7 @@ public class Api {
     public static String baseUrl = isDebug ? offLineApi : onLineApi;
 
 
-    // 具体接口地址设置
+    // v1 api
     public static String login = baseUrl + "/Login";
     public static String register = baseUrl + "/register";
     public static String updatePwd = baseUrl + "/updatePwd";
@@ -32,6 +32,13 @@ public class Api {
     public static String uploadPrimg = baseUrl + "/uploadPrimg";
     public static String imgBase = baseUrl + "/getImgbase";
 
+
+    // v2 api
+    public static String addFeed = baseUrl + "/feed/addFeed";
+    public static String listFeed = baseUrl + "/feed/listFeed";
+
     public static String appUpdate = baseUrl + "/config/appUpdate";
+
+    public static String ossToken = onLineApi + "/oss/distributeToken";
 
 }

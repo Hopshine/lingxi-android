@@ -15,6 +15,15 @@
 
     <include layout="@layout/item_mood_info"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/common_padding"
+        android:paddingRight="@dimen/common_padding"
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
+
     <include layout="@layout/item_mood_action"/>
 
     <include layout="@layout/item_mood_like"/>

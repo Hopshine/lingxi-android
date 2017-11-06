@@ -2,7 +2,7 @@ package me.cl.lingxi.entity;
 
 import java.util.List;
 
-public class UserExtend<T> {
+public class UserExtend {
 
     private int usernum;
     private List<User> userlist;

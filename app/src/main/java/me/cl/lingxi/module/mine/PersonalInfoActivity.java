@@ -37,7 +37,7 @@ import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.MD5Util;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
@@ -61,7 +61,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     private int saveId;
     private String imgStr;
     private File fileDir;
-    private CustomProgressDialog loadingProgress;
+    private LoadingDialog loadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
     private void init() {
         setupToolbar(mToolbar, "个人信息", true, 0, null);
-        loadingProgress = new CustomProgressDialog(this, "修改头像中...");
+        loadingProgress = new LoadingDialog(this, "修改头像中...");
         mPersonImg.setOnClickListener(this);
 
         int x = (int) (Math.random() * 5) + 1;
@@ -214,7 +214,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
             mPersonImg.setImageBitmap(bitmap);
             imgStr = Bitmap2StrByBase64(bitmap);
             Intent intent = new Intent();
-            intent.setAction(Constants.UPDATE_USERIMG);
+            intent.setAction(Constants.UPDATE_USER_IMG);
             sendBroadcast(intent);
         }
         upPhoto();

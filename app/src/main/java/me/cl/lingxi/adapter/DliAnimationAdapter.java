@@ -51,24 +51,6 @@ public class DliAnimationAdapter extends RecyclerView.Adapter<DliAnimationAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.bindView(mContext, mAnimationList.get(position));
-        if (this.mAnimationList != null) {
-            Animation animation = mAnimationList.get(position);
-            holder.mAnimateName.setText(animation.getName());
-            int i = (Utils.getScreenWidth(this.mContext) - Utils.dp2px(mContext, 24f)) / 3;
-            int j = i * 13 / 9;
-            ViewGroup.LayoutParams localLayoutParams = holder.mAnimateImg.getLayoutParams();
-            localLayoutParams.width = i;
-            localLayoutParams.height = j;
-            holder.mAnimateImg.setLayoutParams(localLayoutParams);
-            Glide.with(mContext).load(animation.getImgUrl()).into(holder.mAnimateImg);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(view, mAnimationList.get(position));
-                    }
-                }
-            });
-        }
     }
 
     @Override

@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="me.cl.lingxi">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
@@ -55,6 +57,17 @@
             </intent-filter>
         </activity>
 
+        <!-- PhotoPicker start -->
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/customTheme.PhotoPicker"/>
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/customTheme.PhotoPreview"/>
+        <!-- PhotoPicker end -->
+
         <meta-data
             android:name="me.cl.lingxi.common.config.GlideModule"
             android:value="GlideModule"/>
@@ -62,7 +75,11 @@
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 
-        <service android:name=".module.update.UpdateService" />
+        <!-- UpdateService start -->
+        <service android:name=".module.update.UpdateService"/>
+        <!-- UpdateService stop -->
+        <activity android:name=".module.mood.PhotoActivity">
+        </activity>
     </application>
 
 </manifest>

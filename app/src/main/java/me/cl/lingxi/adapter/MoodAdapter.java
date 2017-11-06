@@ -1,8 +1,10 @@
 package me.cl.lingxi.adapter;
 
 import android.net.Uri;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,6 +50,7 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnItemListener {
         void onItemClick(View view, Mood mood, int position);
+        void onPhotoClick(ArrayList<String> photos, int position);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -191,6 +195,8 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout mLikeWindow;
         @BindView(R.id.mood_card)
         LinearLayout mMoodCard;
+        @BindView(R.id.recycler_view)
+        RecyclerView mRecyclerView;
 
         private Mood mMood;
         private int mPosition;
@@ -205,7 +211,6 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mPosition = position;
             //是否能够聊天
             if (mood.isIm_ability()) {
-                mLcChat.setVisibility(View.VISIBLE);
                 String uid = String.valueOf(mood.getUid());
                 String uname = mood.getUname();
                 String img_url = Api.baseUrl + mood.getUrl();
@@ -213,8 +218,6 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     Constants.uidList.add(uid);
                     Constants.userList.add(new UserInfo(uid, uname, Uri.parse(img_url)));
                 }
-            } else {
-                mLcChat.setVisibility(View.GONE);
             }
             //动态详情
             Glide.with(mUserImg.getContext())
@@ -226,6 +229,28 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mUserName.setText(mood.getUname());
             mMoodTime.setText(DateUtil.showTime(mood.getPl_time()));
             mMoodInfo.setText(mood.getLc_info());
+            // 图片
+            final List<String> photos = mood.getPhotos();
+            if (photos != null && photos.size() > 0) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                int column = 3;
+                if (photos.size() == 1) {
+                    column = 2;
+                    mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                } else {
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), column));
+                }
+                MoodPhotoAdapter adapter = new MoodPhotoAdapter(photos);
+                adapter.setOnItemClickListener(new MoodPhotoAdapter.OnItemClickListener() {
+                    @Override
+                    public void onPhotoClick(int position) {
+                        if (mOnItemListener != null) mOnItemListener.onPhotoClick((ArrayList<String>) photos, position);
+                    }
+                });
+                mRecyclerView.setAdapter(adapter);
+            } else {
+                mRecyclerView.setVisibility(View.GONE);
+            }
             // 查看评论点赞数
             mMfSeeNum.setText(String.valueOf(mood.getViewnum()));
             mMfCommentNum.setText(String.valueOf(mood.getCmtnum()));

@@ -49,4 +49,25 @@
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
+    <!--PhotoPicker start-->
+    <style name="actionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="actionBarSize">@dimen/toolbar_height</item>
+    </style>
+
+    <style name="customTheme.PhotoPicker" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionBarTheme">@style/actionBarTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="actionBarSize">@dimen/toolbar_height</item>
+    </style>
+
+    <style name="customTheme.PhotoPreview" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionBarTheme">@style/actionBarTheme</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="actionBarSize">@dimen/toolbar_height</item>
+    </style>
+    <!--PhotoPicker end-->
 </resources>

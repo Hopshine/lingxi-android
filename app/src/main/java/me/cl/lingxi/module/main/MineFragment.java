@@ -85,7 +85,7 @@ public class MineFragment extends BaseFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (Constants.UPDATE_USERIMG.equals(action)) {
+            if (Constants.UPDATE_USER_IMG.equals(action)) {
                 Utils.setPersonImg(uName, mUserImg);
             }
         }
@@ -94,7 +94,7 @@ public class MineFragment extends BaseFragment {
     private void initReceiver() {
         receiver = new OperateBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.UPDATE_USERIMG);
+        filter.addAction(Constants.UPDATE_USER_IMG);
         getActivity().registerReceiver(receiver, filter);
     }
 

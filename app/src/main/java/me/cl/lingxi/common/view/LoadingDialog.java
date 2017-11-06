@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,28 +14,37 @@ import me.cl.lingxi.R;
 /**
  * 加载动画
  */
-public class CustomProgressDialog extends ProgressDialog {
+public class LoadingDialog extends ProgressDialog {
 
+	private Context mContext;
 	private AnimationDrawable mAnimation;
 	private ImageView mImageView;
-	private CharSequence mLoadingTip;
-	private TextView mLoadingTv;
-	private int mResid;
+	private CharSequence mMessage;
+	private TextView mMessageView;
+	private int mResId;
 
-
-	public CustomProgressDialog(Context context, int tipId) {
+	public LoadingDialog(Context context, @StringRes int tipId) {
 		this(context, context.getResources().getString(tipId));
 	}
 
-	public  CustomProgressDialog(Context context, CharSequence tip) {
+	public LoadingDialog(Context context, CharSequence tip) {
         this(context, R.style.dialog, tip, R.drawable.frame_loadin);
 	}
 
-	public CustomProgressDialog(Context context, int theme, CharSequence tip, int id) {
+	public LoadingDialog(Context context, @StyleRes int theme, CharSequence tip, int id) {
 		super(context, theme);
-		this.mLoadingTip = tip;
-		this.mResid = id;
+		this.mContext = context;
+		this.mMessage = tip;
+		this.mResId = id;
 		setCanceledOnTouchOutside(true);
+	}
+
+	public void setMessage(@StringRes int msgId) {
+		setMessage(mContext.getResources().getString(msgId));
+	}
+
+	public void setMessage(CharSequence msg) {
+		mMessage = msg;
 	}
 
 	@Override
@@ -44,9 +55,9 @@ public class CustomProgressDialog extends ProgressDialog {
 	}
 
 	private void init() {
-        mLoadingTv = (TextView) findViewById(R.id.loadingTv);
+		mMessageView = (TextView) findViewById(R.id.loadingTv);
         mImageView = (ImageView) findViewById(R.id.loadingIv);
-		mImageView.setBackgroundResource(mResid);
+		mImageView.setBackgroundResource(mResId);
 		// 通过ImageView对象拿到背景显示的AnimationDrawable
 		mAnimation = (AnimationDrawable) mImageView.getBackground();
 		// 为了防止在onCreate方法中只显示第一帧的解决方案之一
@@ -56,16 +67,17 @@ public class CustomProgressDialog extends ProgressDialog {
 				mAnimation.start();
 			}
 		});
-		mLoadingTv.setText(mLoadingTip);
-
-	}
-	
-	public void setContent(CharSequence str) {
-		mLoadingTv.setText(str);
+		mMessageView.setText(mMessage);
 	}
 
 	@Override
 	public void dismiss() {
+		mImageView.post(new Runnable() {
+			@Override
+			public void run() {
+				if (mAnimation.isRunning()) mAnimation.stop();
+			}
+		});
 		super.dismiss();
 	}
 }

@@ -30,9 +30,10 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.EvaluateAdapter;
 import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.emojicon.EmojiconEditText;
 import me.cl.lingxi.emojicon.EmojiconTextView;
 import me.cl.lingxi.entity.Evaluate;
@@ -97,7 +98,7 @@ public class MoodActivity extends BaseActivity {
     private String toName;
     private InputMethodManager imm;
     private EvaluateAdapter mAdapter;
-    private CustomProgressDialog loadingProgress;
+    private LoadingDialog loadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,7 @@ public class MoodActivity extends BaseActivity {
     private void init() {
         setupToolbar(mToolbar, R.string.title_activity_minifeed, true, 0, null);
 
-        saveId = SPUtils.getInstance(this).getInt("uid");
+        saveId = SPUtils.getInstance(this).getInt(Constants.USER_ID);
 
         //输入状态模式默认为评论
         MSG_MODE = MSG_EVALUATE;
@@ -122,7 +123,7 @@ public class MoodActivity extends BaseActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new EvaluateAdapter(this, new ArrayList());
+        mAdapter = new EvaluateAdapter(this, new ArrayList<Evaluate>());
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemListener(new EvaluateAdapter.OnItemListener() {
@@ -228,14 +229,14 @@ public class MoodActivity extends BaseActivity {
                 switch (MSG_MODE) {
                     case MSG_EVALUATE:
                         //评论
-                        loadingProgress = new CustomProgressDialog(MoodActivity.this, "评论中...");
+                        loadingProgress = new LoadingDialog(MoodActivity.this, "评论中...");
                         addEvaluate(mMid, saveId, msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
                         break;
                     case MSG_REPLY:
                         //回复
-                        loadingProgress = new CustomProgressDialog(MoodActivity.this, "回复中...");
+                        loadingProgress = new LoadingDialog(MoodActivity.this, "回复中...");
                         addReply(mEid, saveId, toUid, msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);

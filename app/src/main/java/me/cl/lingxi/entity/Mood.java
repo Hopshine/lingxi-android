@@ -15,7 +15,8 @@ public class Mood implements Serializable {
     private int viewnum;
     private int likenum;
     private int cmtnum;
-    private boolean islike;
+    private List<String> photos;
+    private int islike;
     private List<Like> likelist;
 
     public int getLcid() {
@@ -98,12 +99,20 @@ public class Mood implements Serializable {
         this.cmtnum = cmtnum;
     }
 
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
     public boolean islike() {
-        return islike;
+        return islike == 1;
     }
 
     public void setIslike(boolean islike) {
-        this.islike = islike;
+        this.islike = islike ? 1 : 0;
     }
 
     public List<Like> getLikelist() {

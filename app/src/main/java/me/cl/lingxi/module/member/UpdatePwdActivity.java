@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.CustomProgressDialog;
+import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.BaseActivity;
@@ -33,7 +33,7 @@ public class UpdatePwdActivity extends BaseActivity {
     @BindView(R.id.do_password)
     EditText mDoPassword;
 
-    private CustomProgressDialog updateProgress;
+    private LoadingDialog updateProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class UpdatePwdActivity extends BaseActivity {
     }
 
     public void goUpdatePwd(View view) {
-        updateProgress = new CustomProgressDialog(this, R.string.dialog_loading_upwd);
+        updateProgress = new LoadingDialog(this, R.string.dialog_loading_upwd);
         String uName = mUsername.getText().toString().trim();
         String uPhone = mPhone.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();

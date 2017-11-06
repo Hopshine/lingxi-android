@@ -1,7 +1,5 @@
 package me.cl.lingxi.common.config;
 
-import android.app.Activity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +11,9 @@ import io.rong.imlib.model.UserInfo;
  */
 public class Constants {
 
-    public static Activity main;
-
     public static boolean isRead = true;
 
-    public static final String UPDATE_USERIMG = "com.lingci.updateimg";
+    public static final String UPDATE_USER_IMG = "me.cl.update.img";
     public static final String DILI_ANIMATE = "dili.animate";
     public static final String DILI_CACHE = "dili.cache";
 
@@ -25,8 +21,8 @@ public class Constants {
     public static List<String> uidList = new ArrayList<>();
 
     // 本地缓存key
-    public static final String USER_ID = "user_id";
-    public static final String USER_NAME = "user_name";
+    public static final String USER_ID = "uid";
+    public static final String USER_NAME = "username";
 
     // 页面标识
     public static final int ACTIVITY_MAIN = 10001;
@@ -40,4 +36,8 @@ public class Constants {
     public static final String GO_INDEX = "go_index";
     public static final int INDEX_MOOD = 1; // 圈子
     public static final int INDEX_MINE = 3; // 我的
+
+    // oss图片处理
+    public static final String IMG_RESIZE_HW250 = "?x-oss-process=image/resize,m_fill,h_250,w_250";
+    public static final String IMG_RESIZE_HW720 = "?x-oss-process=image/resize,m_mfit,h_720,w_720";
 }
