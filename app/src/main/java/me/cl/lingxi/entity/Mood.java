@@ -9,7 +9,7 @@ public class Mood implements Serializable {
     private int uid;
     private String uname;
     private String url;
-    private boolean im_ability;
+    private int im_ability;
     private String lc_info;
     private String pl_time;
     private int viewnum;
@@ -52,11 +52,11 @@ public class Mood implements Serializable {
     }
 
     public boolean isIm_ability() {
-        return im_ability;
+        return im_ability == 0;
     }
 
     public void setIm_ability(boolean im_ability) {
-        this.im_ability = im_ability;
+        this.im_ability = im_ability ? 0 : 1;
     }
 
     public String getLc_info() {

@@ -14,8 +14,10 @@ public class Constants {
     public static boolean isRead = true;
 
     public static final String UPDATE_USER_IMG = "me.cl.update.img";
-    public static final String DILI_ANIMATE = "dili.animate";
-    public static final String DILI_CACHE = "dili.cache";
+
+    public static final String ANIMATE_JSON = "dili.animate";
+    public static final String ANIMATE_CACHE = "dili.cache";
+    public static final String ANIMATE_SELECT = "dili.index";
 
     public static List<UserInfo> userList = new ArrayList<>();
     public static List<String> uidList = new ArrayList<>();

@@ -19,7 +19,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.Aplication;
+import me.cl.lingxi.common.config.LxApplication;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.LoadingDialog;
@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity {
      * @param token
      */
     private void connect(String token) {
-        if (getApplicationInfo().packageName.equals(Aplication.getCurProcessName(getApplicationContext()))) {
+        if (getApplicationInfo().packageName.equals(LxApplication.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */

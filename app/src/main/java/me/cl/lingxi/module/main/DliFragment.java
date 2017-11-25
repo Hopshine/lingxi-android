@@ -54,6 +54,7 @@ public class DliFragment extends BaseFragment {
     private String baseAnimateUrl = "http://www.dilidili.wang/anime/";
     private String[] selectAnimate = {"201710", "201707", "201704", "201701"};
     private String animateUrl = baseAnimateUrl + selectAnimate[0];
+    private int mSelect = 0;
     private ListPopupWindow mPopupWindow;
 
     private DliAnimationAdapter mAdapter;
@@ -71,7 +72,7 @@ public class DliFragment extends BaseFragment {
         setupToolbar(mToolbar, "番剧", 0, null);
         initAnimateSelect();
         initRecyclerView();
-        if (SPUtils.getInstance(getContext()).getBoolean(Constants.DILI_CACHE)) {
+        if (SPUtils.getInstance(getContext()).getBoolean(Constants.ANIMATE_CACHE)) {
             mAdapter.setData(getData());
         } else {
             analysisDli();
@@ -88,7 +89,8 @@ public class DliFragment extends BaseFragment {
     }
 
     private void initAnimateSelect() {
-        mAnimateSelect.setText(selectAnimate[0]);
+        mSelect = SPUtils.getInstance(getContext()).getInt(Constants.ANIMATE_SELECT, 0);
+        mAnimateSelect.setText(selectAnimate[mSelect]);
         mPopupWindow = new ListPopupWindow(getActivity());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, selectAnimate);
         mPopupWindow.setAdapter(adapter);
@@ -102,6 +104,7 @@ public class DliFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mAnimateSelect.setText(selectAnimate[position]);
                 animateUrl = baseAnimateUrl + selectAnimate[position];
+                SPUtils.getInstance(getContext()).putInt(Constants.ANIMATE_SELECT, position);
                 cleanData();
                 analysisDli();
                 mPopupWindow.dismiss();
@@ -208,21 +211,21 @@ public class DliFragment extends BaseFragment {
     // 保存番剧信息
     private void saveData(List<DliAnimation> data) {
         String json = GsonUtil.toJson(data);
-        SPUtils.getInstance(getContext()).putBoolean(Constants.DILI_CACHE, true);
-        SPUtils.getInstance(getContext()).putString(Constants.DILI_ANIMATE, json);
+        SPUtils.getInstance(getContext()).putBoolean(Constants.ANIMATE_CACHE, true);
+        SPUtils.getInstance(getContext()).putString(Constants.ANIMATE_JSON, json);
     }
 
     // 获取番剧信息
     private List<DliAnimation> getData() {
-        String json = SPUtils.getInstance(getContext()).getString(Constants.DILI_ANIMATE);
+        String json = SPUtils.getInstance(getContext()).getString(Constants.ANIMATE_JSON);
         return GsonUtil.toList(json, DliAnimation[].class);
     }
 
     // 清除保存信息
     private void cleanData() {
         mDliAnimationList.clear();
-        SPUtils.getInstance(getContext()).putString(Constants.DILI_ANIMATE, "{}");
-        SPUtils.getInstance(getContext()).putBoolean(Constants.DILI_CACHE, false);
+        SPUtils.getInstance(getContext()).putString(Constants.ANIMATE_JSON, "{}");
+        SPUtils.getInstance(getContext()).putBoolean(Constants.ANIMATE_CACHE, false);
     }
 
     // 前往web页

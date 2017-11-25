@@ -9,15 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.cl.lingxi.R;
-import me.cl.lingxi.adapter.ConversationListAdapterEx;
-import me.cl.lingxi.adapter.ViewPagerAdapter;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.rong.imkit.RongContext;
 import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.model.Conversation;
+import me.cl.lingxi.R;
+import me.cl.lingxi.adapter.ViewPagerAdapter;
 
 public class MessageFragment extends Fragment{
 
@@ -50,8 +47,9 @@ public class MessageFragment extends Fragment{
     }
 
     private void addFragment(ViewPagerAdapter mPagerAdapter) {
-        ConversationListFragment listFragment = ConversationListFragment.getInstance();
-        listFragment.setAdapter(new ConversationListAdapterEx(RongContext.getInstance()));
+//        SubConversationListFragment fragment = new SubConversationListFragment();
+        ConversationListFragment listFragment = new ConversationListFragment();
+//        listFragment.onResolveAdapter(RongContext.getInstance());
         Uri uri = Uri.parse("rong://" + getActivity().getApplicationInfo().packageName).buildUpon()
                 .appendPath("conversationlist")
                 .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话是否聚合显示

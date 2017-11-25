@@ -1,6 +1,8 @@
 package me.cl.lingxi.entity;
 
-public class Animation {
+import java.io.Serializable;
+
+public class Animation implements Serializable {
 
     private String name;
     private String area;

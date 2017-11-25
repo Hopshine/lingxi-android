@@ -18,7 +18,7 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.Aplication;
+import me.cl.lingxi.common.config.LxApplication;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.GsonUtil;
 import me.cl.lingxi.common.util.SPUtils;
@@ -128,7 +128,7 @@ public class WelcomeActivity extends BaseActivity {
      * @param token Token
      */
     private void connect(final String token) {
-        if (getApplicationInfo().packageName.equals(Aplication.getCurProcessName(getApplicationContext()))) {
+        if (getApplicationInfo().packageName.equals(LxApplication.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */
@@ -139,6 +139,7 @@ public class WelcomeActivity extends BaseActivity {
                 @Override
                 public void onTokenIncorrect() {
                     Log.d("WelcomeActivity", "--onTokenIncorrect");
+                    goHome(0);
                 }
 
                 /**

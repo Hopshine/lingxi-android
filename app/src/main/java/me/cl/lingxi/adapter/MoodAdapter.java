@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -234,12 +233,8 @@ public class MoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (photos != null && photos.size() > 0) {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 int column = 3;
-                if (photos.size() == 1) {
-                    column = 2;
-                    mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-                } else {
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), column));
-                }
+                if (photos.size() == 1) column = 2;
+                mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), column));
                 MoodPhotoAdapter adapter = new MoodPhotoAdapter(photos);
                 adapter.setOnItemClickListener(new MoodPhotoAdapter.OnItemClickListener() {
                     @Override

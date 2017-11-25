@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.lingxi.R;
+import me.cl.lingxi.common.config.Constants;
 
 /**
  * author : Bafs
@@ -24,6 +25,7 @@ import me.cl.lingxi.R;
 
 public class MoodPhotoAdapter extends RecyclerView.Adapter<MoodPhotoAdapter.PhotoViewHolder> {
 
+    private int mType = 0;
     private List<String> mPhotos;
 
     private OnItemClickListener mOnItemClickListener;
@@ -79,7 +81,7 @@ public class MoodPhotoAdapter extends RecyclerView.Adapter<MoodPhotoAdapter.Phot
             mIvDelete.setVisibility(View.GONE);
 
             Glide.with(mIvPhoto.getContext())
-                    .load(photoUrl)
+                    .load(photoUrl + Constants.IMG_RESIZE_HW250)
                     .centerCrop()
                     .into(mIvPhoto);
         }

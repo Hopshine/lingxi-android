@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".common.config.Aplication"
+        android:name=".common.config.LxApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -40,6 +40,12 @@
             android:hardwareAccelerated="true"/>
         <activity android:name=".module.setting.PublicLicenseActivity"/>
         <activity android:name=".module.member.UserActivity"/>
+        <activity android:name=".module.mood.PhotoActivity" />
+
+        <!-- rong cloud start-->
+        <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="8luwapkvufoml"/>
         <activity
             android:name=".module.conversation.ConversationActivity"
             android:label="@string/title_activity_conversation"
@@ -56,6 +62,7 @@
                     android:scheme="rong"/>
             </intent-filter>
         </activity>
+        <!-- Rong Cloud end-->
 
         <!-- PhotoPicker start -->
         <activity
@@ -78,8 +85,6 @@
         <!-- UpdateService start -->
         <service android:name=".module.update.UpdateService"/>
         <!-- UpdateService stop -->
-        <activity android:name=".module.mood.PhotoActivity">
-        </activity>
     </application>
 
 </manifest>
