@@ -8,12 +8,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.IBinder;
-import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.AppVersion;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
+import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.entity.AppVersion;
 
 /**
  * author : Bafs

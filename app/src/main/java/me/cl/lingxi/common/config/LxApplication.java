@@ -68,15 +68,11 @@ public class LxApplication extends Application {
 	}
 
 	private void initRongCloud() {
-		/**
-		 * OnCreate 会被多个进程重入，这段保护代码，确保只有您需要使用 RongIM 的进程和 Push 进程执行了 init。
-		 * io.rong.push 为融云 push 进程名称，不可修改。
-		 */
+		// OnCreate 会被多个进程重入，这段保护代码，确保只有您需要使用 RongIM 的进程和 Push 进程执行了 init。
+		// io.rong.push 为融云 push 进程名称，不可修改。
 		if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext())) ||
 				"io.rong.push".equals(getCurProcessName(getApplicationContext()))) {
-			/**
-			 * IMKit SDK调用第一步 初始化
-			 */
+			// IMKit SDK调用第一步 初始化
 			RongIM.init(this);
 		}
 
@@ -95,12 +91,14 @@ public class LxApplication extends Application {
 		ActivityManager activityManager = (ActivityManager) context
 				.getSystemService(Context.ACTIVITY_SERVICE);
 
-		for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
-				.getRunningAppProcesses()) {
+		if (activityManager != null) {
+			for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+                    .getRunningAppProcesses()) {
 
-			if (appProcess.pid == pid) {
-				return appProcess.processName;
-			}
+                if (appProcess.pid == pid) {
+                    return appProcess.processName;
+                }
+            }
 		}
 		return null;
 	}

@@ -4,7 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="app_name">灵悉测试</string>
+    <string name="app_name">灵悉</string>
+    <string name="app_name_alpha">灵悉测试</string>
+    <string name="app_name_local">灵悉本地</string>
     <string name="app_desc">心有灵犀一点通</string>
     <string name="action_settings">设置</string>
     <string name="reg_agree">同意灵悉的普通的注册邀请，因为没有不普通的选择</string>

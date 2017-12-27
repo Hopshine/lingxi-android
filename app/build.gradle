@@ -5,12 +5,44 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-        applicationId "me.cl.lingxi.test"
+        applicationId "me.cl.lingxi"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 181
-        versionName "1.0.6 bate"
+        versionCode 182
+        versionName "1.0.6 alpha"
+
+        flavorDimensions "versionCode"
     }
+
+    productFlavors {
+        alpha {
+            applicationId "me.cl.lingxi.alpha"
+            buildConfigField 'String', 'BaseUrl', '"http://139.224.128.232:10660/lingxi-dev"'
+            manifestPlaceholders = [
+                    'APP_ID': "me.cl.lingxi.alpha",
+                    'APP_NAME': "@string/app_name_alpha"
+            ]
+        }
+
+        local {
+            applicationId "me.cl.lingxi.local"
+            buildConfigField 'String', 'BaseUrl', '"http://cqytxyz.imwork.net:28513/lingci"'
+            manifestPlaceholders = [
+                    'APP_ID': "me.cl.lingxi.local",
+                    'APP_NAME': "@string/app_name_local"
+            ]
+        }
+
+        online {
+            applicationId "me.cl.lingxi"
+            buildConfigField 'String', 'BaseUrl', '"http://139.224.128.232:10660/lingxi"'
+            manifestPlaceholders = [
+                    'APP_ID': "me.cl.lingxi",
+                    'APP_NAME': "@string/app_name"
+            ]
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

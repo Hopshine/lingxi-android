@@ -1,25 +1,24 @@
 package me.cl.lingxi.common.config;
 
+import me.cl.lingxi.BuildConfig;
+
 /**
- * api
+ * api manage
  * Created by bafsj on 17/3/1.
  */
 public class Api {
 
-    // 版本设置，isDebug为true为开发版本，为false为线上版本
-    private static boolean isDebug = true;
-    private static String onLineApi = "http://139.224.128.232:10660/lingxi";
-//    private static String offLineApi = "http://cqytxyz.imwork.net:28513/lingci";
-    private static String offLineApi = "http://139.224.128.232:10660/lingxi-dev";
-    public static String baseUrl = isDebug ? offLineApi : onLineApi;
-
+    // 版本设置由gradle接管，通过flavor控制多版本
+    public static String baseUrl = BuildConfig.BaseUrl;
 
     // v1 api
     public static String login = baseUrl + "/Login";
     public static String register = baseUrl + "/register";
     public static String updatePwd = baseUrl + "/updatePwd";
 
+    @Deprecated
     public static String moodList = baseUrl + "/minifeedList";
+    @Deprecated
     public static String publishMood = baseUrl + "/minifeedAdd";
     public static String commentList = baseUrl + "/commentList";
     public static String addComment = baseUrl + "/addComment";
@@ -39,6 +38,7 @@ public class Api {
 
     public static String appUpdate = baseUrl + "/config/appUpdate";
 
-    public static String ossToken = onLineApi + "/oss/distributeToken";
+    private static String ossBase = "http://139.224.128.232:10660/lingxi";
+    public static String ossToken = ossBase + "/oss/distributeToken";
 
 }
