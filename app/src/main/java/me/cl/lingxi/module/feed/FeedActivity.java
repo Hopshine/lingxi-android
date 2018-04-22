@@ -100,6 +100,8 @@ public class FeedActivity extends BaseActivity {
     private EvaluateAdapter mAdapter;
     private LoadingDialog loadingProgress;
 
+    private Feed feed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,12 +162,16 @@ public class FeedActivity extends BaseActivity {
 
     private void gotoUser() {
         Intent intent = new Intent(this, UserActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("mood", feed);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
-        Feed feed = (Feed) bundle.getSerializable("mood");
+        if (bundle == null) return;
+        feed = (Feed) bundle.getSerializable("mood");
         if (feed == null) return;
 
         mMid = String.valueOf(feed.getLcid());

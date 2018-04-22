@@ -108,6 +108,7 @@ public class UserActivity extends BaseActivity {
 
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
+        if (bundle == null) return;
         Feed feed = (Feed) bundle.getSerializable("mood");
         if (feed == null) return;
 

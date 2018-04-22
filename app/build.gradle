@@ -4,12 +4,12 @@ apply plugin: 'com.jakewharton.butterknife'
 def configInfo = rootProject.ext.android
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion configInfo.compileSdkVersion
 
     defaultConfig {
         applicationId "me.cl.lingxi"
         minSdkVersion configInfo.minSdkVersion
-        targetSdkVersion 22
+        targetSdkVersion configInfo.targetSdkVersion
         versionCode 183
         versionName "1.0.6 ex"
 
@@ -21,25 +21,23 @@ android {
             applicationId "me.cl.lingxi.alpha"
             buildConfigField 'String', 'BaseUrl', '"http://139.224.128.232:10660/lingxi-dev"'
             manifestPlaceholders = [
-                    'APP_ID': "me.cl.lingxi.alpha",
+                    'APP_ID'  : "me.cl.lingxi.alpha",
                     'APP_NAME': "@string/app_name_alpha"
             ]
         }
-
         local {
             applicationId "me.cl.lingxi.local"
             buildConfigField 'String', 'BaseUrl', '"http://cqytxyz.imwork.net:28513/lingci"'
             manifestPlaceholders = [
-                    'APP_ID': "me.cl.lingxi.local",
+                    'APP_ID'  : "me.cl.lingxi.local",
                     'APP_NAME': "@string/app_name_local"
             ]
         }
-
         online {
             applicationId "me.cl.lingxi"
             buildConfigField 'String', 'BaseUrl', '"http://139.224.128.232:10660/lingxi"'
             manifestPlaceholders = [
-                    'APP_ID': "me.cl.lingxi",
+                    'APP_ID'  : "me.cl.lingxi",
                     'APP_NAME': "@string/app_name"
             ]
         }
@@ -76,6 +74,5 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
     implementation 'cn.rongcloud.android:IMLib:2.8.6'
     implementation 'cn.rongcloud.android:IMKit:2.8.6'
-
     implementation project(':library')
 }
