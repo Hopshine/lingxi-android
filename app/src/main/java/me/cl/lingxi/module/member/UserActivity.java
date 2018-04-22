@@ -27,20 +27,21 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import me.cl.library.base.BaseActivity;
+import me.cl.library.loadmore.LoadMord;
 import me.cl.lingxi.R;
-import me.cl.lingxi.adapter.MoodAdapter;
+import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.ItemAnimator;
 import me.cl.lingxi.common.widget.JsonCallback;
-import me.cl.lingxi.common.widget.OnLoadMoreListener;
-import me.cl.lingxi.entity.Mood;
-import me.cl.lingxi.entity.MoodExtend;
+import me.cl.library.loadmore.OnLoadMoreListener;
+import me.cl.lingxi.entity.Feed;
+import me.cl.lingxi.entity.FeedExtend;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.module.BaseActivity;
-import me.cl.lingxi.module.mood.MoodActivity;
+import me.cl.lingxi.module.feed.FeedActivity;
 import me.iwf.photopicker.PhotoPreview;
 
 public class UserActivity extends BaseActivity {
@@ -73,8 +74,8 @@ public class UserActivity extends BaseActivity {
     private int saveUid;
     private int mUid;
     private String mUName;
-    private List<Mood> mList = new ArrayList<>();
-    private MoodAdapter mAdapter;
+    private List<Feed> mList = new ArrayList<>();
+    private FeedAdapter mAdapter;
 
     private int mPage = 0;
     private int mCount = 10;
@@ -97,7 +98,7 @@ public class UserActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new ItemAnimator());
-        mAdapter = new MoodAdapter(mList);
+        mAdapter = new FeedAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
 
         initView();
@@ -107,27 +108,27 @@ public class UserActivity extends BaseActivity {
 
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
-        Mood mood = (Mood) bundle.getSerializable("mood");
-        if (mood == null) return;
+        Feed feed = (Feed) bundle.getSerializable("mood");
+        if (feed == null) return;
 
-        mUid = mood.getUid();
-        mUName = mood.getUname();
-        String mUrl = Api.baseUrl + mood.getUrl();
+        mUid = feed.getUid();
+        mUName = feed.getUname();
+        String mUrl = Api.baseUrl + feed.getUrl();
         mTitleName.setText(mUName);
         mUserName.setText(mUName);
         Glide.with(this)
                 .load(mUrl)
-                .placeholder(R.mipmap.userimg)
-                .error(R.mipmap.userimg)
+                .placeholder(R.drawable.img_user)
+                .error(R.drawable.img_user)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(mTitleImg);
         Glide.with(this)
                 .load(mUrl)
-                .placeholder(R.mipmap.userimg)
-                .error(R.mipmap.userimg)
+                .placeholder(R.drawable.img_user)
+                .error(R.drawable.img_user)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(mUserImg);
-        if (!mood.isIm_ability())
+        if (!feed.isIm_ability())
             mContact.setVisibility(View.GONE);
     }
 
@@ -144,18 +145,18 @@ public class UserActivity extends BaseActivity {
         });
 
         // item点击
-        mAdapter.setOnItemListener(new MoodAdapter.OnItemListener() {
+        mAdapter.setOnItemListener(new FeedAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view, Mood mood, int position) {
+            public void onItemClick(View view, Feed feed, int position) {
                 switch (view.getId()) {
                     case R.id.mood_card:
                     case R.id.mf_comment:
-                        gotoMood(mood);
+                        gotoMood(feed);
                         break;
                     case R.id.mf_like:
-                        if (mood.islike()) return;
+                        if (feed.islike()) return;
                         // 未点赞点赞
-                        postAddLike(mood, position);
+                        postAddLike(feed, position);
                         break;
                 }
             }
@@ -206,7 +207,7 @@ public class UserActivity extends BaseActivity {
                 if (mAdapter.getItemCount() < 4) return;
 
                 RefreshMODE = MOD_LOADING;
-                mAdapter.updateLoadStatus(MoodAdapter.LOAD_MORE);
+                mAdapter.updateLoadStatus(LoadMord.LOAD_MORE);
 
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
@@ -228,28 +229,28 @@ public class UserActivity extends BaseActivity {
         }
     }
 
-    private void postAddLike(Mood mood, int position) {
+    private void postAddLike(Feed feed, int position) {
     }
 
     // 获取动态列表
     private void listFeed(int page, int count) {
         if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH)
             mSwipeRefreshLayout.setRefreshing(true);
-        OkGo.<Result<MoodExtend>>get(Api.listFeed)
+        OkGo.<Result<FeedExtend>>get(Api.listFeed)
                 .params("page", page)
                 .params("count", count)
                 .params("sUid", mUid)
                 .params("uid", saveUid)
-                .execute(new JsonCallback<Result<MoodExtend>>() {
+                .execute(new JsonCallback<Result<FeedExtend>>() {
                     @Override
-                    public void onSuccess(Response<Result<MoodExtend>> response) {
+                    public void onSuccess(Response<Result<FeedExtend>> response) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mPage++;
-                        MoodExtend moodBean = response.body().getData();
+                        FeedExtend moodBean = response.body().getData();
                         switch (RefreshMODE) {
                             case MOD_LOADING:
                                 if (moodBean.getTotalnum() == 0) {
-                                    mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
+                                    mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
                                     return;
                                 }
                                 updateData(moodBean.getMinifeedlist());
@@ -261,16 +262,16 @@ public class UserActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError(Response<Result<MoodExtend>> response) {
+                    public void onError(Response<Result<FeedExtend>> response) {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.updateLoadStatus(MoodAdapter.LOAD_NONE);
+                        mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
                         Utils.toastShow(UserActivity.this, R.string.toast_getmf_error);
                     }
                 });
     }
 
     //更新数据
-    public void updateData(List<Mood> data) {
+    public void updateData(List<Feed> data) {
         mAdapter.addData(data);
     }
 
@@ -282,10 +283,10 @@ public class UserActivity extends BaseActivity {
     }
 
     // 前往动态详情
-    private void gotoMood(Mood mood) {
-        Intent intent = new Intent(this, MoodActivity.class);
+    private void gotoMood(Feed feed) {
+        Intent intent = new Intent(this, FeedActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("mood", mood);
+        bundle.putSerializable("mood", feed);
         intent.putExtras(bundle);
 //        startActivityForResult(intent, Constants.ACTIVITY_MOOD);
         startActivity(intent);

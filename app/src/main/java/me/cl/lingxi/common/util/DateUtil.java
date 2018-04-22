@@ -3,6 +3,7 @@ package me.cl.lingxi.common.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 时间换算类
@@ -17,16 +18,7 @@ public class DateUtil {
      * @return 处理得到的时间字符串
      */
     public static String showTime(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-
-        long nowYearLong = 0;
-        try {
-            nowYearLong = sdf.parse(sdf.format(new Date())).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE);
 
         Date cTime = null;
         try {
@@ -35,8 +27,7 @@ public class DateUtil {
             e.printStackTrace();
         }
 
-        String r = "未知";
-        if (cTime == null) return r;
+        if (cTime == null) return "未知";
 
         long nowTimeLong = System.currentTimeMillis();
         long cTimeLong = cTime.getTime();
@@ -45,25 +36,36 @@ public class DateUtil {
         if (result < 60000) {
             long seconds = result / 1000;
             if (seconds == 0) {
-                r = "刚刚";
+                return "刚刚";
             } else {
-                r = seconds + "秒前";
+                return seconds + "秒前";
             }
-        } else if (result >= 60000 && result < 3600000) {
-            long seconds = result / 60000;
-            r = seconds + "分前";
-        } else if (result >= 3600000 && result < 86400000) {
-            long seconds = result / 3600000;
-            r = seconds + "时前";
-        } else if (result >= 86400000 && result < 1702967296) {
-            long seconds = result / 86400000;
-            r = seconds + "天前";
-        } else if (nowYearLong < cTimeLong){
-            sdf = new SimpleDateFormat("MM-dd hh:mm");
-            r = sdf.format(cTime).toString();
-        } else {
-            r = sdf.format(cTime).toString();
         }
-        return r;
+        if (result >= 60000 && result < 3600000) {
+            long seconds = result / 60000;
+            return seconds + "分前";
+        }
+        if (result >= 3600000 && result < 86400000) {
+            long seconds = result / 3600000;
+            return seconds + "时前";
+        }
+        if (result >= 86400000 && result < 1702967296) {
+            long seconds = result / 86400000;
+            return seconds + "天前";
+        }
+
+        // 跨年
+        sdf = new SimpleDateFormat("yyyy", Locale.SIMPLIFIED_CHINESE);
+        long nowYearLong = 0;
+        try {
+            nowYearLong = sdf.parse(sdf.format(new Date())).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE);
+        if (nowYearLong < cTimeLong){
+            sdf = new SimpleDateFormat("MM-dd hh:mm", Locale.SIMPLIFIED_CHINESE);
+        }
+        return sdf.format(cTime);
     }
 }

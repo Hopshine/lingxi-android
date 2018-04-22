@@ -1,6 +1,7 @@
 package me.cl.lingxi.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,8 @@ import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.util.ColorPhrase;
-import me.cl.lingxi.emojicon.EmojiconTextView;
-import me.cl.lingxi.entity.Mood;
+import me.cl.library.utils.ColorPhrase;
+import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Relevant;
 
 /**
@@ -76,9 +76,9 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
         @BindView(R.id.relevant_time)
         TextView mRelevantTime;
         @BindView(R.id.relevant_info)
-        EmojiconTextView mRelevantInfo;
+        AppCompatTextView mRelevantInfo;
         @BindView(R.id.mood_info)
-        EmojiconTextView mMoodInfo;
+        AppCompatTextView mMoodInfo;
         @BindView(R.id.mood_body)
         LinearLayout mMoodBody;
 
@@ -93,15 +93,15 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
             mRelevant = relevant;
             Glide.with(context)
                     .load(Api.baseUrl + relevant.getUrl())
-                    .placeholder(R.mipmap.userimg)
-                    .error(R.mipmap.userimg)
+                    .placeholder(R.drawable.img_user)
+                    .error(R.drawable.img_user)
                     .bitmapTransform(new CropCircleTransformation(context))
                     .into(mUserImg);
             mUserName.setText(relevant.getUname());
             mRelevantTime.setText(relevant.getCm_time());
             mRelevantInfo.setText(relevant.getComment());
-            Mood mood = relevant.getMinifeed();
-            String replyStr = "{" + mood.getUname() + "}：" + mood.getLc_info();
+            Feed feed = relevant.getMinifeed();
+            String replyStr = "{" + feed.getUname() + "}：" + feed.getLc_info();
             CharSequence chars = ColorPhrase.from(replyStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
             mMoodInfo.setText(chars);
         }

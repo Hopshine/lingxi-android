@@ -1,19 +1,39 @@
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
     }
 }
 
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
         google()
     }
+}
+
+ext {
+
+    supportVersion = "26.1.0"
+    butterknifeVersion = "8.4.0"
+
+    android = [
+            compileSdkVersion: 26,
+            minSdkVersion    : 16,
+            targetSdkVersion : 22
+    ]
+
+    dependencies = [
+            design     : "com.android.support:design:${supportVersion}",
+            supportV4  : "com.android.support:support-v4:${supportVersion}",
+            appcompatV7: "com.android.support:appcompat-v7:${supportVersion}"
+    ]
 }
 
 task clean(type: Delete) {

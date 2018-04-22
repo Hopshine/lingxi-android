@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context=".module.mood.MoodActivity">
+    tools:context=".module.feed.FeedActivity">
 
     <include layout="@layout/toolbar"/>
 
@@ -90,7 +90,7 @@
         android:orientation="horizontal"
         android:padding="4dp">
 
-        <me.cl.lingxi.emojicon.EmojiconEditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/edit_tu_cao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -104,8 +104,7 @@
             android:maxLines="6"
             android:padding="6dp"
             android:scrollHorizontally="false"
-            android:textColorHint="#818181"
-            app:emojiconSize="28sp"/>
+            android:textColorHint="#818181"/>
 
         <Button
             android:id="@+id/btn_publish"

@@ -17,17 +17,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
+import me.cl.library.base.BaseActivity;
+import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.LxApplication;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.User;
-import me.cl.lingxi.module.BaseActivity;
 import me.cl.lingxi.module.main.MainActivity;
 
 public class LoginActivity extends BaseActivity {
@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void updatePwd(View view) {
-        Intent intent = new Intent(LoginActivity.this, UpdatePwdActivity.class);
+        Intent intent = new Intent(LoginActivity.this, ResetPwdActivity.class);
         startActivity(intent);
     }
 

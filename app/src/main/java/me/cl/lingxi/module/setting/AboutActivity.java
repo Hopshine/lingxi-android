@@ -13,6 +13,7 @@ import com.lzy.okgo.model.Response;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
@@ -20,7 +21,6 @@ import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.module.BaseActivity;
 import me.cl.lingxi.module.WebActivity;
 import me.cl.lingxi.module.update.UpdateReceiver;
 

@@ -21,7 +21,7 @@ public class MoeToast {
     /** Toast字体颜色 */
     private static final int DEFAULT_TEXT_COLOR = 0xffffffff;
     /** Toast背景图片 */
-    private static final int DEFAULT_BG_TEXT = R.drawable.toast_text_bc;
+    private static final int DEFAULT_BG_TEXT = R.drawable.img_toast_bc;
     /** Toast位置高度 */
     private static final int DEFAULT_TOAST_HIGHT = 80;
 

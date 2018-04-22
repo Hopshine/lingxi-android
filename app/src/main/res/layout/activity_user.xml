@@ -33,7 +33,7 @@
                 android:contentDescription="@string/app_name"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/login_image"
+                android:src="@drawable/img_login"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"/>
 
@@ -57,7 +57,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:contentDescription="@string/app_name"
-                        android:src="@mipmap/userimg"/>
+                        android:src="@drawable/img_user"/>
 
                     <TextView
                         android:id="@+id/title_name"
@@ -183,7 +183,7 @@
         android:id="@+id/user_img"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:src="@mipmap/userimg"
+        android:src="@drawable/img_user"
         android:layout_margin="@dimen/activity_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|start"/>

@@ -22,7 +22,7 @@
                 android:id="@+id/mine_top"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/mine_img_bc">
+                android:background="@drawable/img_mine_bc">
 
                 <LinearLayout
                     android:id="@+id/user_body"
@@ -37,7 +37,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:adjustViewBounds="true"
-                        android:src="@mipmap/userimg"/>
+                        android:src="@drawable/img_user"/>
 
                     <TextView
                         android:id="@+id/user_name"
@@ -68,8 +68,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/mine_item"
-                android:drawableLeft="@mipmap/mine_item_like"
-                android:drawableRight="@mipmap/mine_item_right"
+                android:drawableLeft="@drawable/ic_favorite"
+                android:drawableRight="@drawable/ic_more"
                 android:text="我的回复"/>
 
             <TextView
@@ -78,8 +78,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 style="@style/mine_item"
-                android:drawableLeft="@mipmap/mine_item_aet"
-                android:drawableRight="@mipmap/mine_item_right"
+                android:drawableLeft="@drawable/ic_smile"
+                android:drawableRight="@drawable/ic_more"
                 android:text="与我相关"/>
 
             <TextView
@@ -88,8 +88,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/mine_item"
-                android:drawableLeft="@mipmap/mine_item_setting"
-                android:drawableRight="@mipmap/mine_item_right"
+                android:drawableLeft="@drawable/ic_set"
+                android:drawableRight="@drawable/ic_more"
                 android:text="设置"/>
 
             <TextView
@@ -98,8 +98,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/mine_item"
-                android:drawableLeft="@mipmap/mine_item_info"
-                android:drawableRight="@mipmap/mine_item_right"
+                android:drawableLeft="@drawable/ic_link"
+                android:drawableRight="@drawable/ic_more"
                 android:text="关于lingci"/>
 
             <TextView
@@ -108,8 +108,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/mine_item"
-                android:drawableLeft="@mipmap/mine_item_exit"
-                android:drawableRight="@mipmap/mine_item_right"
+                android:drawableLeft="@drawable/ic_wrong"
+                android:drawableRight="@drawable/ic_more"
                 android:text="退出登录"/>
         </LinearLayout>
     </me.cl.lingxi.common.view.JellyScrollView>

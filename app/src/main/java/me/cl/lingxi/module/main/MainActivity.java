@@ -17,7 +17,7 @@ import io.rong.imlib.model.UserInfo;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.lingxi.module.BaseActivity;
+import me.cl.library.base.BaseActivity;
 
 public class MainActivity extends BaseActivity implements RongIM.UserInfoProvider {
 
@@ -27,7 +27,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private FragmentManager fragmentManager;
     private HomeFragment homefragment;
     private DliFragment mDliFragment;
-    private MoodFragment mMoodFragment;
+    private FeedFragment mFeedFragment;
     private MessageFragment messagefragment;
     private MineFragment minefragment;
 
@@ -55,10 +55,10 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
 
     //底部导航
     private void initBottomNavigation() {
-        BottomNavigationItem home = new BottomNavigationItem(R.mipmap.icon_home, "主页").setInactiveIconResource(R.mipmap.icon_home_nor);
-        BottomNavigationItem camera = new BottomNavigationItem(R.mipmap.icon_camera, "圈子").setInactiveIconResource(R.mipmap.icon_camera_nor);
-        BottomNavigationItem message = new BottomNavigationItem(R.mipmap.icon_message, "消息").setInactiveIconResource(R.mipmap.icon_message_nor);
-        BottomNavigationItem mine = new BottomNavigationItem(R.mipmap.icon_mine, "我的").setInactiveIconResource(R.mipmap.icon_mine_nor);
+        BottomNavigationItem home = new BottomNavigationItem(R.drawable.icon_home, "主页").setInactiveIconResource(R.drawable.icon_home_nor);
+        BottomNavigationItem camera = new BottomNavigationItem(R.drawable.icon_camera, "圈子").setInactiveIconResource(R.drawable.icon_camera_nor);
+        BottomNavigationItem message = new BottomNavigationItem(R.drawable.icon_message, "消息").setInactiveIconResource(R.drawable.icon_message_nor);
+        BottomNavigationItem mine = new BottomNavigationItem(R.drawable.icon_mine, "我的").setInactiveIconResource(R.drawable.icon_mine_nor);
         mBottomNavigation.addItem(home).addItem(camera).addItem(message).addItem(mine)
                 .setMode(BottomNavigationBar.MODE_FIXED)//切换模式
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)//背景风格
@@ -124,11 +124,11 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                 }
                 break;
             case 1:
-                if (mMoodFragment == null){
-                    mMoodFragment = MoodFragment.newInstance("home");
-                    transaction.add(R.id.fragment_container, mMoodFragment);
+                if (mFeedFragment == null){
+                    mFeedFragment = FeedFragment.newInstance("home");
+                    transaction.add(R.id.fragment_container, mFeedFragment);
                 } else {
-                    transaction.show(mMoodFragment);
+                    transaction.show(mFeedFragment);
                 }
                 break;
             case 2:
@@ -162,8 +162,8 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         if (mDliFragment != null) {
             transaction.hide(mDliFragment);
         }
-        if (mMoodFragment != null) {
-            transaction.hide(mMoodFragment);
+        if (mFeedFragment != null) {
+            transaction.hide(mFeedFragment);
         }
         if (messagefragment != null) {
             transaction.hide(messagefragment);

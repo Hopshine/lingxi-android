@@ -15,12 +15,12 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_width="@dimen/common_padding"
+            android:layout_height="@dimen/common_padding"
             android:contentDescription="@string/main_mine"
             android:focusable="false"
             android:scaleType="centerInside"
-            android:src="@mipmap/icon_see"/>
+            android:src="@drawable/ic_browse"/>
 
         <TextView
             android:id="@+id/mf_see_num"
@@ -42,12 +42,12 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_width="@dimen/common_padding"
+            android:layout_height="@dimen/common_padding"
             android:contentDescription="@string/main_mine"
             android:focusable="false"
             android:scaleType="centerInside"
-            android:src="@mipmap/icon_comment"/>
+            android:src="@drawable/ic_code"/>
 
         <TextView
             android:id="@+id/mf_comment_num"
@@ -70,8 +70,8 @@
 
         <ImageView
             android:id="@+id/mf_like_icon"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_width="@dimen/common_padding"
+            android:layout_height="@dimen/common_padding"
             android:contentDescription="@string/main_mine"
             android:focusable="false"
             android:scaleType="centerInside"

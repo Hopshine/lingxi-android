@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import me.cl.library.utils.ColorPhrase;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.entity.Like;
@@ -158,8 +159,8 @@ public class Utils {
         }
         Glide.with(imgView.getContext())
                 .load(pathName)
-                .placeholder(R.mipmap.userimg)
-                .error(R.mipmap.userimg)
+                .placeholder(R.drawable.img_user)
+                .error(R.drawable.img_user)
                 .bitmapTransform(new CropCircleTransformation(imgView.getContext()))
                 .into(imgView);
     }

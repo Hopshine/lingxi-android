@@ -40,7 +40,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/userimg" />
+                    android:src="@drawable/img_user" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"

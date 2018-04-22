@@ -37,7 +37,7 @@ import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.JsonCallback;
-import me.cl.lingxi.module.BaseFragment;
+import me.cl.library.base.BaseFragment;
 import me.cl.lingxi.module.member.LoginActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
 import me.cl.lingxi.module.mine.RelevantActivity;
@@ -102,9 +102,9 @@ public class MineFragment extends BaseFragment {
         setupToolbar(mToolbar, "我的", 0, null);
         uName = SPUtils.getInstance(getActivity()).getString("username");
         //设置TextView左右图片
-        Drawable mine_item_aet = getResources().getDrawable(R.mipmap.mine_item_aet);
-        Drawable mine_item_right = getResources().getDrawable(R.mipmap.mine_item_right);
-        Drawable mine_unread_right = getResources().getDrawable(R.mipmap.mine_unread_right);
+        Drawable mine_item_aet = getResources().getDrawable(R.drawable.ic_smile);
+        Drawable mine_item_right = getResources().getDrawable(R.drawable.ic_more);
+        Drawable mine_unread_right = getResources().getDrawable(R.drawable.ic_more);
         mine_item_aet.setBounds(0, 0, mine_item_aet.getIntrinsicWidth(), mine_item_aet.getIntrinsicHeight());
         mine_item_right.setBounds(0, 0, mine_item_right.getIntrinsicWidth(), mine_item_right.getIntrinsicHeight());
         mine_unread_right.setBounds(0, 0, mine_unread_right.getIntrinsicWidth(), mine_unread_right.getIntrinsicHeight());

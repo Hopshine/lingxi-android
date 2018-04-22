@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.mood.PublishActivity">
+    tools:context=".module.feed.PublishActivity">
 
     <include layout="@layout/toolbar"/>
 
-    <me.cl.lingxi.emojicon.EmojiconEditText
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/mood_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,8 +22,7 @@
         android:maxLength="240"
         android:minHeight="123dp"
         android:padding="7dp"
-        android:scrollHorizontally="false"
-        app:emojiconSize="28sp"/>
+        android:scrollHorizontally="false"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -45,7 +43,7 @@
             android:layout_height="48dp"
             android:padding="@dimen/view_padding"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_publish"/>
+            android:src="@drawable/ic_skip"/>
     </RelativeLayout>
 
     <!--android:elevation="0dp"-->

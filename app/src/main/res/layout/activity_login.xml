@@ -13,7 +13,7 @@
         android:layout_height="150dp"
         android:contentDescription="@string/app_name"
         android:layout_gravity="center"
-        android:src="@mipmap/login_image" />
+        android:src="@drawable/img_login" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@null"
-            android:drawableLeft="@mipmap/login_username"
+            android:drawableLeft="@drawable/ic_account"
             android:drawablePadding="16dp"
             android:hint="@string/hint_uname"
             android:inputType="textPersonName"
@@ -48,7 +48,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@null"
-            android:drawableLeft="@mipmap/login_password"
+            android:drawableLeft="@drawable/ic_password"
             android:drawablePadding="16dp"
             android:hint="@string/hint_pwd"
             android:inputType="textPassword"

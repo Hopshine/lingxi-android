@@ -3,11 +3,11 @@ package me.cl.lingxi.module;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import me.cl.lingxi.R;
-import me.cl.lingxi.common.view.MoeWebView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.cl.library.base.BaseActivity;
+import me.cl.lingxi.R;
+import me.cl.lingxi.common.view.MoeWebView;
 
 public class WebActivity extends BaseActivity {
 

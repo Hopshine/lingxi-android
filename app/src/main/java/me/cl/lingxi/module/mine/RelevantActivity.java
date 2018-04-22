@@ -15,19 +15,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.cl.library.base.BaseActivity;
+import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.RelevantAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.lingxi.entity.Mood;
+import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Relevant;
 import me.cl.lingxi.entity.RelevantExtend;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.module.BaseActivity;
-import me.cl.lingxi.module.mood.MoodActivity;
+import me.cl.lingxi.module.feed.FeedActivity;
 
 public class RelevantActivity extends BaseActivity {
 
@@ -104,10 +104,10 @@ public class RelevantActivity extends BaseActivity {
     }
 
     //前往详情页
-    private void gotoMood(Mood mood){
-        Intent intent = new Intent(RelevantActivity.this, MoodActivity.class);
+    private void gotoMood(Feed feed){
+        Intent intent = new Intent(RelevantActivity.this, FeedActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("mood", mood);
+        bundle.putSerializable("mood", feed);
         intent.putExtras(bundle);
         startActivity(intent);
     }

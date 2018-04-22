@@ -11,10 +11,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.PublicLicenseAdapter;
 import me.cl.lingxi.entity.PublicLicense;
-import me.cl.lingxi.module.BaseActivity;
 
 public class PublicLicenseActivity extends BaseActivity {
 

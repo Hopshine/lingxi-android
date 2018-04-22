@@ -11,8 +11,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.imkit.fragment.ConversationFragment;
 import io.rong.imlib.model.Conversation;
+import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
-import me.cl.lingxi.module.BaseActivity;
 
 public class ConversationActivity extends BaseActivity {
 

@@ -1,13 +1,12 @@
 package me.cl.lingxi.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,9 +18,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import me.cl.library.loadmore.LoadMord;
+import me.cl.library.loadmore.LoadMoreViewHolder;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.emojicon.EmojiconTextView;
 import me.cl.lingxi.entity.Evaluate;
 import me.cl.lingxi.entity.Reply;
 
@@ -33,13 +33,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mContext;
     private List<Evaluate> mList;
 
-    public static final int LOAD_MORE = 0;
-    public static final int LOAD_PULL_TO = 1;
-    public static final int LOAD_NONE = 2;
-    public static final int LOAD_END = 3;
-
     private static final int TYPE_FOOTER = -1;
-    private int mStatus = LOAD_END;
 
     private OnItemListener mOnItemListener;
 
@@ -70,8 +64,8 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_FOOTER) {
-            View view = View.inflate(parent.getContext(), R.layout.item_footer, null);
-            return new FooterViewHolder(view);
+            View view = View.inflate(parent.getContext(), R.layout.lib_load_more, null);
+            return new LoadMoreViewHolder(view);
         } else {
             View view = View.inflate(parent.getContext(), R.layout.item_evaluate, null);
             return new EvaluateViewHolder(view);
@@ -80,9 +74,9 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof FooterViewHolder) {
-            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            footerViewHolder.bindItem();
+        if (holder instanceof LoadMoreViewHolder) {
+            LoadMoreViewHolder loadMoreViewHolder = (LoadMoreViewHolder) holder;
+            loadMoreViewHolder.bindItem(LoadMord.LOAD_END);
         } else {
             EvaluateViewHolder evaluateViewHolder = (EvaluateViewHolder) holder;
             evaluateViewHolder.bindItem(mContext, mList.get(position));
@@ -95,7 +89,6 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void updateLoadStatus(int status) {
-        this.mStatus = status;
         notifyDataSetChanged();
     }
 
@@ -109,45 +102,6 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    class FooterViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.progress)
-        ProgressBar mProgress;
-        @BindView(R.id.tv_load_prompt)
-        TextView mTvLoadPrompt;
-
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            LinearLayoutCompat.LayoutParams params = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            itemView.setLayoutParams(params);
-            itemView.setVisibility(View.GONE);
-        }
-
-        public void bindItem() {
-            switch (mStatus) {
-                case LOAD_MORE:
-                    mProgress.setVisibility(View.VISIBLE);
-                    mTvLoadPrompt.setText("正在加载...");
-                    itemView.setVisibility(View.VISIBLE);
-                    break;
-                case LOAD_PULL_TO:
-                    mProgress.setVisibility(View.GONE);
-                    mTvLoadPrompt.setText("上拉加载更多");
-                    itemView.setVisibility(View.VISIBLE);
-                    break;
-                case LOAD_NONE:
-                    mProgress.setVisibility(View.GONE);
-                    mTvLoadPrompt.setText("没有更多了");
-                    break;
-                case LOAD_END:
-                    itemView.setVisibility(View.GONE);
-                default:
-                    break;
-            }
-        }
-    }
-
     class EvaluateViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.evaluate_body)
@@ -159,7 +113,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @BindView(R.id.evaluate_time)
         TextView mEvaluateTime;
         @BindView(R.id.evaluate_info)
-        EmojiconTextView mEvaluateInfo;
+        AppCompatTextView mEvaluateInfo;
         @BindView(R.id.recycler_view)
         RecyclerView mRecyclerView;
         private Evaluate mEvaluate;
@@ -175,8 +129,8 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mEvaluate = evaluate;
             Glide.with(context)
                     .load(Api.baseUrl + evaluate.getUrl())
-                    .placeholder(R.mipmap.userimg)
-                    .error(R.mipmap.userimg)
+                    .placeholder(R.drawable.img_user)
+                    .error(R.drawable.img_user)
                     .bitmapTransform(new CropCircleTransformation(context))
                     .into(mUserImg);
             mUserName.setText(evaluate.getUname());

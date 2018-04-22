@@ -24,7 +24,7 @@
             android:paddingLeft="@dimen/common_padding"
             android:textSize="@dimen/text_size"
             android:textColor="@color/white"
-            android:drawableRight="@mipmap/icon_select"
+            android:drawableRight="@drawable/ic_more_unfold"
             android:gravity="center"/>
 
     </android.support.v7.widget.Toolbar>

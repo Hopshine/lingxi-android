@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.cl.library.base.BaseFragment;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.DliAnimationAdapter;
 import me.cl.lingxi.common.config.Constants;
@@ -34,7 +35,6 @@ import me.cl.lingxi.common.util.GsonUtil;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.entity.Animation;
 import me.cl.lingxi.entity.DliAnimation;
-import me.cl.lingxi.module.BaseFragment;
 import me.cl.lingxi.module.WebActivity;
 
 /**
@@ -52,7 +52,7 @@ public class DliFragment extends BaseFragment {
     SwipeRefreshLayout mSwipeRefresh;
 
     private String baseAnimateUrl = "http://www.dilidili.wang/anime/";
-    private String[] selectAnimate = {"201710", "201707", "201704", "201701"};
+    private String[] selectAnimate = {"201804", "201801", "201710", "201707", "201704", "201701"};
     private String animateUrl = baseAnimateUrl + selectAnimate[0];
     private int mSelect = 0;
     private ListPopupWindow mPopupWindow;

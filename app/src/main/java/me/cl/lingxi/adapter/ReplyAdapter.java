@@ -1,6 +1,7 @@
 package me.cl.lingxi.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.emojicon.EmojiconTextView;
 import me.cl.lingxi.entity.Reply;
 
 /**
@@ -57,7 +57,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
     class ReplyViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.reply_info)
-        EmojiconTextView mReplyInfo;
+        AppCompatTextView mReplyInfo;
         private Reply mReply;
 
         public ReplyViewHolder(View itemView) {

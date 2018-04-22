@@ -18,8 +18,8 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.LxApplication;
 import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.config.LxApplication;
 import me.cl.lingxi.common.util.GsonUtil;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
@@ -29,6 +29,8 @@ import me.cl.lingxi.entity.User;
 import me.cl.lingxi.entity.UserExtend;
 import me.cl.lingxi.module.main.MainActivity;
 import me.cl.lingxi.module.member.LoginActivity;
+
+import me.cl.library.base.BaseActivity;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -73,7 +75,7 @@ public class WelcomeActivity extends BaseActivity {
                 .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<UserExtend>>() {
                     @Override
                     public void onSuccess(Response<Result<UserExtend>> response) {
-                        for (User user: response.body().getData().getUserlist()){
+                        for (User user : response.body().getData().getUserlist()) {
                             UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.baseUrl + user.getUrl()));
                             if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
                                 Constants.uidList.add(String.valueOf(user.getUid()));
@@ -153,9 +155,10 @@ public class WelcomeActivity extends BaseActivity {
                     if (imUserStr == null || imUserStr.length() == 0) {
                         getImUser();
                     } else {
-                        Type type = new TypeToken<Result<UserExtend>>() {}.getType();
+                        Type type = new TypeToken<Result<UserExtend>>() {
+                        }.getType();
                         me.cl.lingxi.entity.Result<UserExtend> userResult = GsonUtil.toObject(imUserStr, type);
-                        for (User user: userResult.getData().getUserlist()){
+                        for (User user : userResult.getData().getUserlist()) {
                             UserInfo userInfo = new UserInfo(String.valueOf(user.getUid()), user.getUname(), Uri.parse(Api.baseUrl + user.getUrl()));
                             if (!Constants.uidList.contains(String.valueOf(user.getUid()))) {
                                 Constants.uidList.add(String.valueOf(user.getUid()));

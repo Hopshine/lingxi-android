@@ -31,17 +31,17 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.cl.library.base.BaseActivity;
+import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.MD5Util;
 import me.cl.lingxi.common.util.SPUtils;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.module.BaseActivity;
 
 public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 

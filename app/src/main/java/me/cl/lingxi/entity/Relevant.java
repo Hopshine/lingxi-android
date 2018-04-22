@@ -10,7 +10,7 @@ public class Relevant implements Serializable {
     private int cmid;
     private String cm_time;
     private String comment;
-    private Mood minifeed;
+    private Feed minifeed;
 
     public int getUid() {
         return uid;
@@ -60,11 +60,11 @@ public class Relevant implements Serializable {
         this.comment = comment;
     }
 
-    public Mood getMinifeed() {
+    public Feed getMinifeed() {
         return minifeed;
     }
 
-    public void setMinifeed(Mood minifeed) {
+    public void setMinifeed(Feed minifeed) {
         this.minifeed = minifeed;
     }
 }

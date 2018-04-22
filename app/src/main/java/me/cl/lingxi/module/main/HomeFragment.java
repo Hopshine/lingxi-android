@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import me.cl.lingxi.R;
-import me.cl.lingxi.module.BaseFragment;
+import me.cl.library.base.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

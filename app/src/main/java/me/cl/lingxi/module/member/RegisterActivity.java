@@ -15,13 +15,13 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.cl.library.base.BaseActivity;
+import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.LoadingDialog;
 import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.module.BaseActivity;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -47,7 +47,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void init() {
-        mToolbar.setTitle(R.string.title_bar_reg);
+        setupToolbar(mToolbar, R.string.title_bar_reg, true, 0, null);
     }
 
     public void goRegister(View view) {
