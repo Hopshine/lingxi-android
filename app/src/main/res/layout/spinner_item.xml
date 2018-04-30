@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/mini_padding"
+    android:paddingBottom="@dimen/spacing_8"
     android:gravity="center"
-    android:paddingTop="@dimen/mini_padding"
-    android:textSize="@dimen/text_size"/>
+    android:paddingTop="@dimen/spacing_8"
+    android:textSize="@dimen/font_16"/>

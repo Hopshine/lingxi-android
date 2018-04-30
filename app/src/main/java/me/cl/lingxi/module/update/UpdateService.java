@@ -31,7 +31,7 @@ public class UpdateService extends Service {
 
     private static final String rootPath = Environment.getExternalStorageDirectory() + File.separator;
     private static final String downloadPath = "lingci/download/";
-    private String title = "下载灵犀APP";
+    private String title = "下载灵悉APP";
     private String loading = "正在下载...";
     private int fileSize;
     private int fileCache;
@@ -52,10 +52,10 @@ public class UpdateService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mAppVersion = (AppVersion) intent.getSerializableExtra("app_version");
-        fileName = mAppVersion.getApk_name();
+        fileName = mAppVersion.getApkName();
         filePath = rootPath + downloadPath;
 
-        downloadApk(mAppVersion.getApk_url());
+        downloadApk(mAppVersion.getApkUrl());
         return super.onStartCommand(intent, flags, startId);
     }
 

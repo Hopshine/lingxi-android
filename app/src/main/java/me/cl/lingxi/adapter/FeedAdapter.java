@@ -1,6 +1,5 @@
 package me.cl.lingxi.adapter;
 
-import android.net.Uri;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,16 +17,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.rong.imlib.model.UserInfo;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.LoadMoreViewHolder;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.DateUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
+import me.cl.lingxi.entity.Like;
+import me.cl.lingxi.entity.User;
 
 /**
  * Feed Adapter
@@ -71,7 +70,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View view = View.inflate(parent.getContext(), R.layout.lib_load_more, null);
             return mLoadMoreViewHolder = new LoadMoreViewHolder(view);
         } else {
-            View view = View.inflate(parent.getContext(), R.layout.item_mood_detail, null);
+            View view = View.inflate(parent.getContext(), R.layout.item_feed_detail, null);
             return new MoodViewHolder(view);
         }
     }
@@ -124,8 +123,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mUserName;
         @BindView(R.id.mood_time)
         TextView mMoodTime;
-        @BindView(R.id.lc_chat)
-        ImageView mLcChat;
         @BindView(R.id.mood_info)
         AppCompatTextView mMoodInfo;
         @BindView(R.id.mood_body)
@@ -164,28 +161,19 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bindItem(Feed feed, int position) {
             mFeed = feed;
             mPosition = position;
-            //是否能够聊天
-            if (feed.isIm_ability()) {
-                String uid = String.valueOf(feed.getUid());
-                String uname = feed.getUname();
-                String img_url = Api.baseUrl + feed.getUrl();
-                if (!Constants.uidList.contains(uid)) {
-                    Constants.uidList.add(uid);
-                    Constants.userList.add(new UserInfo(uid, uname, Uri.parse(img_url)));
-                }
-            }
+            User user = feed.getUser();
             //动态详情
             Glide.with(mUserImg.getContext())
-                    .load(Api.baseUrl + feed.getUrl())
+                    .load(Constants.IMG_URL + user.getAvatar())
                     .placeholder(R.drawable.img_user)
                     .error(R.drawable.img_user)
                     .bitmapTransform(new CropCircleTransformation(mUserImg.getContext()))
                     .into(mUserImg);
-            mUserName.setText(feed.getUname());
-            mMoodTime.setText(DateUtil.showTime(feed.getPl_time()));
-            mMoodInfo.setText(feed.getLc_info());
+            mUserName.setText(user.getUsername());
+            mMoodTime.setText(DateUtil.showTime(feed.getCreateTime()));
+            mMoodInfo.setText(feed.getFeedInfo());
             // 图片
-            final List<String> photos = feed.getPhotos();
+            final List<String> photos = feed.getPhotoList();
             if (photos != null && photos.size() > 0) {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 int column = 3;
@@ -203,18 +191,20 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mRecyclerView.setVisibility(View.GONE);
             }
             // 查看评论点赞数
-            mMfSeeNum.setText(String.valueOf(feed.getViewnum()));
-            mMfCommentNum.setText(String.valueOf(feed.getCmtnum()));
-            mMfLikeNum.setText(String.valueOf(feed.getLikenum()));
+            mMfSeeNum.setText(String.valueOf(feed.getViewNum()));
+            mMfCommentNum.setText(String.valueOf(feed.getCommentNum()));
             // 是否已经点赞
-            if (feed.islike()) {
+            if (feed.isLike()) {
                 mMfLikeIcon.setSelected(true);
             } else {
                 mMfLikeIcon.setSelected(false);
             }
             // 点赞列表
-            String likeStr = Utils.getLikeStr(feed.getLikelist());
-            switch (feed.getLikenum()) {
+            List<Like> likeList = feed.getLikeList();
+            int likeNum = likeList == null ? 0 :likeList.size();
+            mMfLikeNum.setText(String.valueOf(likeNum));
+            String likeStr = Utils.getLikeStr(likeList);
+            switch (likeNum) {
                 case 0:
                     mMfLikeNum.setText("赞");
                     mLikeWindow.setVisibility(View.GONE);
@@ -227,14 +217,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     break;
                 default:
                     mLikeWindow.setVisibility(View.VISIBLE);
-                    likeStr = likeStr + "等" + feed.getLikenum() + "人觉得很赞";
+                    likeStr = likeStr + "等" + likeNum + "人觉得很赞";
                     break;
             }
-            mLikePeople.setText(Utils.getCharSequence(likeStr));
+            mLikePeople.setText(Utils.colorFormat(likeStr));
         }
 
 
-        @OnClick({R.id.user_img, R.id.lc_chat, R.id.mf_comment, R.id.mf_like, R.id.mood_card})
+        @OnClick({R.id.user_img, R.id.mf_comment, R.id.mf_like, R.id.mood_card})
         public void onClick(View view) {
             if (mOnItemListener != null) mOnItemListener.onItemClick(view, mFeed, mPosition);
         }

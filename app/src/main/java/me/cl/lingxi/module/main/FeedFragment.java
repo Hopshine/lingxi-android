@@ -11,56 +11,54 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.rong.imkit.RongIM;
 import me.cl.library.base.BaseFragment;
 import me.cl.library.loadmore.LoadMord;
+import me.cl.library.loadmore.OnLoadMoreListener;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.util.SPUtils;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.ItemAnimator;
-import me.cl.library.loadmore.OnLoadMoreListener;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.entity.FeedExtend;
 import me.cl.lingxi.entity.Like;
+import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.cl.lingxi.module.feed.PublishActivity;
 import me.cl.lingxi.module.member.UserActivity;
 import me.iwf.photopicker.PhotoPreview;
+import okhttp3.Call;
 
 /**
  * 圈子动态
  */
 public class FeedFragment extends BaseFragment {
 
-    private static final String MOOD_TYPE = "mood_type";
+    private static final String FEED_TYPE = "feed_type";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
-    private int saveUid;
-    private String saveUName;
-
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private String saveUid;
+    private String saveUName;
+
     private List<Feed> mList = new ArrayList<>();
     private FeedAdapter mAdapter;
 
-    private int mPage = 0;
+    private int mPage = 1;
     private int mCount = 10;
     private final int MOD_REFRESH = 1;
     private final int MOD_LOADING = 2;
@@ -70,10 +68,10 @@ public class FeedFragment extends BaseFragment {
 
     }
 
-    public static FeedFragment newInstance(String moodType) {
+    public static FeedFragment newInstance(String feedType) {
         FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
-        args.putString(MOOD_TYPE, moodType);
+        args.putString(FEED_TYPE, feedType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,13 +80,13 @@ public class FeedFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            String mType = getArguments().getString(MOOD_TYPE);
+            String mType = getArguments().getString(FEED_TYPE);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mood, container, false);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
         ButterKnife.bind(this, view);
         init();
         return view;
@@ -107,8 +105,8 @@ public class FeedFragment extends BaseFragment {
             }
         });
 
-        saveUid = SPUtils.getInstance(getActivity()).getInt(Constants.USER_ID, 0);
-        saveUName = SPUtils.getInstance(getActivity()).getString(Constants.USER_NAME, "");
+        saveUid = SPUtil.build().getString(Constants.USER_ID);
+        saveUName = SPUtil.build().getString(Constants.USER_NAME);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -128,7 +126,7 @@ public class FeedFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 RefreshMODE = MOD_REFRESH;
-                mPage = 0;
+                mPage = 1;
                 getMoodList(mPage, mCount);
             }
         });
@@ -141,16 +139,12 @@ public class FeedFragment extends BaseFragment {
                     case R.id.user_img:
                         goToUser(feed);
                         break;
-                    case R.id.lc_chat:
-                        if (RongIM.getInstance() != null)
-                            RongIM.getInstance().startPrivateChat(getActivity(), String.valueOf(feed.getUid()), feed.getUname());
-                        break;
                     case R.id.mood_card:
                     case R.id.mf_comment:
                         gotoMood(feed);
                         break;
                     case R.id.mf_like:
-                        if (feed.islike()) return;
+                        if (feed.isLike()) return;
                         // 未点赞点赞
                         postAddLike(feed, position);
                         break;
@@ -198,70 +192,97 @@ public class FeedFragment extends BaseFragment {
     private void gotoMood(Feed feed) {
         Intent intent = new Intent(getActivity(), FeedActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("mood", feed);
+        bundle.putSerializable("feed", feed);
         intent.putExtras(bundle);
         startActivityForResult(intent, Constants.ACTIVITY_MOOD);
     }
 
     // 点赞
     private void postAddLike(final Feed feed, final int position) {
-        String lcId = String.valueOf(feed.getLcid());
-        OkGo.<String>post(Api.addLike)
-                .params("lcid", lcId)
-                .params("uid", saveUid)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<String>() {
+        OkUtil.post()
+                .url(Api.saveAction)
+                .addParam("feedId", feed.getId())
+                .addParam("userId", saveUid)
+                .addParam("type", "0")
+                .execute(new ResultCallback<Result>() {
                     @Override
-                    public void onSuccess(Response<String> response) {
-                        // 刷新UI，本地模拟数据，等待下一次刷新获取
-                        feed.setLikenum(feed.getLikenum() + 1);
-                        feed.setIslike(true);
-                        List<Like> likes = new ArrayList<>(feed.getLikelist());
-                        Like like = new Like(saveUid, saveUName);
-                        likes.add(like);
-                        feed.setLikelist(likes);
+                    public void onSuccess(Result response) {
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            Utils.toastShow(getActivity(), "点赞失败");
+                            return;
+                        }
+                        List<Like> likeList = new ArrayList<>(feed.getLikeList());
+                        Like like = new Like();
+                        like.setUserId(saveUid);
+                        like.setUsername(saveUName);
+                        likeList.add(like);
+                        feed.setLikeList(likeList);
+                        feed.setLike(true);
                         mAdapter.updateItem(feed, position);
                     }
 
                     @Override
-                    public void onError(Response<String> response) {
+                    public void onError(Call call, Exception e) {
+                        Utils.toastShow(getActivity(), "点赞失败");
+                    }
+
+                    @Override
+                    public void onFinish() {
                         Utils.toastShow(getActivity(), "点赞失败");
                     }
                 });
     }
 
     // 获取动态列表
-    private void getMoodList(int page, int count) {
+    private void getMoodList(int pageNum, int pageSize) {
         if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH) mSwipeRefreshLayout.setRefreshing(true);
-        int uid = SPUtils.getInstance(getActivity()).getInt("uid", -1);
-        OkGo.<Result<FeedExtend>>get(Api.listFeed)
-                .params("page", page)
-                .params("count", count)
-                .params("uid", uid)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<FeedExtend>>() {
+        String uid = SPUtil.build().getString(Constants.USER_ID);
+        OkUtil.post()
+                .url(Api.pageFeed)
+                .addParam("userId", uid)
+                .addParam("pageNum", String.valueOf(pageNum))
+                .addParam("pageSize", String.valueOf(pageSize))
+                .execute(new ResultCallback<Result<PageInfo<Feed>>>() {
                     @Override
-                    public void onSuccess(Response<Result<FeedExtend>> response) {
+                    public void onSuccess(Result<PageInfo<Feed>> response) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
+                            Utils.toastShow(getActivity(), R.string.toast_get_feed_error);
+                            return;
+                        }
+                        PageInfo<Feed> page = response.getData();
+                        Integer size = page.getSize();
+                        if (size == 0) {
+                            mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
+                            return;
+                        }
                         mPage++;
-                        FeedExtend moodBean = response.body().getData();
+                        List<Feed> list = page.getList();
                         switch (RefreshMODE) {
                             case MOD_LOADING:
-                                if (moodBean.getTotalnum() == 0 ){
-                                    mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                                    return;
-                                }
-                                updateData(moodBean.getMinifeedlist());
+                                updateData(list);
                                 break;
                             default:
-                                mAdapter.setData(moodBean.getMinifeedlist());
+                                mAdapter.setData(list);
                                 break;
                         }
                     }
 
                     @Override
-                    public void onError(Response<Result<FeedExtend>> response) {
+                    public void onError(Call call, Exception e) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.toastShow(getActivity(), R.string.toast_getmf_error);
+                        Utils.toastShow(getActivity(), R.string.toast_get_feed_error);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
+                        Utils.toastShow(getActivity(), R.string.toast_get_feed_error);
                     }
                 });
     }
@@ -274,7 +295,7 @@ public class FeedFragment extends BaseFragment {
     // 刷新数据
     private void onRefresh(){
         RefreshMODE = MOD_REFRESH;
-        mPage = 0;
+        mPage = 1;
         getMoodList(mPage, mCount);
     }
 
@@ -290,7 +311,7 @@ public class FeedFragment extends BaseFragment {
     private void goToUser(Feed feed){
         Intent intent = new Intent(getActivity(), UserActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("mood", feed);
+        bundle.putSerializable("feed", feed);
         intent.putExtras(bundle);
         startActivity(intent);
     }

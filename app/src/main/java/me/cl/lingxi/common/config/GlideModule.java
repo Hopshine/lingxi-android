@@ -36,7 +36,6 @@ public class GlideModule extends OkHttpGlideModule {
 //        builder.setMemoryCache(new LruResourceCache(defaultMemoryCacheSize)); // 该两句无需设置，是默认的
 //        builder.setBitmapPool(new LruBitmapPool(defaultBitmapPoolSize));
 
-
         // 自定义内存和图片池大小
         builder.setMemoryCache(new LruResourceCache(memorySize));
         builder.setBitmapPool(new LruBitmapPool(memorySize));

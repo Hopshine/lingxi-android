@@ -1,70 +1,45 @@
 package me.cl.lingxi.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+// 与我相关
 public class Relevant implements Serializable {
 
-    private int uid;
-    private String uname;
-    private String url;
-    private int cmid;
-    private String cm_time;
-    private String comment;
-    private Feed minifeed;
+    private Feed feed;
+    private Comment comment;
+    private Integer replyNum;
+    private List<Reply> replyList;
 
-    public int getUid() {
-        return uid;
-    }
-
-    public void setUid(int uid) {
-        this.uid = uid;
-    }
-
-    public String getUname() {
-        return uname;
-    }
-
-    public void setUname(String uname) {
-        this.uname = uname;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public int getCmid() {
-        return cmid;
-    }
-
-    public void setCmid(int cmid) {
-        this.cmid = cmid;
-    }
-
-    public String getCm_time() {
-        return cm_time;
-    }
-
-    public void setCm_time(String cm_time) {
-        this.cm_time = cm_time;
-    }
-
-    public String getComment() {
+    public Comment getComment() {
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setComment(Comment comment) {
         this.comment = comment;
     }
 
-    public Feed getMinifeed() {
-        return minifeed;
+    public Feed getFeed() {
+        return feed;
     }
 
-    public void setMinifeed(Feed minifeed) {
-        this.minifeed = minifeed;
+    public void setFeed(Feed feed) {
+        this.feed = feed;
+    }
+
+    public Integer getReplyNum() {
+        return replyNum;
+    }
+
+    public void setReplyNum(Integer replyNum) {
+        this.replyNum = replyNum;
+    }
+
+    public List<Reply> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<Reply> replyList) {
+        this.replyList = replyList;
     }
 }

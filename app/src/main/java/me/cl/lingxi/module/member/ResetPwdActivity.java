@@ -1,14 +1,10 @@
 package me.cl.lingxi.module.member;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,9 +12,12 @@ import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.entity.UserInfo;
+import okhttp3.Call;
 
 public class ResetPwdActivity extends BaseActivity {
 
@@ -44,59 +43,65 @@ public class ResetPwdActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.title_bar_upwd, true, 0, null);
+        setupToolbar(mToolbar, R.string.title_bar_reset_pwd, true, 0, null);
     }
 
     public void goUpdatePwd(View view) {
-        updateProgress = new LoadingDialog(this, R.string.dialog_loading_upwd);
+        updateProgress = new LoadingDialog(this, R.string.dialog_loading_reset_wd);
         String uName = mUsername.getText().toString().trim();
         String uPhone = mPhone.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();
         String uDoPwd = mDoPassword.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
             Utils.toastShow(this, R.string.toast_reg_null);
-        } else {
-            if (uPwd.equals(uDoPwd)) {
-                if (uPhone.length() == 11) {
-                    postUpdatePwd(uName, uPwd, uPhone);
-                } else {
-                    Utils.toastShow(this, R.string.toast_phone_error);
-                }
-            } else {
-                Utils.toastShow(this, R.string.toast_again_error);
-            }
         }
+        if (uPhone.length() != 11) {
+            Utils.toastShow(this, R.string.toast_phone_format_error);
+            return;
+        }
+        if (!uPwd.equals(uDoPwd)) {
+            Utils.toastShow(this, R.string.toast_again_error);
+            return;
+        }
+        postUpdatePwd(uName, uPwd, uPhone);
     }
 
     public void postUpdatePwd(String userName, String userPwd, String phone) {
-        OkGo.<Result>post(Api.updatePwd)
-                .params("username", userName)
-                .params("password", userPwd)
-                .params("phone", phone)
-                .execute(new JsonCallback<Result>() {
+        OkUtil.post()
+                .url(Api.resetPassword)
+                .addParam("username", userName)
+                .addParam("password", userPwd)
+                .addParam("phone", phone)
+                .execute(new ResultCallback<Result<UserInfo>>() {
+
                     @Override
-                    public void onSuccess(Response<Result> response) {
-                        int tag = response.body().getRet();
-                        switch (tag) {
-                            case 0:
-                                Utils.toastShow(ResetPwdActivity.this, R.string.toast_uped_ok);
-                                Intent intent = new Intent(ResetPwdActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
+                    public void onSuccess(Result<UserInfo> response) {
+                        updateProgress.dismiss();
+                        String code = response.getCode();
+                        switch (code) {
+                            case "00000":
+                                Utils.toastShow(ResetPwdActivity.this, R.string.toast_reset_ped_success);
+                                onBackPressed();
                                 break;
-                            case 2:
-                                Utils.toastShow(ResetPwdActivity.this, R.string.toast_uname_error);
+                            case "00104":
+                                Utils.toastShow(ResetPwdActivity.this, R.string.toast_reset_pwd_user);
                                 break;
-                            case 3:
-                                Utils.toastShow(ResetPwdActivity.this, R.string.toast_uphone_error);
+                            default:
+                                Utils.toastShow(ResetPwdActivity.this, R.string.toast_reset_pwd_error);
                                 break;
                         }
                     }
 
                     @Override
-                    public void onError(Response<Result> response) {
+                    public void onError(Call call, Exception e) {
                         updateProgress.dismiss();
-                        Utils.toastShow(ResetPwdActivity.this, R.string.toast_upwd_error);
+                        Utils.toastShow(ResetPwdActivity.this, R.string.toast_reset_pwd_error);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        updateProgress.dismiss();
+                        Utils.toastShow(ResetPwdActivity.this, R.string.toast_reset_pwd_error);
                     }
                 });
     }

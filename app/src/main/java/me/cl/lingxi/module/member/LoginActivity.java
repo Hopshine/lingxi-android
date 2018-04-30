@@ -2,16 +2,13 @@ package me.cl.lingxi.module.member;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,25 +18,27 @@ import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.LxApplication;
-import me.cl.lingxi.common.util.SPUtils;
+import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.entity.User;
+import me.cl.lingxi.entity.UserInfo;
+import me.cl.lingxi.module.LxApplication;
 import me.cl.lingxi.module.main.MainActivity;
+import okhttp3.Call;
 
 public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.username)
-    EditText mUsername;
+    AppCompatEditText mUsername;
     @BindView(R.id.password)
-    EditText mPassword;
+    AppCompatEditText mPassword;
 
-    private String saveuname;
     private long mExitTime = 0;
     private LoadingDialog loginProgress;
 
@@ -52,22 +51,22 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void init() {
-        String savename = SPUtils.getInstance(this).getString("username", "");
-        mToolbar.setTitle(R.string.title_bar_login);
+        setupToolbar(mToolbar, R.string.title_bar_login, false, 0, null);
+        loginProgress = new LoadingDialog(this, R.string.dialog_loading_login);
 
         int x = (int) (Math.random() * 6) + 1;
         if (x == 5) MoeToast.makeText(this, "从哪里来到哪里去？你明白吗？");
 
-        mUsername.setText(savename);
-        mUsername.setSelection(savename.length());
+        String saveName = SPUtil.build().getString(Constants.USER_NAME);
+        mUsername.setText(saveName);
+        mUsername.setSelection(saveName.length());
     }
 
     public void login(View view) {
-        String uname = mUsername.getText().toString().trim();
-        String upwd = mPassword.getText().toString().trim();
-        loginProgress = new LoadingDialog(this, R.string.dialog_loading_lg);
-        if (!TextUtils.isEmpty(uname) && !TextUtils.isEmpty(upwd)) {
-            postLogin(uname, upwd);
+        String username = mUsername.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            postLogin(username, password);
         } else {
             Toast.makeText(LoginActivity.this, R.string.toast_login_null, Toast.LENGTH_SHORT).show();
         }
@@ -86,38 +85,43 @@ public class LoginActivity extends BaseActivity {
     // 登录请求
     public void postLogin(final String userName, String userPwd) {
         loginProgress.show();
-        saveuname = userName;
-        OkGo.<Result<User>>post(Api.login)
-                .params("username", userName)
-                .params("password", userPwd)
-                .execute(new JsonCallback<Result<User>>() {
+        OkUtil.post()
+                .url(Api.userLogin)
+                .addParam("username", userName)
+                .addParam("password", userPwd)
+                .execute(new ResultCallback<Result<UserInfo>>() {
                     @Override
-                    public void onSuccess(Response<Result<User>> response) {
+                    public void onSuccess(Result<UserInfo> response) {
                         loginProgress.dismiss();
-                        int tag = response.body().getRet();
-                        switch (tag) {
-                            case 0:
-                                User user = response.body().getData();
-                                String im_token = user.getIm_token();
-                                SPUtils.getInstance(LoginActivity.this).putBoolean("islogin", true);
-                                SPUtils.getInstance(LoginActivity.this).putInt("uid", user.getUid());
-                                SPUtils.getInstance(LoginActivity.this).putString("username", user.getUname());
-                                SPUtils.getInstance(LoginActivity.this).putString("im_token", im_token);
-                                if (TextUtils.isEmpty(im_token))
+                        String code = response.getCode();
+                        switch (code) {
+                            case "00000":
+                                UserInfo user = response.getData();
+                                String imToken = user.getImToken();
+                                SPUtil.build().putBoolean(Constants.BEEN_LOGIN, true);
+                                SPUtil.build().putString(Constants.USER_ID, user.getId());
+                                SPUtil.build().putString(Constants.USER_NAME, user.getUsername());
+                                SPUtil.build().putString(Constants.RC_TOKEN, imToken);
+                                if (TextUtils.isEmpty(imToken)) {
                                     goHome();
-                                else
-                                    connect(im_token);
-                                break;
-                            case 2:
-                                Utils.toastShow(LoginActivity.this, R.string.toast_pwd_error);
+                                }else {
+                                    connectRc(imToken);
+                                }
                                 break;
                             default:
+                                Utils.toastShow(LoginActivity.this, R.string.toast_pwd_error);
                                 break;
                         }
                     }
 
                     @Override
-                    public void onError(Response<Result<User>> response) {
+                    public void onError(Call call, Exception e) {
+                        loginProgress.dismiss();
+                        Utils.toastShow(LoginActivity.this, R.string.toast_login_error);
+                    }
+
+                    @Override
+                    public void onFinish() {
                         loginProgress.dismiss();
                         Utils.toastShow(LoginActivity.this, R.string.toast_login_error);
                     }
@@ -142,7 +146,7 @@ public class LoginActivity extends BaseActivity {
      *
      * @param token
      */
-    private void connect(String token) {
+    private void connectRc(String token) {
         if (getApplicationInfo().packageName.equals(LxApplication.getCurProcessName(getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
@@ -164,7 +168,7 @@ public class LoginActivity extends BaseActivity {
                 public void onSuccess(String userid) {
                     Log.d("WelcomeActivity", "--onSuccess" + userid);
                     loginProgress.dismiss();
-                    Toast.makeText(LoginActivity.this, R.string.toast_login_ok, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.toast_login_success, Toast.LENGTH_SHORT).show();
                     goHome();
                 }
 

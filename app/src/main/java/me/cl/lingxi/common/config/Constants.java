@@ -7,7 +7,6 @@ import io.rong.imlib.model.UserInfo;
 
 /**
  * 常量
- * Created by bafsj on 17/3/1.
  */
 public class Constants {
 
@@ -15,16 +14,18 @@ public class Constants {
 
     public static final String UPDATE_USER_IMG = "me.cl.update.img";
 
-    public static final String ANIMATE_JSON = "dili.animate";
-    public static final String ANIMATE_CACHE = "dili.cache";
-    public static final String ANIMATE_SELECT = "dili.index";
-
     public static List<UserInfo> userList = new ArrayList<>();
     public static List<String> uidList = new ArrayList<>();
 
     // 本地缓存key
-    public static final String USER_ID = "uid";
-    public static final String USER_NAME = "username";
+    public static final String ANIMATE_JSON = "animate_json";
+    public static final String ANIMATE_CACHE = "animate_cache";
+    public static final String ANIMATE_SELECT = "animate_select";
+    public static final String USER_ID = "user_id";
+    public static final String USER_NAME = "user_name";
+    public static final String BEEN_LOGIN = "been_login";
+    public static final String RC_USER = "rc_user";
+    public static final String RC_TOKEN = "rc_token";
 
     // 页面标识
     public static final int ACTIVITY_MAIN = 10001;
@@ -36,10 +37,9 @@ public class Constants {
 
     // 回退标识
     public static final String GO_INDEX = "go_index";
-    public static final int INDEX_MOOD = 1; // 圈子
-    public static final int INDEX_MINE = 3; // 我的
 
     // oss图片处理
+    public static final String IMG_URL = "http://lingci.oss-cn-shanghai.aliyuncs.com/lingxi";
     public static final String IMG_RESIZE_HW250 = "?x-oss-process=image/resize,m_fill,h_250,w_250";
     public static final String IMG_RESIZE_HW720 = "?x-oss-process=image/resize,m_mfit,h_720,w_720";
 }

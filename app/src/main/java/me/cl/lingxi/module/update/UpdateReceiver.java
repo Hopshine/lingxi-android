@@ -33,7 +33,7 @@ public class UpdateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         mAppVersion = (AppVersion) intent.getSerializableExtra("app_version");
         int versionCode = Utils.getAppVersionCode(context);
-        if (versionCode >= mAppVersion.getVersion_code()) {
+        if (versionCode >= mAppVersion.getVersionCode()) {
             Utils.toastShow(context, none);
         } else {
             // 判断网络状态
@@ -62,8 +62,8 @@ public class UpdateReceiver extends BroadcastReceiver {
     private void showUpdate(final Context context) {
         AlertDialog.Builder mDialog = new AlertDialog.Builder(context);
         mDialog.setTitle(title);
-        mDialog.setMessage(mAppVersion.getUpdate_info());
-        if (mAppVersion.getUpdate_flag() != 2) {
+        mDialog.setMessage(mAppVersion.getUpdateInfo());
+        if (mAppVersion.getUpdateFlag() != 2) {
             mDialog.setNegativeButton("取消", null);
         }
         mDialog.setPositiveButton("更新", new DialogInterface.OnClickListener() {

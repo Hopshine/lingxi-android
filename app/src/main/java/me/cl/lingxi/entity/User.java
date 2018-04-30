@@ -1,41 +1,44 @@
 package me.cl.lingxi.entity;
 
-public class User {
+import java.io.Serializable;
 
-    private int uid;
-    private String uname;
-    private String url;
-    private String im_token;
+// 用户
+public class User implements Serializable {
 
-    public int getUid() {
-        return uid;
+    private String id;
+    private String username;
+    private String avatar;
+    private String imToken;
+
+    public String getId() {
+        return id;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUname() {
-        return uname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUname(String uname) {
-        this.uname = uname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getIm_token() {
-        return im_token;
+    public String getImToken() {
+        return imToken;
     }
 
-    public void setIm_token(String im_token) {
-        this.im_token = im_token;
+    public void setImToken(String imToken) {
+        this.imToken = imToken;
     }
 }

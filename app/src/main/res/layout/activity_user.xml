@@ -40,7 +40,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
+                android:layout_height="@dimen/spacing_48"
                 android:background="@android:color/transparent"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_collapseMode="pin"
@@ -63,7 +63,7 @@
                         android:id="@+id/title_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/activity_margin"
+                        android:paddingLeft="@dimen/spacing_16"
                         android:text="@string/app_name"
                         android:textColor="@color/white"
                         android:textSize="16sp"/>
@@ -97,13 +97,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:padding="@dimen/common_padding">
+                    android:padding="@dimen/spacing_16">
 
                     <TextView
                         android:id="@+id/attention"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/mini_padding"
+                        android:padding="@dimen/spacing_8"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
                         android:text="关注"
@@ -113,10 +113,10 @@
                         android:id="@+id/contact"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/activity_margin"
+                        android:layout_marginRight="@dimen/spacing_16"
                         android:layout_toLeftOf="@id/attention"
                         android:layout_toStartOf="@id/attention"
-                        android:padding="@dimen/mini_padding"
+                        android:padding="@dimen/spacing_8"
                         android:text="联系"
                         android:textColor="@color/colorPrimary"/>
 
@@ -124,7 +124,7 @@
                         android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/activity_margin"
+                        android:layout_marginTop="@dimen/spacing_16"
                         android:text="@string/app_name"/>
 
                     <TextView
@@ -132,14 +132,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/user_name"
-                        android:layout_marginTop="@dimen/mini_margin"
+                        android:layout_marginTop="@dimen/spacing_8"
                         android:text="这个人很懒，什么也没留下..."/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/signature"
-                        android:layout_marginTop="@dimen/mini_margin">
+                        android:layout_marginTop="@dimen/spacing_8">
 
                         <TextView
                             android:id="@+id/relationship_attention"
@@ -151,7 +151,7 @@
                             android:id="@+id/relationship_fans"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/activity_padding"
+                            android:layout_marginLeft="@dimen/spacing_16"
                             android:text="粉丝 0"/>
                     </LinearLayout>
 
@@ -160,7 +160,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/mini_padding"
+                    android:padding="@dimen/spacing_8"
                     android:background="#f2f2f2"
                     android:text="全部动态"/>
 
@@ -184,7 +184,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:src="@drawable/img_user"
-        android:layout_margin="@dimen/activity_margin"
+        android:layout_margin="@dimen/spacing_16"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|start"/>
 

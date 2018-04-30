@@ -5,13 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,22 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.util.SPUtils;
-import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.library.base.BaseFragment;
+import me.cl.lingxi.R;
+import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.SPUtil;
+import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.module.member.LoginActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
 import me.cl.lingxi.module.mine.RelevantActivity;
@@ -100,9 +89,9 @@ public class MineFragment extends BaseFragment {
 
     private void init(View view) {
         setupToolbar(mToolbar, "我的", 0, null);
-        uName = SPUtils.getInstance(getActivity()).getString("username");
+        uName = SPUtil.build().getString(Constants.USER_NAME);
         //设置TextView左右图片
-        Drawable mine_item_aet = getResources().getDrawable(R.drawable.ic_smile);
+        Drawable mine_item_aet = getResources().getDrawable(R.drawable.ic_eit);
         Drawable mine_item_right = getResources().getDrawable(R.drawable.ic_more);
         Drawable mine_unread_right = getResources().getDrawable(R.drawable.ic_more);
         mine_item_aet.setBounds(0, 0, mine_item_aet.getIntrinsicWidth(), mine_item_aet.getIntrinsicHeight());
@@ -144,39 +133,6 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void loadUserImage() {
-        OkGo.<String>post(Api.imgBase)
-                .params("imgid", "1")
-                .execute(new JsonCallback<String>() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        String imgBase64 = null;
-                        try {
-                            JSONObject json = new JSONObject(response.body());
-                            imgBase64 = json.getString("data");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap userImage = strToBitmap(imgBase64);
-                        mUserImg.setImageBitmap(userImage);
-                    }
-                });
-    }
-
-    //Base64字符串转换成Bitmap
-    private Bitmap strToBitmap(String string) {
-        Bitmap bitmap = null;
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(string, Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
     //前往信息修改
     private void gotoPersonal() {
         Intent goPerson = new Intent(getActivity(), PersonalInfoActivity.class);
@@ -198,7 +154,7 @@ public class MineFragment extends BaseFragment {
     //退出登录
     private void signOut() {
         String content = "", certain = "", cancel = "";
-        final Dialog dialog = new Dialog(getActivity(), R.style.dialog);
+        final Dialog dialog = new Dialog(getActivity(), R.style.AppTheme_Dialog);
         dialog.setContentView(R.layout.dialog_prompt);
         TextView prompt_info = (TextView) dialog.findViewById(R.id.prompt_info);
         Button prompt_ok = (Button) dialog.findViewById(R.id.prompt_ok);
@@ -236,7 +192,7 @@ public class MineFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                SPUtils.getInstance(getActivity()).putBoolean("islogin", false);
+                SPUtil.build().putBoolean(Constants.BEEN_LOGIN, false);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();

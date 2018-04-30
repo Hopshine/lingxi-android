@@ -67,8 +67,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
         public void bindItem(Context context, Reply reply) {
             mReply = reply;
-            String replyStr = "{" + reply.getUname() + "}回复{" + reply.getTouname() + "}：" + reply.getReply();
-            mReplyInfo.setText(Utils.getCharSequence(replyStr));
+            String replyStr = "{" + reply.getUser().getUsername() + "}回复{" + reply.getToUser().getUsername() + "}：" + reply.getCommentInfo();
+            mReplyInfo.setText(Utils.colorFormat(replyStr));
         }
 
         @OnClick(R.id.reply_info)

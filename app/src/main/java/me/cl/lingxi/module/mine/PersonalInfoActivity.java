@@ -20,9 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,14 +31,10 @@ import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.util.MD5Util;
-import me.cl.lingxi.common.util.SPUtils;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.lingxi.common.widget.JsonCallback;
-import me.cl.lingxi.entity.Result;
 
 public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 
@@ -58,7 +51,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
     private Bitmap bitmap;
     private String saveName;
-    private int saveId;
+    private String saveId;
     private String imgStr;
     private File fileDir;
     private LoadingDialog loadingProgress;
@@ -80,8 +73,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         if (x == 1) {
             MoeToast.makeText(this, "是谁，是谁在那里？");
         }
-        saveName = SPUtils.getInstance(this).getString("username", "");
-        saveId = SPUtils.getInstance(this).getInt("uid", -1);
+        saveName = SPUtil.build().getString(Constants.USER_NAME);
+        saveId = SPUtil.build().getString(Constants.USER_ID);
         mPersonName.setText(saveName);
         fileDir = new File(Environment.getExternalStorageDirectory() + "/lingci/image/avatar");
         if (!fileDir.exists()) {
@@ -94,7 +87,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.person_img:
-                final Dialog dialog = new Dialog(this, R.style.dialog);
+                final Dialog dialog = new Dialog(this, R.style.AppTheme_Dialog);
                 dialog.setContentView(R.layout.dialog_photo_camera);
                 LinearLayout ll_photograph = (LinearLayout) dialog.findViewById(R.id.ll_photograph);
                 LinearLayout ll_getPicture = (LinearLayout) dialog.findViewById(R.id.ll_getPicture);
@@ -221,23 +214,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     }
 
     private void upPhoto() {
-        loadingProgress.show();
-        OkGo.<Result>post(Api.uploadPrimg)
-                .params("MD5name", MD5Util.MD5(saveName))
-                .params("uid", saveId)
-                .params("imgStr", imgStr)
-                .execute(new JsonCallback<Result>() {
-                    @Override
-                    public void onSuccess(Response<Result> response) {
-                        loadingProgress.dismiss();
-                        Utils.toastShow(PersonalInfoActivity.this, "头像更新成功");
-                    }
-
-                    @Override
-                    public void onError(Response<Result> response) {
-                        loadingProgress.dismiss();
-                    }
-                });
+        Utils.toastShow(PersonalInfoActivity.this, "暂不支持修改头像");
+//        loadingProgress.show();
     }
 
     /**
@@ -255,13 +233,11 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 //	        }
             fos = new FileOutputStream(f);
             Log.i("ml", "strFileName 1= " + f.getPath());
-            if (null != fos) {
-                b.compress(CompressFormat.PNG, 90, fos);
-                fos.flush();
-                fos.close();
-                Log.i("ml", "save pic OK!" + f.toString());
-                return f.getPath();
-            }
+            b.compress(CompressFormat.PNG, 90, fos);
+            fos.flush();
+            fos.close();
+            Log.i("ml", "save pic OK!" + f.toString());
+            return f.getPath();
         } catch (FileNotFoundException e) {
             Log.i("ml", "FileNotFoundException");
             e.printStackTrace();

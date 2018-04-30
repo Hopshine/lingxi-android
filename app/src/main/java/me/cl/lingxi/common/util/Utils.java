@@ -1,5 +1,6 @@
 package me.cl.lingxi.common.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -24,7 +27,7 @@ import java.util.regex.Pattern;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.utils.ColorPhrase;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.entity.Like;
 
 /**
@@ -35,20 +38,18 @@ public class Utils {
 
     private static Toast toast;
 
+    @SuppressLint("ShowToast")
     public static void toastShow(Context context, String info) {
-        if (toast == null)
+        if (toast == null) {
             toast = Toast.makeText(context, info, Toast.LENGTH_SHORT);
-        else
+        } else {
             toast.setText(info);
+        }
         toast.show();
     }
 
     public static void toastShow(Context context, int infoId) {
-        if (toast == null)
-            toast = Toast.makeText(context, infoId, Toast.LENGTH_SHORT);
-        else
-            toast.setText(infoId);
-        toast.show();
+        toastShow(context, context.getResources().getString(infoId));
     }
 
     public static int dp2px(float dpValue) {
@@ -60,6 +61,13 @@ public class Utils {
 
     public static void setTime() {
         time = System.currentTimeMillis();
+    }
+
+    public static int getScreenWidth(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
     }
 
     public interface OnLoading {
@@ -104,7 +112,7 @@ public class Utils {
 
     /**
      * 隐藏虚拟键盘
-      */
+     */
     public static void HideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -121,9 +129,9 @@ public class Utils {
         String likeStr = "";
         for (int i = 0, size = likes.size(); i < size; i++) {
             if (i == 3) break;
-            likeStr = likeStr + "{" + likes.get(i).getUname() + "、}" + "";
+            likeStr = likeStr + "{" + likes.get(i).getUsername() + "、}" + "";
         }
-        if (likes.size() > 0) likeStr = likeStr.substring(0, likeStr.length()-2) + "}";
+        if (likes.size() > 0) likeStr = likeStr.substring(0, likeStr.length() - 2) + "}";
         return likeStr;
     }
 
@@ -134,9 +142,9 @@ public class Utils {
         String likeStr = "";
         for (int i = 0; i < likes.size(); i++) {
             if (i == likes.size() - 1) {
-                likeStr = likeStr + "{" + likes.get(i).getUname() + "}";
+                likeStr = likeStr + "{" + likes.get(i).getUsername() + "}";
             } else {
-                likeStr = likeStr + "{" + likes.get(i).getUname() + "、}";
+                likeStr = likeStr + "{" + likes.get(i).getUsername() + "、}";
             }
         }
         return likeStr;
@@ -145,7 +153,7 @@ public class Utils {
     /**
      * 突出颜色
      */
-    public static CharSequence getCharSequence(String str){
+    public static CharSequence colorFormat(String str) {
         return ColorPhrase.from(str).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
     }
 
@@ -155,7 +163,7 @@ public class Utils {
     public static void setPersonImg(String uName, ImageView imgView) {
         String pathName = Environment.getExternalStorageDirectory() + "/lingci/image/avatar/headportraits.png";
         if (!new File(pathName).exists()) {
-            pathName = Api.baseUrl + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
+            pathName = Constants.IMG_URL + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
         }
         Glide.with(imgView.getContext())
                 .load(pathName)
@@ -175,10 +183,10 @@ public class Utils {
             return null;
         }
         try {
-            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(
+            ApplicationInfo app = context.getPackageManager().getApplicationInfo(
                     context.getPackageName(), PackageManager.GET_META_DATA);
-            if (null != ai) {
-                metaData = ai.metaData;
+            if (null != app) {
+                metaData = app.metaData;
             }
             if (null != metaData) {
                 metaValue = metaData.getString(metaKey);

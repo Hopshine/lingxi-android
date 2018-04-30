@@ -21,9 +21,10 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.LoadMoreViewHolder;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.entity.Evaluate;
+import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Reply;
+import me.cl.lingxi.entity.User;
 
 /**
  * Evaluate Adapter
@@ -31,14 +32,14 @@ import me.cl.lingxi.entity.Reply;
 public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<Evaluate> mList;
+    private List<Comment> mList;
 
     private static final int TYPE_FOOTER = -1;
 
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
-        void onItemClick(View view, Evaluate evaluate);
+        void onItemClick(View view, Comment comment);
         void onItemChildClick(View view,String eid, Reply reply);
     }
 
@@ -46,7 +47,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mOnItemListener = onItemListener;
     }
 
-    public EvaluateAdapter(Context context, List<Evaluate> list) {
+    public EvaluateAdapter(Context context, List<Comment> list) {
         this.mContext = context;
         this.mList = list;
     }
@@ -92,12 +93,12 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public void setDate(List<Evaluate> data) {
+    public void setDate(List<Comment> data) {
         mList = data;
         notifyDataSetChanged();
     }
 
-    public void updateData(List<Evaluate> data) {
+    public void updateData(List<Comment> data) {
         mList.addAll(data);
         notifyDataSetChanged();
     }
@@ -116,7 +117,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         AppCompatTextView mEvaluateInfo;
         @BindView(R.id.recycler_view)
         RecyclerView mRecyclerView;
-        private Evaluate mEvaluate;
+        private Comment mComment;
 
         public EvaluateViewHolder(View itemView) {
             super(itemView);
@@ -125,21 +126,22 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mRecyclerView.setLayoutManager(layoutManager);
         }
 
-        public void bindItem(Context context, Evaluate evaluate) {
-            mEvaluate = evaluate;
+        public void bindItem(Context context, Comment comment) {
+            mComment = comment;
+            User user = comment.getUser();
             Glide.with(context)
-                    .load(Api.baseUrl + evaluate.getUrl())
+                    .load(Constants.IMG_URL + user.getAvatar())
                     .placeholder(R.drawable.img_user)
                     .error(R.drawable.img_user)
                     .bitmapTransform(new CropCircleTransformation(context))
                     .into(mUserImg);
-            mUserName.setText(evaluate.getUname());
-            mEvaluateTime.setText(evaluate.getCm_time());
-            mEvaluateInfo.setText(evaluate.getComment());
-            ReplyAdapter adapter = new ReplyAdapter(context, evaluate.getReplylist());
+            mUserName.setText(user.getUsername());
+            mEvaluateTime.setText(comment.getCreateTime());
+            mEvaluateInfo.setText(comment.getCommentInfo());
+            ReplyAdapter adapter = new ReplyAdapter(context, comment.getReplyList());
             mRecyclerView.setAdapter(adapter);
 
-            final String eid = String.valueOf(evaluate.getCmid());
+            final String eid = comment.getId();
             adapter.setOnItemListener(new ReplyAdapter.OnItemListener() {
                 @Override
                 public void onItemClick(View view, Reply reply) {
@@ -150,7 +152,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @OnClick({R.id.user_img, R.id.evaluate_body})
         public void onClick(View view) {
-            if (mOnItemListener != null) mOnItemListener.onItemClick(view, mEvaluate);
+            if (mOnItemListener != null) mOnItemListener.onItemClick(view, mComment);
         }
     }
 }

@@ -7,22 +7,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.lingxi.common.widget.JsonCallback;
 import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.WebActivity;
 import me.cl.lingxi.module.update.UpdateReceiver;
+import okhttp3.Call;
 
 public class AboutActivity extends BaseActivity {
 
@@ -87,18 +86,30 @@ public class AboutActivity extends BaseActivity {
 
     // 获取版本信息
     public void getAppVersion() {
-        OkGo.<Result<AppVersion>>get(Api.appUpdate)
-                .execute(new JsonCallback<Result<AppVersion>>() {
+        OkUtil.post()
+                .url(Api.latestVersion)
+                .execute(new ResultCallback<Result<AppVersion>>() {
                     @Override
-                    public void onSuccess(Response<Result<AppVersion>> response) {
-                        Result<AppVersion> result = response.body();
-                        if (result.getRet() == 0 && result.getData() != null) {
+                    public void onSuccess(Result<AppVersion> response) {
+                        String code = response.getCode();
+                        AppVersion data = response.getData();
+                        if ("00000".equals(code) && data != null) {
                             Intent intent = new Intent(UpdateReceiver.UPDATE_ACTION);
-                            intent.putExtra("app_version", result.getData());
+                            intent.putExtra("app_version", data);
                             sendBroadcast(intent);
                         } else {
                             Utils.toastShow(AboutActivity.this, "版本信息获取失败");
                         }
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        Utils.toastShow(AboutActivity.this, "版本信息获取失败");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Utils.toastShow(AboutActivity.this, "版本信息获取失败");
                     }
                 });
 

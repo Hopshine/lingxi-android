@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--主题默认-->
+    <!-- 主题默认 -->
     <color name="colorPrimaryDark">#4FC1E9</color>
     <color name="colorPrimary">#4FC1E9</color>
     <color name="colorAccent">#4FC1E9</color>
-    <color name="textColorPrimary">#565656</color>
+    <color name="textColorPrimary">#767676</color>
 
 
-    <color name="white">#FFFFFF</color>
+    <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="light_black">#212121</color>
     <color name="transparent">#00ffffff</color>
-	<color name="aqua_bule">#4FC1E9</color>
-	<color name="dark_gray">#656D78</color>
+    <color name="aqua_blue">#4fc1e9</color>
+    <color name="blue">#25c6fc</color>
+    <color name="dark_gray">#656D78</color>
     <color name="light_gray">#ffdbe4e7</color>
-	<color name="grapefruit">#ED5565</color>
+    <color name="grapefruit">#ED5565</color>
     <color name="mine_select_black">#ffeeeeee</color>
 </resources>

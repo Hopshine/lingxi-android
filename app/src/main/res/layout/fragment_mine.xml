@@ -56,8 +56,8 @@
                         android:layout_marginTop="3dp"
                         android:gravity="center"
                         android:textColor="#ffffff"
-                        android:paddingLeft="@dimen/activity_padding"
-                        android:paddingRight="@dimen/activity_padding"
+                        android:paddingLeft="@dimen/spacing_16"
+                        android:paddingRight="@dimen/spacing_16"
                         android:text="签名：暂无签名"/>
                 </LinearLayout>
             </RelativeLayout>
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                style="@style/mine_item"
+                style="@style/AppTheme.MoreEntry"
                 android:drawableLeft="@drawable/ic_favorite"
                 android:drawableRight="@drawable/ic_more"
                 android:text="我的回复"/>
@@ -77,8 +77,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
-                style="@style/mine_item"
-                android:drawableLeft="@drawable/ic_smile"
+                style="@style/AppTheme.MoreEntry"
+                android:drawableLeft="@drawable/ic_eit"
                 android:drawableRight="@drawable/ic_more"
                 android:text="与我相关"/>
 
@@ -87,8 +87,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                style="@style/mine_item"
-                android:drawableLeft="@drawable/ic_set"
+                style="@style/AppTheme.MoreEntry"
+                android:drawableLeft="@drawable/ic_setup"
                 android:drawableRight="@drawable/ic_more"
                 android:text="设置"/>
 
@@ -97,18 +97,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                style="@style/mine_item"
-                android:drawableLeft="@drawable/ic_link"
+                style="@style/AppTheme.MoreEntry"
+                android:drawableLeft="@drawable/ic_accessory"
                 android:drawableRight="@drawable/ic_more"
-                android:text="关于lingci"/>
+                android:text="@string/title_activity_about"/>
 
             <TextView
                 android:id="@+id/mine_sign_out"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                style="@style/mine_item"
-                android:drawableLeft="@drawable/ic_wrong"
+                style="@style/AppTheme.MoreEntry"
+                android:drawableLeft="@drawable/ic_delete"
                 android:drawableRight="@drawable/ic_more"
                 android:text="退出登录"/>
         </LinearLayout>

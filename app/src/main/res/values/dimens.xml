@@ -3,32 +3,34 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="activity_margin">16dp</dimen>
-    <dimen name="activity_padding">16dp</dimen>
-    <dimen name="common_margin">16dp</dimen>
-    <dimen name="common_padding">16dp</dimen>
-    <dimen name="view_margin">10dp</dimen>
-    <dimen name="view_padding">10dp</dimen>
-    <dimen name="mini_margin">8dp</dimen>
-    <dimen name="mini_padding">8dp</dimen>
+    <!-- spacing size -->
+    <dimen name="spacing_3">3dp</dimen>
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_6">6dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="spacing_10">10dp</dimen>
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_14">14dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_20">20dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_28">28dp</dimen>
+    <dimen name="spacing_32">32dp</dimen>
+    <dimen name="spacing_36">36dp</dimen>
+    <dimen name="spacing_40">40dp</dimen>
+    <dimen name="spacing_44">44dp</dimen>
+    <dimen name="spacing_48">48dp</dimen>
+    <dimen name="spacing_52">52dp</dimen>
+    <dimen name="spacing_56">56dp</dimen>
+    <dimen name="spacing_60">60dp</dimen>
 
-    <dimen name="toolbar_height">48dp</dimen>
-
-    <dimen name="icon_size">24dp</dimen>
-    <dimen name="mood_action_height">32dp</dimen>
-    <dimen name="mood_margin">6dp</dimen>
-    
-    <dimen name="evaluate_avatar">43dp</dimen>
-    <dimen name="evaluate_margin">3dp</dimen>
-    <dimen name="evaluate_recycler_margin">60dp</dimen>
-
-    <!--text size-->
-    <dimen name="text_size">16sp</dimen>
-    <dimen name="mood_action_size">12sp</dimen>
-
-    <dimen name="evaluate_title">14sp</dimen>
-    <dimen name="evaluate_time">12sp</dimen>
-    <dimen name="evaluate_info">16sp</dimen>
-    <dimen name="evaluate_emoji">28sp</dimen>
+    <!-- font size -->
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="font_13">13sp</dimen>
+    <dimen name="font_14">14sp</dimen>
+    <dimen name="font_15">15sp</dimen>
+    <dimen name="font_16">16sp</dimen>
+    <dimen name="font_17">17sp</dimen>
+    <dimen name="font_18">18sp</dimen>
 
 </resources>

@@ -41,7 +41,7 @@
             android:id="@+id/iv_submit"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="@dimen/view_padding"
+            android:padding="@dimen/spacing_10"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_skip"/>
     </RelativeLayout>

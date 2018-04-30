@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="colorButtonNormal">@color/blue</item>
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base"/>
@@ -17,23 +18,40 @@
     <style name="LoginFormContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">@dimen/spacing_16</item>
     </style>
 
-    <style name="AppTextAppearance">
-        <item name="android:textSize">18sp</item>
+    <style name="AppTheme.TextAppearance">
+        <item name="android:textSize">@dimen/font_18</item>
     </style>
 
-    <style name="mine_item">
-        <item name="android:background">@drawable/selector_item</item>
-        <item name="android:drawablePadding">@dimen/activity_padding</item>
-        <item name="android:paddingRight">@dimen/activity_padding</item>
-        <item name="android:paddingLeft">@dimen/activity_padding</item>
-        <item name="android:textSize">@dimen/text_size</item>
+    <style name="AppTheme.EditText">
+        <item name="android:textSize">@dimen/font_16</item>
+    </style>
+
+    <style name="AppTheme.EditText.OneLine">
+        <item name="android:drawablePadding">@dimen/spacing_16</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">@color/light_black</item>
+        <item name="android:textSize">@dimen/font_16</item>
+    </style>
+
+    <style name="AppTheme.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_16</item>
+    </style>
+
+    <style name="AppTheme.MoreEntry">
+        <item name="android:background">@drawable/more_entry_selector</item>
+        <item name="android:drawablePadding">@dimen/spacing_16</item>
+        <item name="android:paddingRight">@dimen/spacing_16</item>
+        <item name="android:paddingLeft">@dimen/spacing_16</item>
+        <item name="android:textSize">@dimen/font_16</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="dialog" parent="@android:style/Theme.Dialog">
+    <style name="AppTheme.Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">false</item>
@@ -41,8 +59,8 @@
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-    
-    <style name="dialog.unDim" parent="dialog">
+
+    <style name="AppTheme.Dialog.unDim" parent="AppTheme.Dialog">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@null</item>
@@ -52,7 +70,7 @@
     <!--PhotoPicker start-->
     <style name="actionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">#ffffff</item>
-        <item name="actionBarSize">@dimen/toolbar_height</item>
+        <item name="actionBarSize">@dimen/spacing_48</item>
     </style>
 
     <style name="customTheme.PhotoPicker" parent="Theme.AppCompat.Light.NoActionBar">
@@ -60,14 +78,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorPrimary">#ffffff</item>
-        <item name="actionBarSize">@dimen/toolbar_height</item>
+        <item name="actionBarSize">@dimen/spacing_48</item>
     </style>
 
     <style name="customTheme.PhotoPreview" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="actionBarTheme">@style/actionBarTheme</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="actionBarSize">@dimen/toolbar_height</item>
+        <item name="actionBarSize">@dimen/spacing_48</item>
     </style>
     <!--PhotoPicker end-->
 </resources>

@@ -18,10 +18,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Api;
-import me.cl.library.utils.ColorPhrase;
+import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Relevant;
+import me.cl.lingxi.entity.Reply;
+import me.cl.lingxi.entity.User;
 
 /**
  * Reply Adapter
@@ -91,19 +94,46 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
 
         public void bindItem(Context context, Relevant relevant) {
             mRelevant = relevant;
+            Comment comment = relevant.getComment();
+            User user = comment.getUser();
+            Integer replyNum = relevant.getReplyNum();
+            StringBuilder relevantInfo = new StringBuilder();
+            String timeStr = "";
+            if (replyNum > 0) {
+                List<Reply> replyList = relevant.getReplyList();
+                for (int i = 0, size = replyList.size(); i < size; i++) {
+                    Reply reply = replyList.get(i);
+                    if (i == 0) {
+                        user = reply.getUser();
+                        timeStr = reply.getCreateTime();
+                        relevantInfo.append(reply.getCommentInfo());
+                    } else {
+                        relevantInfo.append("//{@").append(reply.getUser().getUsername()).append("}:")
+                                .append(reply.getCommentInfo());
+                    }
+
+                }
+                relevantInfo.append("//{@").append(comment.getUser().getUsername()).append("}:")
+                        .append(comment.getCommentInfo());
+            } else {
+                timeStr = comment.getCreateTime();
+                relevantInfo.append(comment.getCommentInfo());
+            }
+
             Glide.with(context)
-                    .load(Api.baseUrl + relevant.getUrl())
+                    .load(Constants.IMG_URL + user.getAvatar())
                     .placeholder(R.drawable.img_user)
                     .error(R.drawable.img_user)
                     .bitmapTransform(new CropCircleTransformation(context))
                     .into(mUserImg);
-            mUserName.setText(relevant.getUname());
-            mRelevantTime.setText(relevant.getCm_time());
-            mRelevantInfo.setText(relevant.getComment());
-            Feed feed = relevant.getMinifeed();
-            String replyStr = "{" + feed.getUname() + "}：" + feed.getLc_info();
-            CharSequence chars = ColorPhrase.from(replyStr).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
-            mMoodInfo.setText(chars);
+            mUserName.setText(user.getUsername());
+            mRelevantTime.setText(timeStr);
+
+            mRelevantInfo.setText(Utils.colorFormat(relevantInfo.toString()));
+
+            Feed feed = relevant.getFeed();
+            String feedInfo = "{" + feed.getUser().getUsername() + "}：" + feed.getFeedInfo();
+            mMoodInfo.setText(Utils.colorFormat(feedInfo));
         }
 
         @OnClick({R.id.user_img, R.id.mood_body})

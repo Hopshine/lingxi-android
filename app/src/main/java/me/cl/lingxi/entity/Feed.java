@@ -3,123 +3,118 @@ package me.cl.lingxi.entity;
 import java.io.Serializable;
 import java.util.List;
 
+// 动态
 public class Feed implements Serializable {
 
-    private int lcid;
-    private int uid;
-    private String uname;
-    private String url;
-    private int im_ability;
-    private String lc_info;
-    private String pl_time;
-    private int viewnum;
-    private int likenum;
-    private int cmtnum;
-    private List<String> photos;
-    private int islike;
-    private List<Like> likelist;
+    private String id;
+    // 用户信息
+    private User user;
+    private String feedInfo;
+    private Integer viewNum;
+    // 评论数
+    private Integer commentNum;
+    // 当前用户是否点赞
+    private boolean like;
+    // 点赞列表
+    private List<Like> likeList;
+    // 相册
+    private List<String> photoList;
+    private String createTime;
+    private String updateTime;
 
-    public int getLcid() {
-        return lcid;
+    public String getId() {
+        return id;
     }
 
-    public void setLcid(int lcid) {
-        this.lcid = lcid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public int getUid() {
-        return uid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getUname() {
-        return uname;
+    public String getFeedInfo() {
+        return feedInfo;
     }
 
-    public void setUname(String uname) {
-        this.uname = uname;
+    public void setFeedInfo(String feedInfo) {
+        this.feedInfo = feedInfo;
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getViewNum() {
+        return viewNum;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setViewNum(Integer viewNum) {
+        this.viewNum = viewNum;
     }
 
-    public boolean isIm_ability() {
-        return im_ability == 0;
+    public Integer getCommentNum() {
+        return commentNum;
     }
 
-    public void setIm_ability(boolean im_ability) {
-        this.im_ability = im_ability ? 0 : 1;
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
     }
 
-    public String getLc_info() {
-        return lc_info;
+    public boolean isLike() {
+        return like;
     }
 
-    public void setLc_info(String lc_info) {
-        this.lc_info = lc_info;
+    public void setLike(boolean like) {
+        this.like = like;
     }
 
-    public String getPl_time() {
-        return pl_time;
+    public List<Like> getLikeList() {
+        return likeList;
     }
 
-    public void setPl_time(String pl_time) {
-        this.pl_time = pl_time;
+    public void setLikeList(List<Like> likeList) {
+        this.likeList = likeList;
     }
 
-    public int getViewnum() {
-        return viewnum;
+    public List<String> getPhotoList() {
+        return photoList;
     }
 
-    public void setViewnum(int viewnum) {
-        this.viewnum = viewnum;
+    public void setPhotoList(List<String> photoList) {
+        this.photoList = photoList;
     }
 
-    public int getLikenum() {
-        return likenum;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setLikenum(int likenum) {
-        this.likenum = likenum;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
-    public int getCmtnum() {
-        return cmtnum;
+    public String getUpdateTime() {
+        return updateTime;
     }
 
-    public void setCmtnum(int cmtnum) {
-        this.cmtnum = cmtnum;
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public List<String> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
-    }
-
-    public boolean islike() {
-        return islike == 1;
-    }
-
-    public void setIslike(boolean islike) {
-        this.islike = islike ? 1 : 0;
-    }
-
-    public List<Like> getLikelist() {
-        return likelist;
-    }
-
-    public void setLikelist(List<Like> likelist) {
-        this.likelist = likelist;
+    @Override
+    public String toString() {
+        return "Feed{" +
+                "id='" + id + '\'' +
+                ", user=" + user +
+                ", feedInfo='" + feedInfo + '\'' +
+                ", viewNum=" + viewNum +
+                ", commentNum=" + commentNum +
+                ", like=" + like +
+                ", likeList=" + likeList +
+                ", photoList=" + photoList +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

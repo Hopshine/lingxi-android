@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ashokvarma.bottomnavigation.utils.Utils;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.lingxi.R;
+import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Animation;
 import me.cl.lingxi.entity.DliAnimation;
 
@@ -82,7 +82,7 @@ public class DliAnimationAdapter extends RecyclerView.Adapter<DliAnimationAdapte
         public void bindView(Context context, Animation animation) {
             mAnimation = animation;
             mAnimateName.setText(animation.getName());
-            int i = (Utils.getScreenWidth(context) - Utils.dp2px(mContext, 16f)) / 3;
+            int i = (Utils.getScreenWidth(context) - Utils.dp2px(16f)) / 3;
             int j = i * 13 / 9;
             ViewGroup.LayoutParams localLayoutParams = mAnimateImg.getLayoutParams();
             localLayoutParams.width = i;

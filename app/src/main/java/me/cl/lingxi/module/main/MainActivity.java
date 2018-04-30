@@ -3,35 +3,37 @@ package me.cl.lingxi.module.main;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
+import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.view.MoeToast;
-import me.cl.library.base.BaseActivity;
+import me.cl.library.utils.BottomNavigationViewHelper;
 
 public class MainActivity extends BaseActivity implements RongIM.UserInfoProvider {
 
     @BindView(R.id.bottom_navigation)
-    BottomNavigationBar mBottomNavigation;
+    BottomNavigationView mBottomNavigation;
 
-    private FragmentManager fragmentManager;
-    private HomeFragment homefragment;
+    private FragmentManager mFragmentManager;
+    private HomeFragment mHomeFragment;
     private DliFragment mDliFragment;
     private FeedFragment mFeedFragment;
-    private MessageFragment messagefragment;
-    private MineFragment minefragment;
+    private MessageFragment mMessageFragment;
+    private MineFragment mMineFragment;
 
-    private String exit = "MM";
+    private String mExit = "MM";
     private long mExitTime = 0;
 
     @Override
@@ -46,37 +48,43 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         RongIM.setUserInfoProvider(this, true);
         RongIM.getInstance().setMessageAttachedUserInfo(true);
 
+        initFragment();
         initBottomNavigation();
 
         int num = this.getIntent().getFlags();
-        fragmentManager = getSupportFragmentManager();
-        setTabSelection(0);
+    }
+
+    private void initFragment() {
+        mFragmentManager = getSupportFragmentManager();
+        mHomeFragment = new HomeFragment();
+        mDliFragment = new DliFragment();
+        mFeedFragment = FeedFragment.newInstance("home");
+        mMessageFragment = new MessageFragment();
+        mMineFragment = new MineFragment();
+        switchFragment(mDliFragment);
     }
 
     //底部导航
     private void initBottomNavigation() {
-        BottomNavigationItem home = new BottomNavigationItem(R.drawable.icon_home, "主页").setInactiveIconResource(R.drawable.icon_home_nor);
-        BottomNavigationItem camera = new BottomNavigationItem(R.drawable.icon_camera, "圈子").setInactiveIconResource(R.drawable.icon_camera_nor);
-        BottomNavigationItem message = new BottomNavigationItem(R.drawable.icon_message, "消息").setInactiveIconResource(R.drawable.icon_message_nor);
-        BottomNavigationItem mine = new BottomNavigationItem(R.drawable.icon_mine, "我的").setInactiveIconResource(R.drawable.icon_mine_nor);
-        mBottomNavigation.addItem(home).addItem(camera).addItem(message).addItem(mine)
-                .setMode(BottomNavigationBar.MODE_FIXED)//切换模式
-                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)//背景风格
-                .initialise();
-        mBottomNavigation.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
+        BottomNavigationViewHelper.disableShiftMode(mBottomNavigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onTabSelected(int position) {
-                setTabSelection(position);
-            }
-
-            @Override
-            public void onTabUnselected(int position) {
-
-            }
-
-            @Override
-            public void onTabReselected(int position) {
-
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        switchFragment(mDliFragment);
+                        return true;
+                    case R.id.navigation_camera:
+                        switchFragment(mFeedFragment);
+                        return true;
+                    case R.id.navigation_interactive:
+                        switchFragment(mMessageFragment);
+                        return true;
+                    case R.id.navigation_mine:
+                        switchFragment(mMineFragment);
+                        return true;
+                }
+                return false;
             }
         });
     }
@@ -86,91 +94,36 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case Constants.ACTIVITY_PUBLISH:
-                int index = data.getIntExtra(Constants.GO_INDEX, 0);
-                setTabSelection(index);
+                int id = data.getIntExtra(Constants.GO_INDEX, R.id.navigation_home);
                 // 非导航本身事件，手动切换
-                mBottomNavigation.selectTab(index);
+                mBottomNavigation.setSelectedItemId(id);
                 break;
             case Constants.ACTIVITY_PERSONAL:
-                minefragment.onActivityResult(requestCode, resultCode, data);
+                mMineFragment.onActivityResult(requestCode, resultCode, data);
                 break;
             default:
                 break;
         }
     }
 
-    /**
-     * 根据传入的index参数来设置选中的tab页。
-     * @param index 每个tab页对应的下标。0表示首页，1表示圈子，2表示消息，3表示用户
-     */
-    private void setTabSelection(int index) {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        hideFragments(transaction);
-        switch (index) {
-            case -1:
-                if (homefragment == null) {
-                    homefragment = new HomeFragment();
-                    transaction.add(R.id.fragment_container, homefragment);
-                } else {
-                    transaction.show(homefragment);
-                }
-                break;
-            case 0:
-                if (mDliFragment == null){
-                    mDliFragment = new DliFragment();
-                    transaction.add(R.id.fragment_container, mDliFragment);
-                }else {
-                    transaction.show(mDliFragment);
-                }
-                break;
-            case 1:
-                if (mFeedFragment == null){
-                    mFeedFragment = FeedFragment.newInstance("home");
-                    transaction.add(R.id.fragment_container, mFeedFragment);
-                } else {
-                    transaction.show(mFeedFragment);
-                }
-                break;
-            case 2:
-                if (messagefragment == null) {
-                    messagefragment = new MessageFragment();
-                    transaction.add(R.id.fragment_container, messagefragment, "messagefragment");
-                } else {
-                    transaction.show(messagefragment);
-                }
-                break;
-            case 3:
-                if (minefragment == null) {
-                    minefragment = new MineFragment();
-                    transaction.add(R.id.fragment_container, minefragment, "minefragment");
-                } else {
-                    transaction.show(minefragment);
-                }
-                break;
-        }
-        transaction.commit();
-    }
+    private Fragment currentFragment;
 
     /**
-     * 将所有的Fragment都置为隐藏状态。
-     * @param transaction 用于对Fragment执行操作的事务
+     * 切换Fragment
      */
-    private void hideFragments(FragmentTransaction transaction) {
-        if (homefragment != null) {
-            transaction.hide(homefragment);
+    private void switchFragment(Fragment targetFragment) {
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        if (!targetFragment.isAdded()) {
+            //首次currentFragment为null
+            if (currentFragment != null) {
+                transaction.hide(currentFragment);
+            }
+            transaction.add(R.id.fragment_container, targetFragment, targetFragment.getClass().getName());
+        } else {
+            transaction.hide(currentFragment).show(targetFragment);
         }
-        if (mDliFragment != null) {
-            transaction.hide(mDliFragment);
-        }
-        if (mFeedFragment != null) {
-            transaction.hide(mFeedFragment);
-        }
-        if (messagefragment != null) {
-            transaction.hide(messagefragment);
-        }
-        if (minefragment != null) {
-            transaction.hide(minefragment);
-        }
+        currentFragment = targetFragment;
+        transaction.commitAllowingStateLoss();
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -180,7 +133,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                 mExitTime = System.currentTimeMillis();
             } else {
                 int x = (int) (Math.random() * 10) + 1;
-                if (exit.equals("MM")) {
+                if ("MM".equals(mExit)) {
                     if (x == 10) {
                         MoeToast.makeText(this, "恭喜你找到隐藏的偶，Game over!");
                         finish();
@@ -188,9 +141,9 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                         MoeToast.makeText(this, "你果然想要离开我(＠￣ー￣＠)");
                     }
                     mExitTime = System.currentTimeMillis();
-                    exit = "mm";
-                } else if (exit.equals("mm")) {
-                    exit = "MM";
+                    mExit = "mm";
+                } else if ("mm".equals(mExit)) {
+                    mExit = "MM";
                     finish();
                 }
             }

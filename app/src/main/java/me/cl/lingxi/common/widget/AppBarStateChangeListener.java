@@ -10,7 +10,7 @@ import android.support.design.widget.AppBarLayout;
  * version: 1.0
  */
 
-public abstract class AppBarStateChangeListener  implements AppBarLayout.OnOffsetChangedListener {
+public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
 
     public enum State {
         EXPANDED, // 展开状态

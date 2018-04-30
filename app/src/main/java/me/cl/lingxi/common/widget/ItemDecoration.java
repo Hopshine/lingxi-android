@@ -5,9 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,7 +14,7 @@ import android.widget.LinearLayout;
  * author : Bafs
  * e-mail : bafs.jy@live.com
  * time   : 2017/09/15
- * desc   :
+ * desc   : RecyclerView ItemDecoration
  * version: 1.0
  */
 
@@ -38,6 +36,10 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     public void setOrientation(int orientation) {
+        if (orientation != HORIZONTAL && orientation != VERTICAL) {
+            throw new IllegalArgumentException(
+                    "Invalid orientation. It should be either HORIZONTAL or VERTICAL");
+        }
         mOrientation = orientation;
     }
 
@@ -75,14 +77,12 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
             left = 0;
             right = parent.getWidth();
         }
-        final int lastPosition = ((LinearLayoutManager)parent.getLayoutManager()).findLastCompletelyVisibleItemPosition();
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
-            int adapterPosition = parent.getChildAdapterPosition(child);
             parent.getDecoratedBoundsWithMargins(child, mBounds);
-            final int bottom = mBounds.bottom + Math.round(ViewCompat.getTranslationY(child));
-            final int top = bottom - mDivider.getIntrinsicHeight();
+            final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
+            final int top = bottom - mDecoration;
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(canvas);
         }
@@ -108,8 +108,8 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             parent.getLayoutManager().getDecoratedBoundsWithMargins(child, mBounds);
-            final int right = mBounds.right + Math.round(ViewCompat.getTranslationX(child));
-            final int left = right - mDivider.getIntrinsicWidth();
+            final int right = mBounds.right + Math.round(child.getTranslationX());
+            final int left = right - mDecoration;
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(canvas);
         }

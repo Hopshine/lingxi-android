@@ -32,7 +32,7 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.DliAnimationAdapter;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.GsonUtil;
-import me.cl.lingxi.common.util.SPUtils;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.entity.Animation;
 import me.cl.lingxi.entity.DliAnimation;
 import me.cl.lingxi.module.WebActivity;
@@ -72,7 +72,7 @@ public class DliFragment extends BaseFragment {
         setupToolbar(mToolbar, "番剧", 0, null);
         initAnimateSelect();
         initRecyclerView();
-        if (SPUtils.getInstance(getContext()).getBoolean(Constants.ANIMATE_CACHE)) {
+        if (SPUtil.build().getBoolean(Constants.ANIMATE_CACHE)) {
             mAdapter.setData(getData());
         } else {
             analysisDli();
@@ -89,7 +89,7 @@ public class DliFragment extends BaseFragment {
     }
 
     private void initAnimateSelect() {
-        mSelect = SPUtils.getInstance(getContext()).getInt(Constants.ANIMATE_SELECT, 0);
+        mSelect = SPUtil.build().getInt(Constants.ANIMATE_SELECT, 0);
         mAnimateSelect.setText(selectAnimate[mSelect]);
         mPopupWindow = new ListPopupWindow(getActivity());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, selectAnimate);
@@ -104,7 +104,7 @@ public class DliFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mAnimateSelect.setText(selectAnimate[position]);
                 animateUrl = baseAnimateUrl + selectAnimate[position];
-                SPUtils.getInstance(getContext()).putInt(Constants.ANIMATE_SELECT, position);
+                SPUtil.build().putInt(Constants.ANIMATE_SELECT, position);
                 cleanData();
                 analysisDli();
                 mPopupWindow.dismiss();
@@ -211,21 +211,21 @@ public class DliFragment extends BaseFragment {
     // 保存番剧信息
     private void saveData(List<DliAnimation> data) {
         String json = GsonUtil.toJson(data);
-        SPUtils.getInstance(getContext()).putBoolean(Constants.ANIMATE_CACHE, true);
-        SPUtils.getInstance(getContext()).putString(Constants.ANIMATE_JSON, json);
+        SPUtil.build().putBoolean(Constants.ANIMATE_CACHE, true);
+        SPUtil.build().putString(Constants.ANIMATE_JSON, json);
     }
 
     // 获取番剧信息
     private List<DliAnimation> getData() {
-        String json = SPUtils.getInstance(getContext()).getString(Constants.ANIMATE_JSON);
+        String json = SPUtil.build().getString(Constants.ANIMATE_JSON);
         return GsonUtil.toList(json, DliAnimation[].class);
     }
 
     // 清除保存信息
     private void cleanData() {
         mDliAnimationList.clear();
-        SPUtils.getInstance(getContext()).putString(Constants.ANIMATE_JSON, "{}");
-        SPUtils.getInstance(getContext()).putBoolean(Constants.ANIMATE_CACHE, false);
+        SPUtil.build().putString(Constants.ANIMATE_JSON, "{}");
+        SPUtil.build().putBoolean(Constants.ANIMATE_CACHE, false);
     }
 
     // 前往web页

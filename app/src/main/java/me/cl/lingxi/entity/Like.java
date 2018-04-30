@@ -2,29 +2,25 @@ package me.cl.lingxi.entity;
 
 import java.io.Serializable;
 
+// 点赞
 public class Like implements Serializable {
 
-    private int uid;
-    private String uname;
+    private String userId;
+    private String username;
 
-    public int getUid() {
-        return uid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getUname() {
-        return uname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUname(String uname) {
-        this.uname = uname;
-    }
-
-    public Like(int uid, String uname) {
-        this.uid = uid;
-        this.uname = uname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

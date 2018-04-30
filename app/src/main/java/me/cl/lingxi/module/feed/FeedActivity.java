@@ -19,8 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +33,19 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.EvaluateAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.util.SPUtils;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.Evaluate;
-import me.cl.lingxi.entity.EvaluateExtend;
+import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Feed;
+import me.cl.lingxi.entity.Like;
+import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.member.UserActivity;
+import okhttp3.Call;
 
 public class FeedActivity extends BaseActivity {
 
@@ -54,8 +57,6 @@ public class FeedActivity extends BaseActivity {
     TextView mUserName;
     @BindView(R.id.mood_time)
     TextView mMoodTime;
-    @BindView(R.id.lc_chat)
-    ImageView mLcChat;
     @BindView(R.id.mood_info)
     AppCompatTextView mMoodInfo;
     @BindView(R.id.mood_body)
@@ -91,10 +92,10 @@ public class FeedActivity extends BaseActivity {
     private final int MSG_EVALUATE = 0;
     private final int MSG_REPLY = 1;
 
-    private int saveId;
-    private String mMid;
-    private String mEid;
-    private int toUid;
+    private String saveId;
+    private String mFeedId;
+    private String mCommentId;
+    private String toUid;
     private String toName;
     private InputMethodManager imm;
     private EvaluateAdapter mAdapter;
@@ -105,15 +106,15 @@ public class FeedActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mood);
+        setContentView(R.layout.activity_feed);
         ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.title_activity_minifeed, true, 0, null);
+        setupToolbar(mToolbar, R.string.title_activity_feed, true, 0, null);
 
-        saveId = SPUtils.getInstance(this).getInt(Constants.USER_ID);
+        saveId = SPUtil.build().getString(Constants.USER_ID);
 
         //输入状态模式默认为评论
         MSG_MODE = MSG_EVALUATE;
@@ -125,21 +126,21 @@ public class FeedActivity extends BaseActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new EvaluateAdapter(this, new ArrayList<Evaluate>());
+        mAdapter = new EvaluateAdapter(this, new ArrayList<Comment>());
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemListener(new EvaluateAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view, Evaluate evaluate) {
+            public void onItemClick(View view, Comment comment) {
                 switch (view.getId()) {
                     case R.id.user_img:
                         gotoUser();
                         break;
                     case R.id.evaluate_body:
                         MSG_MODE = MSG_REPLY;
-                        mEid = String.valueOf(evaluate.getCmid());
-                        toUid = evaluate.getUid();
-                        mEditTuCao.setHint("回复：" + evaluate.getUname());
+                        mCommentId = String.valueOf(comment.getId());
+                        toUid = comment.getUser().getId();
+                        mEditTuCao.setHint("回复：" + comment.getUser().getUsername());
                         openSofInput(mEditTuCao);
                         mEditMask.setVisibility(View.VISIBLE);
                         break;
@@ -149,9 +150,9 @@ public class FeedActivity extends BaseActivity {
             @Override
             public void onItemChildClick(View view, String eid, Reply reply) {
                 MSG_MODE = MSG_REPLY;
-                mEid = eid;
-                toUid = reply.getUid();
-                mEditTuCao.setHint("回复：" + reply.getUname());
+                mCommentId = eid;
+                toUid = reply.getUser().getId();
+                mEditTuCao.setHint("回复：" + reply.getUser().getUsername());
                 openSofInput(mEditTuCao);
                 mEditMask.setVisibility(View.VISIBLE);
             }
@@ -163,7 +164,7 @@ public class FeedActivity extends BaseActivity {
     private void gotoUser() {
         Intent intent = new Intent(this, UserActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("mood", feed);
+        bundle.putSerializable("feed", feed);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -171,42 +172,69 @@ public class FeedActivity extends BaseActivity {
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle == null) return;
-        feed = (Feed) bundle.getSerializable("mood");
+        feed = (Feed) bundle.getSerializable("feed");
         if (feed == null) return;
 
-        mMid = String.valueOf(feed.getLcid());
+        mFeedId = String.valueOf(feed.getId());
+
+        User user = feed.getUser();
         //动态详情
         Glide.with(this)
-                .load(Api.baseUrl + feed.getUrl())
+                .load(Constants.IMG_URL + user.getAvatar())
                 .placeholder(R.drawable.img_user)
                 .error(R.drawable.img_user)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(mUserImg);
-        mUserName.setText(feed.getUname());
-        mMoodTime.setText(feed.getPl_time());
-        mMoodInfo.setText(feed.getLc_info());
+        mUserName.setText(user.getUsername());
+        mMoodTime.setText(feed.getCreateTime());
+        mMoodInfo.setText(feed.getFeedInfo());
         //查看评论点赞数
-        mMfSeeNum.setText(String.valueOf(feed.getViewnum()));
-        mMfCommentNum.setText(String.valueOf(feed.getCmtnum()));
-        mMfLikeNum.setText(String.valueOf(feed.getLikenum()));
+        mMfSeeNum.setText(String.valueOf(feed.getViewNum()));
+        mMfCommentNum.setText(String.valueOf(feed.getCommentNum()));
         //是否已经点赞
-        mMfLikeIcon.setSelected(feed.islike());
-        mMfLike.setClickable(feed.islike());
+        mMfLikeIcon.setSelected(feed.isLike());
+        mMfLike.setClickable(feed.isLike());
         //点赞列表
-        String likeStr = Utils.getLongLikeStr(feed.getLikelist());
-        switch (feed.getLikenum()) {
+        List<Like> likeList = feed.getLikeList();
+        Integer likeNum = likeList == null ? 0 : likeList.size();
+        switch (likeNum) {
             case 0:
                 mMfLikeNum.setText("赞");
                 mLikeWindow.setVisibility(View.GONE);
                 break;
             default:
+                String likeStr = Utils.getLongLikeStr(likeList);
+                mMfLikeNum.setText(String.valueOf(likeNum));
                 mLikeWindow.setVisibility(View.VISIBLE);
                 likeStr = likeStr + "觉得很赞";
+                mLikePeople.setText(Utils.colorFormat(likeStr));
                 break;
         }
-        mLikePeople.setText(Utils.getCharSequence(likeStr));
 
-        getEvaluateList(String.valueOf(feed.getLcid()));
+        postViewFeed();
+        getEvaluateList(String.valueOf(feed.getId()));
+    }
+
+    private void postViewFeed() {
+        OkUtil.post()
+                .url(Api.viewFeed)
+                .addParam("id", mFeedId)
+                .execute(new ResultCallback<Result>() {
+                    @Override
+                    public void onSuccess(Result response) {
+
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                });
     }
 
     @OnClick({R.id.user_img, R.id.mf_like, R.id.mf_comment, R.id.edit_mask, R.id.edit_tu_cao, R.id.btn_publish})
@@ -236,14 +264,14 @@ public class FeedActivity extends BaseActivity {
                     case MSG_EVALUATE:
                         //评论
                         loadingProgress = new LoadingDialog(FeedActivity.this, "评论中...");
-                        addEvaluate(mMid, saveId, msg);
+                        addEvaluate(mFeedId, saveId, toUid, msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
                         break;
                     case MSG_REPLY:
                         //回复
                         loadingProgress = new LoadingDialog(FeedActivity.this, "回复中...");
-                        addReply(mEid, saveId, toUid, msg);
+                        addReply(mFeedId, mCommentId, saveId, toUid, msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
                         break;
@@ -255,22 +283,30 @@ public class FeedActivity extends BaseActivity {
     /**
      * 添加评论
      */
-    public void addEvaluate(String mid, int uid, String evaluate) {
-        OkGo.<Result>post(Api.addComment)
-                .params("lcid", mid)
-                .params("uid", uid)
-                .params("comment", evaluate)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result>() {
+    public void addEvaluate(String feedId, String uid, String toUid, String comment) {
+        OkUtil.post()
+                .url(Api.saveComment)
+                .addParam("feedId", feedId)
+                .addParam("userId", uid)
+                .addParam("toUserId", toUid)
+                .addParam("commentInfo", comment)
+                .addParam("type", "0")
+                .execute(new ResultCallback<Result>() {
                     @Override
-                    public void onSuccess(Response<Result> response) {
+                    public void onSuccess(Result response) {
                         Utils.toastShow(FeedActivity.this, "评论成功");
                         mMfCommentNum.setText(String.valueOf(Integer.valueOf(mMfCommentNum.getText().toString()) + 1));
 
-                        getEvaluateList(mMid);
+                        getEvaluateList(mFeedId);
                     }
 
                     @Override
-                    public void onError(Response<Result> response) {
+                    public void onError(Call call, Exception e) {
+                        Utils.toastShow(FeedActivity.this, "评论失败");
+                    }
+
+                    @Override
+                    public void onFinish() {
                         Utils.toastShow(FeedActivity.this, "评论失败");
                     }
                 });
@@ -279,21 +315,29 @@ public class FeedActivity extends BaseActivity {
     /**
      * 添加回复
      */
-    public void addReply(String eid, int uid, int toUid, String reply) {
-        OkGo.<Result>post(Api.addReply)
-                .params("cmid", eid)
-                .params("uid", uid)
-                .params("touid", toUid)
-                .params("reply", reply)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result>() {
+    public void addReply(String feedId, String commentId, String uid, String toUid, String reply) {
+        OkUtil.post()
+                .url(Api.saveComment)
+                .addParam("feedId", feedId)
+                .addParam("commentId", commentId)
+                .addParam("userId", uid)
+                .addParam("toUserId", toUid)
+                .addParam("commentInfo", reply)
+                .addParam("type", "1")
+                .execute(new ResultCallback<Result>() {
                     @Override
-                    public void onSuccess(Response<Result> response) {
+                    public void onSuccess(Result response) {
                         Utils.toastShow(FeedActivity.this, "回复成功");
-                        getEvaluateList(mMid);
+                        getEvaluateList(mFeedId);
                     }
 
                     @Override
-                    public void onError(Response<Result> response) {
+                    public void onError(Call call, Exception e) {
+                        Utils.toastShow(FeedActivity.this, "回复失败");
+                    }
+
+                    @Override
+                    public void onFinish() {
                         Utils.toastShow(FeedActivity.this, "回复失败");
                     }
                 });
@@ -302,18 +346,31 @@ public class FeedActivity extends BaseActivity {
     /**
      * 获取评论数据
      */
-    public void getEvaluateList(String mid) {
-        OkGo.<Result<EvaluateExtend>>post(Api.commentList)
-                .params("lcid", mid)
-                .execute(new me.cl.lingxi.common.widget.JsonCallback<Result<EvaluateExtend>>() {
+    public void getEvaluateList(String feedId) {
+        Integer pageNum = 1;
+        Integer pageSize = 20;
+        OkUtil.post()
+                .url(Api.pageComment)
+                .addParam("feedId", feedId)
+                .addParam("pageNum", String.valueOf(pageNum))
+                .addParam("pageSize", String.valueOf(pageSize))
+                .execute(new ResultCallback<Result<PageInfo<Comment>>>() {
                     @Override
-                    public void onSuccess(Response<Result<EvaluateExtend>> response) {
-                        setData(response.body().getData().getCmtlist());
+                    public void onSuccess(Result<PageInfo<Comment>> response) {
+                        String code = response.getCode();
+                        if ("00000".equals(code)) {
+                            setData(response.getData().getList());
+                        }
                     }
 
                     @Override
-                    public void onError(Response<Result<EvaluateExtend>> response) {
-                        Utils.toastShow(FeedActivity.this, R.string.toast_getmf_error);
+                    public void onError(Call call, Exception e) {
+                        Utils.toastShow(FeedActivity.this, R.string.toast_get_feed_error);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Utils.toastShow(FeedActivity.this, R.string.toast_get_feed_error);
                     }
                 });
     }
@@ -336,7 +393,7 @@ public class FeedActivity extends BaseActivity {
         imm.hideSoftInputFromWindow(edit.getWindowToken(), 0);
     }
 
-    public void setData(List<Evaluate> data) {
+    public void setData(List<Comment> data) {
         mAdapter.setDate(data);
     }
 

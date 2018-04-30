@@ -2,78 +2,79 @@ package me.cl.lingxi.entity;
 
 import java.io.Serializable;
 
+// 回复
 public class Reply implements Serializable {
 
-    private int rpid;
-    private int cmid;
-    private int uid;
-    private String uname;
-    private int touid;
-    private String touname;
-    private String reply;
-    private String rp_time;
+    private String id;
+    private String feedId;
+    private String commentId;
+    private User user;
+    private User toUser;
+    private String commentInfo;
+    private String createTime;
+    private String updateTime;
 
-    public int getRpid() {
-        return rpid;
+    public String getId() {
+        return id;
     }
 
-    public void setRpid(int rpid) {
-        this.rpid = rpid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public int getCmid() {
-        return cmid;
+    public String getFeedId() {
+        return feedId;
     }
 
-    public void setCmid(int cmid) {
-        this.cmid = cmid;
+    public void setFeedId(String feedId) {
+        this.feedId = feedId;
     }
 
-    public int getUid() {
-        return uid;
+    public String getCommentId() {
+        return commentId;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
-    public String getUname() {
-        return uname;
+    public User getUser() {
+        return user;
     }
 
-    public void setUname(String uname) {
-        this.uname = uname;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getTouid() {
-        return touid;
+    public User getToUser() {
+        return toUser;
     }
 
-    public void setTouid(int touid) {
-        this.touid = touid;
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
     }
 
-    public String getTouname() {
-        return touname;
+    public String getCommentInfo() {
+        return commentInfo;
     }
 
-    public void setTouname(String touname) {
-        this.touname = touname;
+    public void setCommentInfo(String commentInfo) {
+        this.commentInfo = commentInfo;
     }
 
-    public String getReply() {
-        return reply;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setReply(String reply) {
-        this.reply = reply;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
-    public String getRp_time() {
-        return rp_time;
+    public String getUpdateTime() {
+        return updateTime;
     }
 
-    public void setRp_time(String rp_time) {
-        this.rp_time = rp_time;
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

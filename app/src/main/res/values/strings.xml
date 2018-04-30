@@ -8,72 +8,77 @@
     <string name="app_name_alpha">灵悉测试</string>
     <string name="app_name_local">灵悉本地</string>
     <string name="app_desc">心有灵犀一点通</string>
+    <string name="app_placeholder">占位字符</string>
     <string name="action_settings">设置</string>
-    <string name="reg_agree">同意灵悉的普通的注册邀请，因为没有不普通的选择</string>
     <string name="share_text">分享到灵悉</string>
-    <string name="item_num">0</string>
-    <string name="title_activity_minifeed">动态详情</string>
+    <string name="zero_num">0</string>
+
+    <!-- App Title -->
+    <string name="title_activity_feed">动态详情</string>
     <string name="title_activity_personal_info">个人信息</string>
-    <string name="title_activity_about">关于lingci</string>
+    <string name="title_activity_about">关于灵悉</string>
     <string name="title_activity_relevant">与我相关</string>
     <string name="title_activity_conversation">会话</string>
 
     <!-- Button String -->
-    <string name="btn_login">普通的登录</string>
+    <string name="btn_login">登录</string>
     <string name="btn_forget_pwd">忘记密码？</string>
-    <string name="btn_register">沒有账号？普通的注册</string>
-    <string name="btn_modify">普通的修改</string>
-    <string name="btn_exitlogin">普通的退出登录</string>
-    <string name="btn_share">普通的发送</string>
+    <string name="btn_register">沒有账号？前往注册</string>
+    <string name="btn_modify">重置密码</string>
+    <string name="btn_exit_login">退出登录</string>
+    <string name="btn_send">发送</string>
 
     <!-- Text hint -->
-    <string name="hint_uname">普通的用户名</string>
-    <string name="hint_pwd">普通的密码</string>
-    <string name="hint_newpwd">普通的新密码</string>
-    <string name="hint_dopwd">确认普通的密码</string>
-    <string name="hint_phone">普通的手机号码</string>
+    <string name="hint_username">用户名</string>
+    <string name="hint_pwd">密码</string>
+    <string name="hint_new_pwd">新密码</string>
+    <string name="hint_do_pwd">确认密码</string>
+    <string name="hint_phone">手机号码</string>
+    <string name="hint_register_agree">同意灵悉的注册邀请，因为没有其他的选择</string>
     <string name="hint_share">写下今天的普通心情吧</string>
+    <string name="hint_comment">吐槽一下</string>
 
     <!-- Nav String -->
-    <string name="main_home">首页</string>
-    <string name="main_share">分享</string>
-    <string name="main_message">消息</string>
-    <string name="main_mine">我的</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_camera">圈子</string>
+    <string name="nav_message">消息</string>
+    <string name="nav_mine">我的</string>
 
     <!-- Title String -->
-    <string name="title_bar_login">普通的登录</string>
-    <string name="title_bar_reg">普通的注册</string>
-    <string name="title_bar_upwd">普通的密码修改</string>
-    <string name="title_bar_index">普通的首页</string>
-    <string name="title_bar_share">普通的分享</string>
-    <string name="title_bar_mine">普通的本体</string>
+    <string name="title_bar_login">用户登录</string>
+    <string name="title_bar_reg">注册用户</string>
+    <string name="title_bar_reset_pwd">重置密码</string>
+    <string name="title_bar_index">首页</string>
+    <string name="title_bar_share">分享</string>
+    <string name="title_bar_mine">我的</string>
 
     <!-- Dialog String -->
-    <string name="dialog_loading">普通的加载中..</string>
-    <string name="dialog_loading_lc">普通的加载动态中…</string>
-    <string name="dialog_loading_lg">普通的登陆中…</string>
-    <string name="dialog_loading_reg">普通的注册中…</string>
-    <string name="dialog_loading_upwd">普通的修改密码中…</string>
-    <string name="dialog_loading_more">更多加载中…</string>
+    <string name="dialog_loading">正在加载&#8230;</string>
+    <string name="dialog_loading_feed">正在加载动态&#8230;</string>
+    <string name="dialog_loading_login">正在登录&#8230;</string>
+    <string name="dialog_loading_reg">正在注册&#8230;</string>
+    <string name="dialog_loading_reset_wd">正在重置密码&#8230;</string>
+    <string name="dialog_loading_more">正在加载更更多&#8230;</string>
 
     <!-- Toast String -->
-    <string name="toast_again_exit">(ಥ _ ಥ)你难道要再按一次离开我么</string>
     <string name="toast_login_null">请输入完整的登陆信息</string>
     <string name="toast_pwd_error">用户名或密码错误</string>
-    <string name="toast_login_error">登陆失败</string>
-    <string name="toast_login_ok">登陆成功</string>
-    <string name="toast_phone_error">手机号码格式不正确</string>
+    <string name="toast_username_error">用户名错误</string>
+    <string name="toast_phone_error">手机号码错误</string>
+    <string name="toast_phone_format_error">手机号码格式不正确</string>
     <string name="toast_reg_null">请确保信息全部填写</string>
     <string name="toast_again_error">两次输入的密码不同</string>
-    <string name="toast_uname_being">用户名已被注册</string>
+    <string name="toast_username_being">用户名已存在</string>
     <string name="toast_phone_being">手机已被注册</string>
     <string name="toast_reg_error">注册失败</string>
-    <string name="toast_reg_ok">注册成功</string>
-    <string name="toast_uname_error">用户名错误</string>
-    <string name="toast_uphone_error">手机号码错误</string>
-    <string name="toast_upwd_error">修改密码失败</string>
-    <string name="toast_uped_ok">修改密码成功</string>
-    <string name="toast_getmf_error">获取动态失败</string>
+    <string name="toast_reg_success">注册成功</string>
+    <string name="toast_login_error">登陆失败</string>
+    <string name="toast_login_success">登陆成功</string>
+    <string name="toast_reset_pwd_error">修改密码失败</string>
+    <string name="toast_reset_ped_success">修改密码成功</string>
+    <string name="toast_reset_pwd_user">用户名或手机号不对</string>
+    <string name="toast_get_feed_error">获取动态失败</string>
+    <string name="toast_again_exit">(ಥ _ ಥ)你难道要再按一次离开我么</string>
 
     <!-- painted eggshell -->
 

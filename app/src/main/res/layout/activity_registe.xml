@@ -13,19 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/common_padding" >
+        android:padding="@dimen/spacing_16" >
 
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@null"
-            android:hint="@string/hint_uname"
+            android:hint="@string/hint_username"
             android:inputType="textPersonName"
             android:maxLength="15"
             android:maxLines="1"
-            android:padding="7dp"
             android:lines="1"
+            android:padding="7dp"
             android:textSize="16sp" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@null"
-            android:hint="@string/hint_dopwd"
+            android:hint="@string/hint_do_pwd"
             android:inputType="textPassword"
             android:maxLength="15"
             android:maxLines="1"
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:padding="10dp"
-            android:text="@string/reg_agree"
+            android:text="@string/hint_register_agree"
             android:textSize="12sp" />
 
         <Button
@@ -107,6 +107,7 @@
             android:text="@string/title_bar_reg"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
+
     </LinearLayout>
 
 </LinearLayout>

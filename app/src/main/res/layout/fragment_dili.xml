@@ -10,10 +10,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
+        android:layout_height="@dimen/spacing_48"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextAppearance="@style/AppTextAppearance"
+        app:titleTextAppearance="@style/AppTheme.TextAppearance"
         app:titleTextColor="@color/white"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -21,10 +21,10 @@
             android:id="@+id/animate_select"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/common_padding"
-            android:textSize="@dimen/text_size"
+            android:paddingLeft="@dimen/spacing_16"
+            android:textSize="@dimen/font_16"
             android:textColor="@color/white"
-            android:drawableRight="@drawable/ic_more_unfold"
+            android:drawableRight="@drawable/ic_unfold"
             android:gravity="center"/>
 
     </android.support.v7.widget.Toolbar>

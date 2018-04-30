@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/common_padding" >
+        android:padding="@dimen/spacing_16" >
 
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@null"
-            android:hint="@string/hint_uname"
+            android:hint="@string/hint_username"
             android:inputType="textPersonName"
             android:maxLength="15"
             android:maxLines="1"
@@ -58,7 +58,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@null"
-            android:hint="@string/hint_newpwd"
+            android:hint="@string/hint_new_pwd"
             android:inputType="textPassword"
             android:maxLength="15"
             android:maxLines="1"
@@ -77,7 +77,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@null"
-            android:hint="@string/hint_dopwd"
+            android:hint="@string/hint_do_pwd"
             android:inputType="textPassword"
             android:maxLength="15"
             android:maxLines="1"

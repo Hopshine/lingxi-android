@@ -28,13 +28,13 @@
                 android:id="@+id/version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/mini_margin"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:text="@string/app_name"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/mini_margin"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:text="@string/app_desc"/>
         </LinearLayout>
 
@@ -48,20 +48,20 @@
                 android:id="@+id/app_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/common_padding"
+                android:padding="@dimen/spacing_16"
                 android:text="版本更新"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/common_padding"
+                android:padding="@dimen/spacing_16"
                 android:text="意见反馈"/>
 
             <TextView
                 android:id="@+id/public_license"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/common_padding"
+                android:padding="@dimen/spacing_16"
                 android:text="开源相关"/>
 
         </LinearLayout>
@@ -78,13 +78,13 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:gravity="center"
-                android:textColor="@color/aqua_bule"
+                android:textColor="@color/aqua_blue"
                 android:text="了解更多"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/common_padding"
+                android:padding="@dimen/spacing_16"
                 android:gravity="center"
                 android:textSize="12sp"
                 android:text="Copyright © 2015-2017 LingXi. All Rights Reserved"/>
