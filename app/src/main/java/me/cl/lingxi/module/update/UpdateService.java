@@ -71,10 +71,10 @@ public class UpdateService extends Service {
         // 如果文件存在，则不再下载
         String path = filePath + fileName;
         File file = new File(path);
-        if (file.exists())
-            installApk(path);
-        else
-            new UpdateTask().execute(url);
+        if (file.exists()) {
+            boolean delete = file.delete();
+        }
+        new UpdateTask().execute(url);
     }
 
     // 更新任务
@@ -114,7 +114,7 @@ public class UpdateService extends Service {
 
                 File file = new File(filePath);
                 if (!file.exists()) {
-                    file.mkdirs();
+                    boolean mkdirs = file.mkdirs();
                 }
                 filePath = filePath + fileName;
                 FileOutputStream fos = new FileOutputStream(filePath);

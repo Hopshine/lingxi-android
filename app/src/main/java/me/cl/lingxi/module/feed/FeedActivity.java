@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -175,9 +176,11 @@ public class FeedActivity extends BaseActivity {
         feed = (Feed) bundle.getSerializable("feed");
         if (feed == null) return;
 
-        mFeedId = String.valueOf(feed.getId());
+        mFeedId = feed.getId();
 
         User user = feed.getUser();
+        toUid = user.getId();
+
         //动态详情
         Glide.with(this)
                 .load(Constants.IMG_URL + user.getAvatar())
@@ -284,6 +287,7 @@ public class FeedActivity extends BaseActivity {
      * 添加评论
      */
     public void addEvaluate(String feedId, String uid, String toUid, String comment) {
+        Log.d(getClass().getName(), feedId + "," + uid + "," + toUid + "," + comment);
         OkUtil.post()
                 .url(Api.saveComment)
                 .addParam("feedId", feedId)

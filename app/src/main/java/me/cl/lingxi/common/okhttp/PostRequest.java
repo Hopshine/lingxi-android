@@ -86,28 +86,30 @@ public class PostRequest {
 
     /** 添加请求头 */
     public PostRequest addHeader(@NonNull String key, String value) {
+        if (value == null) return this;
         this.headers.put(key, value);
         return this;
     }
 
     /** 添加参数 */
     public PostRequest addParam(@NonNull String key, Integer value) {
+        if (value == null) return this;
         this.params.put(key, String.valueOf(value));
         return this;
     }
 
     /** 添加参数 */
     public PostRequest addParam(@NonNull String key, String value) {
+        if (value == null) return this;
         this.params.put(key, value);
         return this;
     }
 
     /** 添加数组参数 */
     public PostRequest addUrlParams(@NonNull String key, List<String> values) {
-        if (values != null && values.size() > 0) {
-            this.isSpliceUrl = true;
-            this.urlParams.put(key, values);
-        }
+        if (values == null || values.size() == 0) return this;
+        this.isSpliceUrl = true;
+        this.urlParams.put(key, values);
         return this;
     }
 
