@@ -37,6 +37,7 @@
         <activity android:name=".module.feed.FeedActivity"/>
         <activity
             android:name=".module.WebActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"/>
         <activity android:name=".module.setting.PublicLicenseActivity"/>
         <activity android:name=".module.member.UserActivity"/>

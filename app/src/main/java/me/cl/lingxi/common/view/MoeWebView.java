@@ -1,13 +1,11 @@
 package me.cl.lingxi.common.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import me.cl.lingxi.BuildConfig;
 
@@ -31,18 +29,32 @@ public class MoeWebView extends WebView {
         init();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void init() {
-        setWebViewClient(new WebClient());
-        setWebChromeClient(new ChromeClient());
+        // 相关设置
         WebSettings webSettings = getSettings();
+        // 排版适应屏幕
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        // JavaScript
         webSettings.setJavaScriptEnabled(true);
+        // 允许访问文件
         webSettings.setAllowFileAccess(true);
-        webSettings.setDatabaseEnabled(true);
+
+        webSettings.setDatabaseEnabled(false);
+
         webSettings.setDomStorageEnabled(true);
-        webSettings.setSaveFormData(false);
+        // 保存表单数据
+        webSettings.setSaveFormData(true);
+        // 缓存
         webSettings.setAppCacheEnabled(true);
+        // 缓存模式
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        // setUseWideViewPort方法设置webview推荐使用的窗口
+        // setLoadWithOverviewMode方法是设置webview加载的页面的模式。
         webSettings.setLoadWithOverviewMode(false);
+        // 隐藏缩放按钮
+        webSettings.setBuiltInZoomControls(true);
+        // 可任意比例缩放
         webSettings.setUseWideViewPort(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -52,29 +64,4 @@ public class MoeWebView extends WebView {
         }
     }
 
-    private class WebClient extends WebViewClient {
-
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url != null) view.loadUrl(url);
-            return true;
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-        }
-
-    }
-
-    private class ChromeClient extends WebChromeClient implements MediaPlayer.OnCompletionListener {
-
-        @Override
-        public void onCompletion(MediaPlayer player) {
-            if (player != null) {
-                if (player.isPlaying()) player.stop();
-                player.reset();
-                player.release();
-            }
-        }
-    }
 }
