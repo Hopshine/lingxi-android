@@ -20,7 +20,7 @@ android {
     productFlavors {
         alpha {
             applicationId "me.cl.lingxi.alpha"
-            buildConfigField 'String', 'BaseUrl', '"http://139.224.128.232/lingxi-dev"'
+            buildConfigField 'String', 'BaseUrl', '"http://47.100.245.128/lingxi-test"'
             manifestPlaceholders = [
                     'APP_ID'  : "me.cl.lingxi.alpha",
                     'APP_NAME': "@string/app_name_alpha"
@@ -36,7 +36,7 @@ android {
         }
         online {
             applicationId "me.cl.lingxi"
-            buildConfigField 'String', 'BaseUrl', '"http://139.224.128.232/lingxi"'
+            buildConfigField 'String', 'BaseUrl', '"http://47.100.245.128/lingxi"'
             manifestPlaceholders = [
                     'APP_ID'  : "me.cl.lingxi",
                     'APP_NAME': "@string/app_name"

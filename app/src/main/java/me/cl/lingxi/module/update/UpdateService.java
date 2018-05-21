@@ -72,7 +72,7 @@ public class UpdateService extends Service {
         String path = filePath + fileName;
         File file = new File(path);
         if (file.exists()) {
-            boolean delete = file.delete();
+            file.delete();
         }
         new UpdateTask().execute(url);
     }

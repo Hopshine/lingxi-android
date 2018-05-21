@@ -69,7 +69,6 @@ public class MineFragment extends BaseFragment {
         return view;
     }
 
-
     private final class OperateBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -85,6 +84,12 @@ public class MineFragment extends BaseFragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.UPDATE_USER_IMG);
         getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
     private void init(View view) {

@@ -162,6 +162,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mFeed = feed;
             mPosition = position;
             User user = feed.getUser();
+            user = user == null ? new User() : user;
             //动态详情
             Glide.with(mUserImg.getContext())
                     .load(Constants.IMG_URL + user.getAvatar())

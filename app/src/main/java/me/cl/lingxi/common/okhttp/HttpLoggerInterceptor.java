@@ -69,11 +69,11 @@ public class HttpLoggerInterceptor implements Interceptor {
                     byte[] bytes = toByteArray(responseBody.byteStream());
                     MediaType contentType = responseBody.contentType();
                     String body = new String(bytes, getCharset(contentType));
-                    log("\tbody:" + body);
+                    log("\tresponse:" + body);
                     responseBody = ResponseBody.create(responseBody.contentType(), bytes);
                     return response.newBuilder().body(responseBody).build();
                 } else {
-                    log("\tbody: maybe [binary body], omitted!");
+                    log("\tresponse: maybe [binary body], omitted!");
                 }
             }
         } catch (Exception e) {
