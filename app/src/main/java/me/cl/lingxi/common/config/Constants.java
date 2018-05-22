@@ -26,6 +26,7 @@ public class Constants {
     public static final String BEEN_LOGIN = "been_login";
     public static final String RC_USER = "rc_user";
     public static final String RC_TOKEN = "rc_token";
+    public static final String UPDATE_FLAG = "update_flag";
 
     // 页面标识
     public static final int ACTIVITY_MAIN = 10001;

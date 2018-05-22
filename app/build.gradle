@@ -10,8 +10,8 @@ android {
         applicationId "me.cl.lingxi"
         minSdkVersion configInfo.minSdkVersion
         targetSdkVersion configInfo.targetSdkVersion
-        versionCode 184
-        versionName "1.0.7 acx"
+        versionCode 185
+        versionName "1.0.7 bx"
 
         vectorDrawables.useSupportLibrary = true
         flavorDimensions "versionCode"

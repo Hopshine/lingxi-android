@@ -1,5 +1,6 @@
 package me.cl.lingxi.module.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,18 +9,31 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 import me.cl.library.base.BaseActivity;
-import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.view.MoeToast;
 import me.cl.library.utils.BottomNavigationViewHelper;
+import me.cl.lingxi.R;
+import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.SPUtil;
+import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.entity.AppVersion;
+import me.cl.lingxi.entity.Result;
+import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements RongIM.UserInfoProvider {
 
@@ -52,6 +66,10 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         initBottomNavigation();
 
         int num = this.getIntent().getFlags();
+
+        if (isCheckUpdate()) {
+            checkNewVersion();
+        }
     }
 
     private void initFragment() {
@@ -164,11 +182,77 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                 return userInfo;
             }
         }
-        if (s.equals("6")) {
-            return new UserInfo("6", "命运的安排", Uri.parse("http://d.hiphotos.baidu.com/zhidao/wh%3D600%2C800/sign=295f784cb1de9c82a630f1895cb1ac32/faf2b2119313b07e7187cc7d0ed7912397dd8c89.jpg"));
-        } else if (s.equals("7")) {
-            return new UserInfo("7", "历史的齿轮", Uri.parse("http://b.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=973525c1d0160924dc70aa1fe13719cc/f11f3a292df5e0feb8edcb965c6034a85fdf72ab.jpg"));
-        }
         return null;
+    }
+
+    // 是否提示更新
+    private boolean isCheckUpdate() {
+        int updateFlag = SPUtil.build().getInt(Constants.UPDATE_FLAG);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd", Locale.SIMPLIFIED_CHINESE);
+        int dateInt = Integer.parseInt(sdf.format(new Date()));
+        return (dateInt + 1) != updateFlag;
+    }
+
+    // 保存updateFlag
+    private void saveUpdateFlag(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd", Locale.SIMPLIFIED_CHINESE);
+        int dateInt = Integer.parseInt(sdf.format(new Date()));
+        SPUtil.build().putInt(Constants.UPDATE_FLAG, (dateInt + 1));
+    }
+
+    // 检查新版本
+    private void checkNewVersion() {
+        OkUtil.post()
+                .url(Api.latestVersion)
+                .execute(new ResultCallback<Result<AppVersion>>() {
+                    @Override
+                    public void onSuccess(Result<AppVersion> response) {
+                        String code = response.getCode();
+                        AppVersion data = response.getData();
+                        if ("00000".equals(code) && data != null) {
+                            int versionCode = Utils.getAppVersionCode(MainActivity.this);
+                            if (versionCode < data.getVersionCode()) {
+                                showUpdate(data);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                    }
+                });
+    }
+
+    // 展示更新弹窗
+    private void showUpdate(final AppVersion appVersion) {
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
+        mDialog.setTitle("发现新版本");
+        mDialog.setMessage(appVersion.getUpdateInfo());
+        if (appVersion.getUpdateFlag() != 2) {
+            mDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    saveUpdateFlag();
+                }
+            });
+        }
+        mDialog.setPositiveButton("更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gotoDownload(appVersion.getApkUrl());
+            }
+        }).setCancelable(false).create().show();
+    }
+
+    // 调起浏览器下载
+    private void gotoDownload(String url){
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(url));
+        intent.setAction(Intent.ACTION_VIEW);
+        startActivity(intent);
     }
 }

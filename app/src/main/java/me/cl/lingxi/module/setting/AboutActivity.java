@@ -1,8 +1,10 @@
 package me.cl.lingxi.module.setting;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -20,7 +22,6 @@ import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.WebActivity;
-import me.cl.lingxi.module.update.UpdateReceiver;
 import okhttp3.Call;
 
 public class AboutActivity extends BaseActivity {
@@ -29,8 +30,6 @@ public class AboutActivity extends BaseActivity {
     Toolbar mToolbar;
     @BindView(R.id.version)
     TextView mVersion;
-
-    private UpdateReceiver mUpdateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +49,6 @@ public class AboutActivity extends BaseActivity {
         String versionName = "V " + Utils.getAppVersionName(this);
         mVersion.setText(versionName);
 
-        registerBroadcast();
-    }
-
-    // 注册广播
-    private void registerBroadcast() {
-        mUpdateReceiver = new UpdateReceiver();
-        IntentFilter mIntentFilter = new IntentFilter(UpdateReceiver.UPDATE_ACTION);
-        this.registerReceiver(mUpdateReceiver, mIntentFilter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        // 注销广播
-        if (mUpdateReceiver != null)
-            unregisterReceiver(mUpdateReceiver);
-        super.onDestroy();
     }
 
     @OnClick({R.id.app_update, R.id.public_license, R.id.learn_more})
@@ -78,8 +61,7 @@ public class AboutActivity extends BaseActivity {
                 gotoPublicLicense();
                 break;
             case R.id.learn_more:
-                String url = "file:///android_asset/about.html";
-                gotoWeb("前世今生", url);
+                gotoWeb("前世今生", "file:///android_asset/about.html");
                 break;
         }
     }
@@ -94,9 +76,12 @@ public class AboutActivity extends BaseActivity {
                         String code = response.getCode();
                         AppVersion data = response.getData();
                         if ("00000".equals(code) && data != null) {
-                            Intent intent = new Intent(UpdateReceiver.UPDATE_ACTION);
-                            intent.putExtra("app_version", data);
-                            sendBroadcast(intent);
+                            int versionCode = Utils.getAppVersionCode(AboutActivity.this);
+                            if (versionCode >= data.getVersionCode()) {
+                                Utils.toastShow(AboutActivity.this, "已是最新版");
+                            } else {
+                                showUpdate(data);
+                            }
                         } else {
                             Utils.toastShow(AboutActivity.this, "版本信息获取失败");
                         }
@@ -117,6 +102,30 @@ public class AboutActivity extends BaseActivity {
 
     private void gotoPublicLicense() {
         Intent intent = new Intent(this, PublicLicenseActivity.class);
+        startActivity(intent);
+    }
+
+    // 展示更新弹窗
+    private void showUpdate(final AppVersion appVersion) {
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
+        mDialog.setTitle("发现新版本");
+        mDialog.setMessage(appVersion.getUpdateInfo());
+        if (appVersion.getUpdateFlag() != 2) {
+            mDialog.setNegativeButton("取消", null);
+        }
+        mDialog.setPositiveButton("更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gotoDownload(appVersion.getApkUrl());
+            }
+        }).setCancelable(false).create().show();
+    }
+
+    // 调起浏览器下载
+    private void gotoDownload(String url){
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(url));
+        intent.setAction(Intent.ACTION_VIEW);
         startActivity(intent);
     }
 

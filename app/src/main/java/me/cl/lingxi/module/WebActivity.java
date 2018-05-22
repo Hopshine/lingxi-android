@@ -67,6 +67,8 @@ public class WebActivity extends BaseActivity {
         });
         mWebView.setWebViewClient(mWebClient);
         mWebView.setWebChromeClient(mChromeClient);
+
+        mWebView.loadUrl(mUrl);
     }
 
     private void setLandscape() {
@@ -75,6 +77,8 @@ public class WebActivity extends BaseActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // 隐藏状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // 常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void setPortrait() {
@@ -83,6 +87,8 @@ public class WebActivity extends BaseActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // 显示状态栏
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // 清除常亮
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
 
@@ -132,7 +138,6 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mWebView.loadUrl(mUrl);
     }
 
     @Override

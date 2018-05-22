@@ -83,9 +83,6 @@
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 
-        <!-- UpdateService start -->
-        <service android:name=".module.update.UpdateService"/>
-        <!-- UpdateService stop -->
     </application>
 
 </manifest>
