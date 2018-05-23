@@ -1,9 +1,11 @@
 package me.cl.lingxi.module;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,10 +47,20 @@ public class WebActivity extends BaseActivity {
     }
 
     private void init() {
-        Bundle bundle = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle bundle = null;
+        if (intent != null) {
+            bundle = intent.getExtras();
+        }
         if (bundle != null) {
-            mTittle = bundle.getString("tittle");
-            mUrl = bundle.getString("url");
+            if ("text/plain".equals(intent.getType())) {
+                mTittle = bundle.getString(Intent.EXTRA_TITLE);
+                mTittle = TextUtils.isEmpty(mTittle) ? "分享内容" : mTittle;
+                mUrl = bundle.getString(Intent.EXTRA_TEXT);
+            } else {
+                mTittle = bundle.getString("tittle");
+                mUrl = bundle.getString("url");
+            }
         }
 
         setupToolbar(mToolbar, mTittle, true, 0, null);

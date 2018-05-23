@@ -57,6 +57,10 @@ public class MoeWebView extends WebView {
         // 可任意比例缩放
         webSettings.setUseWideViewPort(true);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (BuildConfig.DEBUG) {
                 WebView.setWebContentsDebuggingEnabled(true);
