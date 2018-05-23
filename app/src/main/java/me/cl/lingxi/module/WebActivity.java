@@ -149,13 +149,12 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onPause() {
         pauseWebView();
-        clearWebView();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        resumeWebView();
+        clearWebView();
         super.onDestroy();
     }
 

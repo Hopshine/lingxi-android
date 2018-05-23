@@ -77,7 +77,7 @@ public class WelcomeActivity extends BaseActivity {
                         List<User> data = response.getData();
                         if ("00000".equals(code) && data != null) {
                             SPUtil.build().putString(Constants.RC_USER, GsonUtil.toJson(data));
-                            serRcUser(data);
+                            setRcUser(data);
                         }
                         goHome(0);
                     }
@@ -164,7 +164,7 @@ public class WelcomeActivity extends BaseActivity {
                         getImUser();
                     } else {
                         List<User> userList = GsonUtil.toList(imUserStr, User[].class);
-                        serRcUser(userList);
+                        setRcUser(userList);
                         goHome(0);
                     }
                 }
@@ -183,7 +183,7 @@ public class WelcomeActivity extends BaseActivity {
         }
     }
 
-    private void serRcUser(List<User> list) {
+    private void setRcUser(List<User> list) {
         for (User user : list) {
             String id = user.getId();
             UserInfo userInfo = new UserInfo(id, user.getUsername(), Uri.parse(Constants.IMG_URL + user.getAvatar()));
