@@ -55,8 +55,17 @@ public class WebActivity extends BaseActivity {
         if (bundle != null) {
             if ("text/plain".equals(intent.getType())) {
                 mTittle = bundle.getString(Intent.EXTRA_TITLE);
-                mTittle = TextUtils.isEmpty(mTittle) ? "分享内容" : mTittle;
                 mUrl = bundle.getString(Intent.EXTRA_TEXT);
+                mUrl = TextUtils.isEmpty(mUrl) ? "http://47.100.245.128" : mUrl;
+                mUrl = mUrl.replaceAll("\t", "");
+                mUrl = mUrl.replaceAll("\n", "");
+                int i = mUrl.indexOf("http");
+                if (TextUtils.isEmpty(mTittle)) {
+                    mTittle = mUrl.substring(0, i);
+                } else {
+                    mTittle = "分享内容";
+                }
+                mUrl = mUrl.substring(i, mUrl.length());
             } else {
                 mTittle = bundle.getString("tittle");
                 mUrl = bundle.getString("url");
