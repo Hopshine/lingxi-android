@@ -1,6 +1,7 @@
 package me.cl.lingxi.module.member;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -37,6 +38,7 @@ import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.ItemAnimator;
+import me.cl.lingxi.common.widget.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Result;
@@ -99,6 +101,7 @@ public class UserActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new ItemAnimator());
+        mRecyclerView.addItemDecoration(new ItemDecoration(ItemDecoration.VERTICAL, 10, Color.parseColor("#f2f2f2")));
         mAdapter = new FeedAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -154,11 +157,11 @@ public class UserActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, Feed feed, int position) {
                 switch (view.getId()) {
-                    case R.id.mood_card:
-                    case R.id.mf_comment:
+                    case R.id.feed_card:
+                    case R.id.feed_comment_layout:
                         gotoMood(feed);
                         break;
-                    case R.id.mf_like:
+                    case R.id.feed_like_layout:
                         if (feed.isLike()) return;
                         // 未点赞点赞
                         postAddLike(feed, position);

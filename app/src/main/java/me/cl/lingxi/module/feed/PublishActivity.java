@@ -7,11 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
-
-import com.alibaba.sdk.android.oss.ClientException;
-import com.alibaba.sdk.android.oss.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +22,11 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
-import me.cl.lingxi.common.util.OSSUploadUtils;
+import me.cl.lingxi.common.util.ImageUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.entity.STSToken;
 import me.cl.lingxi.module.main.MainActivity;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
@@ -41,7 +36,7 @@ public class PublishActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.mood_info)
+    @BindView(R.id.feed_info)
     AppCompatEditText mMoodInfo;
     @BindView(R.id.iv_submit)
     ImageView mIvSubmit;
@@ -114,7 +109,7 @@ public class PublishActivity extends BaseActivity {
         if (mPhotos.size() <= 1) {
             postSaveFeed(mPhotos);
         } else {
-            getOssToken();
+            postUpload(mPhotos);
         }
     }
 
@@ -134,66 +129,38 @@ public class PublishActivity extends BaseActivity {
         mPhotoSelAdapter.setPhotos(mPhotos);
     }
 
-    private void getOssToken() {
-        showLoading();
+    // 上传图片
+    private void postUpload(List<String> photos) {
+        removePhotoAdd(photos);
+
+        photos = ImageUtil.compressorImage(this, photos);
+
         OkUtil.post()
-                .url(Api.ossToken)
-                .execute(new ResultCallback<Result<STSToken>>() {
+                .url(Api.uploadFeedImage)
+                .addFiles("file", ImageUtil.pathToImageFile(photos))
+                .execute(new ResultCallback<Result<List<String>>>() {
                     @Override
-                    public void onSuccess(Result<STSToken> response) {
+                    public void onSuccess(Result<List<String>> response) {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
                             Utils.toastShow(PublishActivity.this, "发布失败");
+                            addPhotoAdd(mPhotos);
                             return;
                         }
-                        uploadImage(response.getData());
+                        // 发送动态
+                        postSaveFeed(response.getData());
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
                         Utils.toastShow(PublishActivity.this, "发布失败");
+                        addPhotoAdd(mPhotos);
                     }
 
                     @Override
                     public void onFinish() {
                         Utils.toastShow(PublishActivity.this, "发布失败");
-                    }
-                });
-    }
-
-    private void uploadImage(STSToken stsToken) {
-        removePhotoAdd(mPhotos);
-        OSSUploadUtils.build(PublishActivity.this, stsToken)
-                .uploadFiles("lingxi/feed/pt_", mPhotos, new OSSUploadUtils.UploadCallback() {
-
-                    @Override
-                    public void onProgress(int position, long currentSize, long totalSize) {
-                        Log.d("PutObject", "position:" + position + " currentSize: " + currentSize + " totalSize: " + totalSize);
-                    }
-
-                    @Override
-                    public void onSuccess(List<String> uploadImg) {
-                        for (String img : uploadImg) {
-                            Log.d("PutObject", img);
-                        }
-                        postSaveFeed(uploadImg);
-                    }
-
-                    @Override
-                    public void onFailure(ClientException clientException, ServiceException serviceException) {
-                        dismissLoading();
-                        Utils.toastShow(PublishActivity.this, "发布失败");
-                        if (clientException != null) {
-                            // 本地异常如网络异常等
-                            clientException.printStackTrace();
-                        }
-                        if (serviceException != null) {
-                            // 服务异常
-                            Log.e("ErrorCode", serviceException.getErrorCode());
-                            Log.e("RequestId", serviceException.getRequestId());
-                            Log.e("HostId", serviceException.getHostId());
-                            Log.e("RawMessage", serviceException.getRawMessage());
-                        }
+                        addPhotoAdd(mPhotos);
                     }
                 });
     }
@@ -213,6 +180,7 @@ public class PublishActivity extends BaseActivity {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
                             Utils.toastShow(PublishActivity.this, "发布失败");
+                            addPhotoAdd(mPhotos);
                             return;
                         }
                         mMoodInfo.setText(null);
@@ -224,16 +192,26 @@ public class PublishActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
                         dismissLoading();
                         Utils.toastShow(PublishActivity.this, "发布失败");
+                        addPhotoAdd(mPhotos);
                     }
 
                     @Override
                     public void onFinish() {
                         dismissLoading();
                         Utils.toastShow(PublishActivity.this, "发布失败");
+                        addPhotoAdd(mPhotos);
                     }
                 });
     }
 
+    // 添加添加图片按钮
+    private void addPhotoAdd(List<String> photList) {
+        if (!photList.contains(PhotoSelAdapter.mPhotoAdd)) {
+            photList.add(PhotoSelAdapter.mPhotoAdd);
+        }
+    }
+
+    // 去除添加图片按钮
     private void removePhotoAdd(List<String> photList) {
         if (photList.contains(PhotoSelAdapter.mPhotoAdd)) {
             photList.remove(PhotoSelAdapter.mPhotoAdd);

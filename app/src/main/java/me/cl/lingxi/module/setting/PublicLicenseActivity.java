@@ -1,6 +1,7 @@
 package me.cl.lingxi.module.setting;
 
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +14,6 @@ import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.PublicLicenseAdapter;
-import me.cl.lingxi.common.widget.ItemDecoration;
 import me.cl.lingxi.entity.PublicLicense;
 
 public class PublicLicenseActivity extends BaseActivity {
@@ -40,8 +40,7 @@ public class PublicLicenseActivity extends BaseActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.addItemDecoration(new ItemDecoration(ItemDecoration.VERTICAL, 8, 0x757575));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         PublicLicenseAdapter mAdapter = new PublicLicenseAdapter(this, mData);
         mRecyclerView.setAdapter(mAdapter);
     }

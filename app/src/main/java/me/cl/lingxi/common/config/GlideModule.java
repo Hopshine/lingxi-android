@@ -29,13 +29,6 @@ public class GlideModule extends OkHttpGlideModule {
         builder.setDiskCache(new InternalCacheDiskCacheFactory(context, "image",diskSize));  //手机磁盘
         builder.setDiskCache(new ExternalCacheDiskCacheFactory(context, "image", diskSize)); //sd卡磁盘
 
-        // 默认内存和图片池大小
-//        MemorySizeCalculator calculator = new MemorySizeCalculator(context);
-//        int defaultMemoryCacheSize = calculator.getMemoryCacheSize(); // 默认内存大小
-//        int defaultBitmapPoolSize = calculator.getBitmapPoolSize(); // 默认图片池大小
-//        builder.setMemoryCache(new LruResourceCache(defaultMemoryCacheSize)); // 该两句无需设置，是默认的
-//        builder.setBitmapPool(new LruBitmapPool(defaultBitmapPoolSize));
-
         // 自定义内存和图片池大小
         builder.setMemoryCache(new LruResourceCache(memorySize));
         builder.setBitmapPool(new LruBitmapPool(memorySize));

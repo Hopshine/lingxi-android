@@ -10,7 +10,7 @@
     <include layout="@layout/toolbar"/>
 
     <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/mood_info"
+        android:id="@+id/feed_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"

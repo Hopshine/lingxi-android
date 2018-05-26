@@ -51,7 +51,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public FeedAdapter(List<Feed> list) {
-        this.mList = list;
+        this.mList = list == null ? new ArrayList<Feed>() : list;
     }
 
     @Override
@@ -67,11 +67,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_FOOTER) {
-            View view = View.inflate(parent.getContext(), R.layout.lib_load_more, null);
-            return mLoadMoreViewHolder = new LoadMoreViewHolder(view);
+            View loadView = View.inflate(parent.getContext(), R.layout.lib_load_more, null);
+            return mLoadMoreViewHolder = new LoadMoreViewHolder(loadView);
         } else {
-            View view = View.inflate(parent.getContext(), R.layout.item_feed_detail, null);
-            return new MoodViewHolder(view);
+            View feedView = View.inflate(parent.getContext(), R.layout.item_feed_detail, null);
+            return new MoodViewHolder(feedView);
         }
     }
 
@@ -79,7 +79,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof LoadMoreViewHolder) {
             LoadMoreViewHolder loadMoreViewHolder = (LoadMoreViewHolder) holder;
-            loadMoreViewHolder.bindItem(LoadMord.LOAD_END);
+            if (getItemCount() > 5) {
+                loadMoreViewHolder.bindItem(LoadMord.LOAD_PULL_TO);
+            } else {
+                loadMoreViewHolder.bindItem(LoadMord.LOAD_END);
+            }
         } else {
             MoodViewHolder moodViewHolder = (MoodViewHolder) holder;
             moodViewHolder.bindItem(mList.get(position), position);
@@ -98,15 +102,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // 设置数据
     public void setData(List<Feed> data) {
         mList = data;
+        mLoadMoreViewHolder.bindItem(LoadMord.LOAD_PULL_TO);
         notifyDataSetChanged();
-        mLoadMoreViewHolder.bindItem(LoadMord.LOAD_MORE);
     }
 
     // 添加数据
     public void addData(List<Feed> data) {
         mList.addAll(data);
-        notifyDataSetChanged();
         mLoadMoreViewHolder.bindItem(LoadMord.LOAD_PULL_TO);
+        notifyDataSetChanged();
     }
 
     // 更新item
@@ -121,32 +125,32 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView mUserImg;
         @BindView(R.id.user_name)
         TextView mUserName;
-        @BindView(R.id.mood_time)
-        TextView mMoodTime;
-        @BindView(R.id.mood_info)
-        AppCompatTextView mMoodInfo;
-        @BindView(R.id.mood_body)
-        LinearLayout mMoodBody;
-        @BindView(R.id.mf_see_num)
-        TextView mMfSeeNum;
-        @BindView(R.id.mf_comment_num)
-        TextView mMfCommentNum;
-        @BindView(R.id.mf_comment)
-        LinearLayout mMfComment;
-        @BindView(R.id.mf_like_icon)
-        ImageView mMfLikeIcon;
-        @BindView(R.id.mf_like_num)
-        TextView mMfLikeNum;
-        @BindView(R.id.mf_like)
-        LinearLayout mMfLike;
-        @BindView(R.id.mood_action)
-        LinearLayout mMoodAction;
+        @BindView(R.id.feed_time)
+        TextView mFeedTime;
+        @BindView(R.id.feed_info)
+        AppCompatTextView mFeedInfo;
+        @BindView(R.id.feed_body)
+        LinearLayout mFeedBody;
+        @BindView(R.id.feed_view_num)
+        TextView mFeedSeeNum;
+        @BindView(R.id.feed_comment_num)
+        TextView mFeedCommentNum;
+        @BindView(R.id.feed_comment_layout)
+        LinearLayout mFeedCommentLayout;
+        @BindView(R.id.feed_like_icon)
+        ImageView mFeedLikeIcon;
+        @BindView(R.id.feed_like_num)
+        TextView mFeedLikeNum;
+        @BindView(R.id.feed_like_layout)
+        LinearLayout mFeedLikeLayout;
+        @BindView(R.id.feed_action_layout)
+        LinearLayout mFeedActionLayout;
         @BindView(R.id.like_people)
         TextView mLikePeople;
         @BindView(R.id.like_window)
         LinearLayout mLikeWindow;
-        @BindView(R.id.mood_card)
-        LinearLayout mMoodCard;
+        @BindView(R.id.feed_card)
+        LinearLayout mFeedCard;
         @BindView(R.id.recycler_view)
         RecyclerView mRecyclerView;
 
@@ -171,20 +175,30 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .bitmapTransform(new CropCircleTransformation(mUserImg.getContext()))
                     .into(mUserImg);
             mUserName.setText(user.getUsername());
-            mMoodTime.setText(DateUtil.showTime(feed.getCreateTime()));
-            mMoodInfo.setText(feed.getFeedInfo());
+            mFeedTime.setText(DateUtil.showTime(feed.getCreateTime()));
+            mFeedInfo.setText(feed.getFeedInfo());
             // 图片
             final List<String> photos = feed.getPhotoList();
             if (photos != null && photos.size() > 0) {
                 mRecyclerView.setVisibility(View.VISIBLE);
-                int column = 3;
-                if (photos.size() == 1) column = 2;
+                int size = photos.size();
+                // 如果只有一张图，设置两列，否则三列
+                int column = size == 1 ? 2 : 3;
                 mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), column));
                 FeedPhotoAdapter adapter = new FeedPhotoAdapter(photos);
                 adapter.setOnItemClickListener(new FeedPhotoAdapter.OnItemClickListener() {
                     @Override
                     public void onPhotoClick(int position) {
-                        if (mOnItemListener != null) mOnItemListener.onPhotoClick((ArrayList<String>) photos, position);
+                        // 新对象接防止拼接后影响原来的url
+                        List<String> urls = new ArrayList<>(photos);
+                        int size = urls.size();
+                        // 拼接url
+                        for (int i = 0; i < size; i++) {
+                            String photo = urls.get(i);
+                            photo = Constants.IMG_URL + photo;
+                            urls.set(i, photo);
+                        }
+                        if (mOnItemListener != null) mOnItemListener.onPhotoClick((ArrayList<String>) urls, position);
                     }
                 });
                 mRecyclerView.setAdapter(adapter);
@@ -192,22 +206,22 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mRecyclerView.setVisibility(View.GONE);
             }
             // 查看评论点赞数
-            mMfSeeNum.setText(String.valueOf(feed.getViewNum()));
-            mMfCommentNum.setText(String.valueOf(feed.getCommentNum()));
+            mFeedSeeNum.setText(String.valueOf(feed.getViewNum()));
+            mFeedCommentNum.setText(String.valueOf(feed.getCommentNum()));
             // 是否已经点赞
             if (feed.isLike()) {
-                mMfLikeIcon.setSelected(true);
+                mFeedLikeIcon.setSelected(true);
             } else {
-                mMfLikeIcon.setSelected(false);
+                mFeedLikeIcon.setSelected(false);
             }
             // 点赞列表
             List<Like> likeList = feed.getLikeList();
             int likeNum = likeList == null ? 0 :likeList.size();
-            mMfLikeNum.setText(String.valueOf(likeNum));
+            mFeedLikeNum.setText(String.valueOf(likeNum));
             String likeStr = Utils.getLikeStr(likeList);
             switch (likeNum) {
                 case 0:
-                    mMfLikeNum.setText("赞");
+                    mFeedLikeNum.setText("赞");
                     mLikeWindow.setVisibility(View.GONE);
                     break;
                 case 1:
@@ -225,7 +239,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
 
-        @OnClick({R.id.user_img, R.id.mf_comment, R.id.mf_like, R.id.mood_card})
+        @OnClick({R.id.user_img, R.id.feed_comment_layout, R.id.feed_like_layout, R.id.feed_card})
         public void onClick(View view) {
             if (mOnItemListener != null) mOnItemListener.onItemClick(view, mFeed, mPosition);
         }

@@ -80,9 +80,9 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
         TextView mRelevantTime;
         @BindView(R.id.relevant_info)
         AppCompatTextView mRelevantInfo;
-        @BindView(R.id.mood_info)
+        @BindView(R.id.feed_info)
         AppCompatTextView mMoodInfo;
-        @BindView(R.id.mood_body)
+        @BindView(R.id.feed_body)
         LinearLayout mMoodBody;
 
         private Relevant mRelevant;
@@ -136,7 +136,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
             mMoodInfo.setText(Utils.colorFormat(feedInfo));
         }
 
-        @OnClick({R.id.user_img, R.id.mood_body})
+        @OnClick({R.id.user_img, R.id.feed_body})
         public void onClick(View view) {
             if (mOnItemListener != null) mOnItemListener.onItemClick(view, mRelevant);
         }

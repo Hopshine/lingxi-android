@@ -70,7 +70,7 @@ public class RelevantActivity extends BaseActivity {
                 switch (view.getId()) {
                     case R.id.user_img:
                         break;
-                    case R.id.mood_body:
+                    case R.id.feed_body:
                         gotoFeed(relevant.getFeed());
                         break;
                 }

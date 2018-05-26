@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.rong.imlib.model.UserInfo;
+import me.cl.lingxi.BuildConfig;
 
 /**
  * 常量
@@ -34,13 +35,10 @@ public class Constants {
     public static final int ACTIVITY_MOOD = 10003;
     public static final int ACTIVITY_PERSONAL = 10004;
 
-
-
     // 回退标识
     public static final String GO_INDEX = "go_index";
 
-    // oss图片处理
-    public static final String IMG_URL = "http://lingci.oss-cn-shanghai.aliyuncs.com/lingxi";
-    public static final String IMG_RESIZE_HW250 = "?x-oss-process=image/resize,m_fill,h_250,w_250";
-    public static final String IMG_RESIZE_HW720 = "?x-oss-process=image/resize,m_mfit,h_720,w_720";
+    // 服务器rss图片
+    public static final String IMG_URL = BuildConfig.RssUrl;
+
 }

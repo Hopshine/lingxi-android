@@ -10,8 +10,8 @@ android {
         applicationId "me.cl.lingxi"
         minSdkVersion configInfo.minSdkVersion
         targetSdkVersion configInfo.targetSdkVersion
-        versionCode 185
-        versionName "1.0.7 bx"
+        versionCode 186
+        versionName "1.0.8"
 
         vectorDrawables.useSupportLibrary = true
         flavorDimensions "versionCode"
@@ -20,7 +20,8 @@ android {
     productFlavors {
         alpha {
             applicationId "me.cl.lingxi.alpha"
-            buildConfigField 'String', 'BaseUrl', '"http://47.100.245.128/lingxi-test"'
+            buildConfigField 'String', 'ApiUrl', '"http://47.100.245.128/lingxi-test"'
+            buildConfigField 'String', 'RssUrl', '"http://47.100.245.128/rss/lingxi-test"'
             manifestPlaceholders = [
                     'APP_ID'  : "me.cl.lingxi.alpha",
                     'APP_NAME': "@string/app_name_alpha"
@@ -28,7 +29,8 @@ android {
         }
         local {
             applicationId "me.cl.lingxi.local"
-            buildConfigField 'String', 'BaseUrl', '"http://lingci.iok.la/lingxi"'
+            buildConfigField 'String', 'ApiUrl', '"http://192.168.26.108:8090/lingxi"'
+            buildConfigField 'String', 'RssUrl', '"http://192.168.26.108/rss/lingxi-test"'
             manifestPlaceholders = [
                     'APP_ID'  : "me.cl.lingxi.local",
                     'APP_NAME': "@string/app_name_local"
@@ -36,7 +38,8 @@ android {
         }
         online {
             applicationId "me.cl.lingxi"
-            buildConfigField 'String', 'BaseUrl', '"http://47.100.245.128/lingxi"'
+            buildConfigField 'String', 'ApiUrl', '"http://47.100.245.128/lingxi"'
+            buildConfigField 'String', 'RssUrl', '"http://47.100.245.128/rss/lingxi"'
             manifestPlaceholders = [
                     'APP_ID'  : "me.cl.lingxi",
                     'APP_NAME': "@string/app_name"
@@ -69,7 +72,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
     implementation 'org.jsoup:jsoup:1.10.2'
     implementation 'me.iwf.photopicker:PhotoPicker:0.9.0@aar'
-    implementation 'com.aliyun.dpa:oss-android-sdk:2.3.0'
+    implementation 'id.zelory:compressor:2.1.0'
     implementation "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
     implementation 'cn.rongcloud.android:IMLib:2.8.6'

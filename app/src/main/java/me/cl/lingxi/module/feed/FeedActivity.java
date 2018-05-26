@@ -56,25 +56,25 @@ public class FeedActivity extends BaseActivity {
     ImageView mUserImg;
     @BindView(R.id.user_name)
     TextView mUserName;
-    @BindView(R.id.mood_time)
+    @BindView(R.id.feed_time)
     TextView mMoodTime;
-    @BindView(R.id.mood_info)
+    @BindView(R.id.feed_info)
     AppCompatTextView mMoodInfo;
-    @BindView(R.id.mood_body)
+    @BindView(R.id.feed_body)
     LinearLayout mMoodBody;
-    @BindView(R.id.mf_see_num)
+    @BindView(R.id.feed_view_num)
     TextView mMfSeeNum;
-    @BindView(R.id.mf_comment_num)
+    @BindView(R.id.feed_comment_num)
     TextView mMfCommentNum;
-    @BindView(R.id.mf_comment)
+    @BindView(R.id.feed_comment_layout)
     LinearLayout mMfComment;
-    @BindView(R.id.mf_like_icon)
+    @BindView(R.id.feed_like_icon)
     ImageView mMfLikeIcon;
-    @BindView(R.id.mf_like_num)
+    @BindView(R.id.feed_like_num)
     TextView mMfLikeNum;
-    @BindView(R.id.mf_like)
+    @BindView(R.id.feed_like_layout)
     LinearLayout mMfLike;
-    @BindView(R.id.mood_action)
+    @BindView(R.id.feed_action_layout)
     LinearLayout mMoodAction;
     @BindView(R.id.like_people)
     TextView mLikePeople;
@@ -240,15 +240,15 @@ public class FeedActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.user_img, R.id.mf_like, R.id.mf_comment, R.id.edit_mask, R.id.edit_tu_cao, R.id.btn_publish})
+    @OnClick({R.id.user_img, R.id.feed_like_layout, R.id.feed_comment_layout, R.id.edit_mask, R.id.edit_tu_cao, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_img:
                 break;
-            case R.id.mf_like:
+            case R.id.feed_like_layout:
                 Utils.toastShow(this, "点赞");
                 break;
-            case R.id.mf_comment:
+            case R.id.feed_comment_layout:
                 mEditTuCao.setHint("吐槽一下");
                 MSG_MODE = MSG_EVALUATE;
                 openSofInput(mEditTuCao);

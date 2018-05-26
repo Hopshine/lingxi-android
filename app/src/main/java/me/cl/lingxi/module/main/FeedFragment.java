@@ -1,6 +1,7 @@
 package me.cl.lingxi.module.main;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.ItemAnimator;
+import me.cl.lingxi.common.widget.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.PageInfo;
@@ -57,6 +59,7 @@ public class FeedFragment extends BaseFragment {
 
     private List<Feed> mList = new ArrayList<>();
     private FeedAdapter mAdapter;
+    private ItemDecoration mItemDecoration;
 
     private int mPage = 1;
     private int mCount = 10;
@@ -111,6 +114,7 @@ public class FeedFragment extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new ItemAnimator());
+        mItemDecoration = new ItemDecoration(ItemDecoration.VERTICAL, 10, Color.parseColor("#f2f2f2"));
         mAdapter = new FeedAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -139,11 +143,11 @@ public class FeedFragment extends BaseFragment {
                     case R.id.user_img:
                         goToUser(feed);
                         break;
-                    case R.id.mood_card:
-                    case R.id.mf_comment:
+                    case R.id.feed_card:
+                    case R.id.feed_comment_layout:
                         gotoMood(feed);
                         break;
-                    case R.id.mf_like:
+                    case R.id.feed_like_layout:
                         if (feed.isLike()) return;
                         // 未点赞点赞
                         postAddLike(feed, position);
@@ -241,8 +245,8 @@ public class FeedFragment extends BaseFragment {
         OkUtil.post()
                 .url(Api.pageFeed)
                 .addParam("userId", uid)
-                .addParam("pageNum", String.valueOf(pageNum))
-                .addParam("pageSize", String.valueOf(pageSize))
+                .addParam("pageNum", pageNum)
+                .addParam("pageSize", pageSize)
                 .execute(new ResultCallback<Result<PageInfo<Feed>>>() {
                     @Override
                     public void onSuccess(Result<PageInfo<Feed>> response) {
@@ -266,7 +270,7 @@ public class FeedFragment extends BaseFragment {
                                 updateData(list);
                                 break;
                             default:
-                                mAdapter.setData(list);
+                                setData(list);
                                 break;
                         }
                     }
@@ -287,7 +291,13 @@ public class FeedFragment extends BaseFragment {
                 });
     }
 
-    //更新数据
+    // 设置数据
+    private void setData(List<Feed> data){
+        mRecyclerView.addItemDecoration(mItemDecoration);
+        mAdapter.setData(data);
+    }
+
+    // 更新数据
     public void updateData(List<Feed> data) {
         mAdapter.addData(data);
     }

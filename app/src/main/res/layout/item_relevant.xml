@@ -60,7 +60,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/mood_body"
+        android:id="@+id/feed_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#f4f4f4"
@@ -71,7 +71,7 @@
         android:paddingTop="10dp">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/mood_info"
+            android:id="@+id/feed_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"

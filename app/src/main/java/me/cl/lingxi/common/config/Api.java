@@ -9,7 +9,7 @@ import me.cl.lingxi.BuildConfig;
 public class Api {
 
     // 版本设置由gradle接管，通过flavor控制多版本
-    public static String baseUrl = BuildConfig.BaseUrl;
+    public static String baseUrl = BuildConfig.ApiUrl;
 
     /**
      * 用户注册
@@ -76,8 +76,12 @@ public class Api {
      */
     public static String latestVersion = baseUrl + "/app/version/latest";
     /**
-     * 获取oss token
+     * 上传用户图片
      */
-    public static String ossToken = baseUrl + "/ali/oss/token";
+    public static String uploadUserImage = baseUrl + "/rss/upload/user/image";
+    /**
+     * 上传动态图片
+     */
+    public static String uploadFeedImage = baseUrl + "/rss/upload/feed/image";
 
 }

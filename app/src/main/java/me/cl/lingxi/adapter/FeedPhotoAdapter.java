@@ -19,10 +19,9 @@ import me.cl.lingxi.common.config.Constants;
  * author : Bafs
  * e-mail : bafs.jy@live.com
  * time   : 2017/11/03
- * desc   :
+ * desc   : 动态图片
  * version: 1.0
  */
-
 public class FeedPhotoAdapter extends RecyclerView.Adapter<FeedPhotoAdapter.PhotoViewHolder> {
 
     private int mType = 0;
@@ -80,10 +79,13 @@ public class FeedPhotoAdapter extends RecyclerView.Adapter<FeedPhotoAdapter.Phot
             mPosition = position;
             mIvDelete.setVisibility(View.GONE);
 
+            photoUrl = Constants.IMG_URL + photoUrl;
+
             Glide.with(mIvPhoto.getContext())
-                    .load(photoUrl + Constants.IMG_RESIZE_HW250)
+                    .load(photoUrl)
                     .centerCrop()
                     .into(mIvPhoto);
+
         }
 
         @OnClick({R.id.iv_photo})
