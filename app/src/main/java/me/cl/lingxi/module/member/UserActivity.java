@@ -101,7 +101,10 @@ public class UserActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new ItemAnimator());
-        mRecyclerView.addItemDecoration(new ItemDecoration(ItemDecoration.VERTICAL, 10, Color.parseColor("#f2f2f2")));
+        ItemDecoration itemDecoration = new ItemDecoration(ItemDecoration.VERTICAL, 10, Color.parseColor("#f2f2f2"));
+        // 隐藏最后一个item的分割线
+        itemDecoration.setGoneLast(true);
+        mRecyclerView.addItemDecoration(itemDecoration);
         mAdapter = new FeedAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
 

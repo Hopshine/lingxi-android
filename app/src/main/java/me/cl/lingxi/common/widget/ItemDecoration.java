@@ -25,6 +25,7 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
     private int mOrientation;
     private int mDecoration;
     private ColorDrawable mDivider;
+    private boolean isGoneLast;
 
     private final Rect mBounds = new Rect();
 
@@ -32,6 +33,7 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
         setOrientation(orientation);
         setDecoration(decoration);
         setDrawable(color);
+        setGoneLast(false);
     }
 
     public void setOrientation(int orientation) {
@@ -48,6 +50,10 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
 
     public void setDrawable(@ColorInt int color) {
         mDivider = new ColorDrawable(color);
+    }
+
+    public void setGoneLast(boolean goneLast) {
+        isGoneLast = goneLast;
     }
 
     @Override
@@ -78,6 +84,9 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
         }
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
+            if (isGoneLast && i == childCount - 1) {
+                continue;
+            }
             final View child = parent.getChildAt(i);
             parent.getDecoratedBoundsWithMargins(child, mBounds);
             final int bottom = mBounds.bottom + Math.round(child.getTranslationY());
@@ -105,6 +114,9 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
 
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
+            if (isGoneLast && i == childCount - 1) {
+                continue;
+            }
             final View child = parent.getChildAt(i);
             parent.getLayoutManager().getDecoratedBoundsWithMargins(child, mBounds);
             final int right = mBounds.right + Math.round(child.getTranslationX());

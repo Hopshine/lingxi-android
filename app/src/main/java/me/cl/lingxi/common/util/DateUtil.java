@@ -43,11 +43,11 @@ public class DateUtil {
         }
         if (result >= 60000 && result < 3600000) {
             long seconds = result / 60000;
-            return seconds + "分前";
+            return seconds + "分钟前";
         }
         if (result >= 3600000 && result < 86400000) {
             long seconds = result / 3600000;
-            return seconds + "时前";
+            return seconds + "小时前";
         }
         if (result >= 86400000 && result < 1702967296) {
             long seconds = result / 86400000;

@@ -57,25 +57,25 @@ public class FeedActivity extends BaseActivity {
     @BindView(R.id.user_name)
     TextView mUserName;
     @BindView(R.id.feed_time)
-    TextView mMoodTime;
+    TextView mFeedTime;
     @BindView(R.id.feed_info)
-    AppCompatTextView mMoodInfo;
+    AppCompatTextView mFeedInfo;
     @BindView(R.id.feed_body)
-    LinearLayout mMoodBody;
+    LinearLayout mFeedBody;
     @BindView(R.id.feed_view_num)
-    TextView mMfSeeNum;
+    TextView mFeedSeeNum;
     @BindView(R.id.feed_comment_num)
-    TextView mMfCommentNum;
+    TextView mFeedCommentNum;
     @BindView(R.id.feed_comment_layout)
-    LinearLayout mMfComment;
+    LinearLayout mFeedComment;
     @BindView(R.id.feed_like_icon)
-    ImageView mMfLikeIcon;
+    ImageView mFeedLikeIcon;
     @BindView(R.id.feed_like_num)
-    TextView mMfLikeNum;
+    TextView mFeedLikeNum;
     @BindView(R.id.feed_like_layout)
-    LinearLayout mMfLike;
+    LinearLayout mFeedLikeLayout;
     @BindView(R.id.feed_action_layout)
-    LinearLayout mMoodAction;
+    LinearLayout mFeedActionLayout;
     @BindView(R.id.like_people)
     TextView mLikePeople;
     @BindView(R.id.like_window)
@@ -97,7 +97,6 @@ public class FeedActivity extends BaseActivity {
     private String mFeedId;
     private String mCommentId;
     private String toUid;
-    private String toName;
     private InputMethodManager imm;
     private EvaluateAdapter mAdapter;
     private LoadingDialog loadingProgress;
@@ -162,14 +161,6 @@ public class FeedActivity extends BaseActivity {
         initView();
     }
 
-    private void gotoUser() {
-        Intent intent = new Intent(this, UserActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("feed", feed);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle == null) return;
@@ -189,25 +180,25 @@ public class FeedActivity extends BaseActivity {
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(mUserImg);
         mUserName.setText(user.getUsername());
-        mMoodTime.setText(feed.getCreateTime());
-        mMoodInfo.setText(feed.getFeedInfo());
+        mFeedTime.setText(feed.getCreateTime());
+        mFeedInfo.setText(feed.getFeedInfo());
         //查看评论点赞数
-        mMfSeeNum.setText(String.valueOf(feed.getViewNum()));
-        mMfCommentNum.setText(String.valueOf(feed.getCommentNum()));
+        mFeedSeeNum.setText(String.valueOf(feed.getViewNum()));
+        mFeedCommentNum.setText(String.valueOf(feed.getCommentNum()));
         //是否已经点赞
-        mMfLikeIcon.setSelected(feed.isLike());
-        mMfLike.setClickable(feed.isLike());
+        mFeedLikeIcon.setSelected(feed.isLike());
+        mFeedLikeLayout.setClickable(feed.isLike());
         //点赞列表
         List<Like> likeList = feed.getLikeList();
         Integer likeNum = likeList == null ? 0 : likeList.size();
         switch (likeNum) {
             case 0:
-                mMfLikeNum.setText("赞");
+                mFeedLikeNum.setText("赞");
                 mLikeWindow.setVisibility(View.GONE);
                 break;
             default:
                 String likeStr = Utils.getLongLikeStr(likeList);
-                mMfLikeNum.setText(String.valueOf(likeNum));
+                mFeedLikeNum.setText(String.valueOf(likeNum));
                 mLikeWindow.setVisibility(View.VISIBLE);
                 likeStr = likeStr + "觉得很赞";
                 mLikePeople.setText(Utils.colorFormat(likeStr));
@@ -299,7 +290,7 @@ public class FeedActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Result response) {
                         Utils.toastShow(FeedActivity.this, "评论成功");
-                        mMfCommentNum.setText(String.valueOf(Integer.valueOf(mMfCommentNum.getText().toString()) + 1));
+                        mFeedCommentNum.setText(String.valueOf(Integer.valueOf(mFeedCommentNum.getText().toString()) + 1));
 
                         getEvaluateList(mFeedId);
                     }
@@ -356,8 +347,8 @@ public class FeedActivity extends BaseActivity {
         OkUtil.post()
                 .url(Api.pageComment)
                 .addParam("feedId", feedId)
-                .addParam("pageNum", String.valueOf(pageNum))
-                .addParam("pageSize", String.valueOf(pageSize))
+                .addParam("pageNum", pageNum)
+                .addParam("pageSize", pageSize)
                 .execute(new ResultCallback<Result<PageInfo<Comment>>>() {
                     @Override
                     public void onSuccess(Result<PageInfo<Comment>> response) {
@@ -377,6 +368,17 @@ public class FeedActivity extends BaseActivity {
                         Utils.toastShow(FeedActivity.this, R.string.toast_get_feed_error);
                     }
                 });
+    }
+
+    /**
+     * 前往用户界面
+     */
+    private void gotoUser() {
+        Intent intent = new Intent(this, UserActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("feed", feed);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     /**

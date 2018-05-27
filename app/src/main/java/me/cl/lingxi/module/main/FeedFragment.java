@@ -59,7 +59,6 @@ public class FeedFragment extends BaseFragment {
 
     private List<Feed> mList = new ArrayList<>();
     private FeedAdapter mAdapter;
-    private ItemDecoration mItemDecoration;
 
     private int mPage = 1;
     private int mCount = 10;
@@ -114,7 +113,10 @@ public class FeedFragment extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new ItemAnimator());
-        mItemDecoration = new ItemDecoration(ItemDecoration.VERTICAL, 10, Color.parseColor("#f2f2f2"));
+        ItemDecoration itemDecoration = new ItemDecoration(ItemDecoration.VERTICAL, 10, Color.parseColor("#f2f2f2"));
+        // 隐藏最后一个item的分割线
+        itemDecoration.setGoneLast(true);
+        mRecyclerView.addItemDecoration(itemDecoration);
         mAdapter = new FeedAdapter(mList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -293,7 +295,6 @@ public class FeedFragment extends BaseFragment {
 
     // 设置数据
     private void setData(List<Feed> data){
-        mRecyclerView.addItemDecoration(mItemDecoration);
         mAdapter.setData(data);
     }
 
@@ -313,8 +314,9 @@ public class FeedFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 发布动态回退则掉调起刷新
-        if (resultCode == Constants.ACTIVITY_PUBLISH)
+        if (resultCode == Constants.ACTIVITY_PUBLISH) {
             onRefresh();
+        }
     }
 
     // 前往用户页面
