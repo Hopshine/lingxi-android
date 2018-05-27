@@ -1,0 +1,159 @@
+package me.cl.lingxi.module.feed;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import me.cl.library.base.BaseActivity;
+import me.cl.lingxi.R;
+import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.FeedTextUtil;
+import me.cl.lingxi.common.util.SPUtil;
+import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.entity.Feed;
+import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.module.main.MainActivity;
+import okhttp3.Call;
+
+public class ShareFeedActivity extends BaseActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.feed_info)
+    AppCompatEditText mFeedInfo;
+    @BindView(R.id.iv_submit)
+    ImageView mIvSubmit;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    private String mUid;
+    private StringBuffer mInfo = new StringBuffer();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_publish);
+        ButterKnife.bind(this);
+        init();
+    }
+
+    private void init() {
+        mUid = SPUtil.build().getString(Constants.USER_ID);
+        setupToolbar(mToolbar, "分享到灵悉", true, 0, null);
+        setLoading("发布中...");
+        mRecyclerView.setVisibility(View.GONE);
+
+        Intent intent = getIntent();
+        if (intent == null) {
+            onBackPressed();
+            return;
+        }
+        Bundle bundle = intent.getExtras();
+        if (bundle == null) {
+            onBackPressed();
+            return;
+        }
+        if (!"text/plain".equals(intent.getType())) {
+            onBackPressed();
+            return;
+        }
+        String title = bundle.getString(Intent.EXTRA_TITLE);
+        String text = bundle.getString(Intent.EXTRA_TEXT);
+        if (TextUtils.isEmpty(text)) {
+            onBackPressed();
+            return;
+        }
+        if (text.contains("bilibili")) {
+            mInfo.append("#bilibili#");
+        }
+
+        mInfo.append(text);
+        mFeedInfo.setEnabled(false);
+        mFeedInfo.setText(FeedTextUtil.getFeedText(mInfo.toString(), mFeedInfo));
+
+        // 预留
+        int i = text.indexOf("http");
+        String url = text.substring(i);
+        Log.d(TAG, "init: title" + title);
+        Log.d(TAG, "init: url" + url);
+    }
+
+    @OnClick(R.id.iv_submit)
+    public void onClick() {
+        postSaveFeed();
+    }
+
+    // 发布动态
+    private void postSaveFeed() {
+        OkUtil.post()
+                .url(Api.saveFeed)
+                .addParam("userId", mUid)
+                .addParam("feedInfo", mInfo.toString())
+                .execute(new ResultCallback<Result<Feed>>() {
+                    @Override
+                    public void onSuccess(Result<Feed> response) {
+                        dismissLoading();
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            Utils.toastShow(ShareFeedActivity.this, "发布失败");
+                            return;
+                        }
+                        showSuccess();
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        dismissLoading();
+                        Utils.toastShow(ShareFeedActivity.this, "发布失败");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        dismissLoading();
+                        Utils.toastShow(ShareFeedActivity.this, "发布失败");
+                    }
+                });
+    }
+
+    // 发布成功
+    private void showSuccess() {
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
+        mDialog.setMessage("发布成功，是否留在本APP");
+        mDialog.setNegativeButton("离开", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onBackPressed();
+            }
+        });
+        mDialog.setPositiveButton("留下", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gotoHome();
+            }
+        });
+        mDialog.setCancelable(false).create().show();
+    }
+
+    public void gotoHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.GO_INDEX, R.id.navigation_camera);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+}

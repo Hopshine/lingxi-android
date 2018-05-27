@@ -36,6 +36,7 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.FeedTextUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Comment;
@@ -181,7 +182,7 @@ public class FeedActivity extends BaseActivity {
                 .into(mUserImg);
         mUserName.setText(user.getUsername());
         mFeedTime.setText(feed.getCreateTime());
-        mFeedInfo.setText(feed.getFeedInfo());
+        mFeedInfo.setText(FeedTextUtil.getFeedText(feed.toString(), mFeedInfo));
         //查看评论点赞数
         mFeedSeeNum.setText(String.valueOf(feed.getViewNum()));
         mFeedCommentNum.setText(String.valueOf(feed.getCommentNum()));
