@@ -182,7 +182,7 @@ public class FeedActivity extends BaseActivity {
                 .into(mUserImg);
         mUserName.setText(user.getUsername());
         mFeedTime.setText(feed.getCreateTime());
-        mFeedInfo.setText(FeedTextUtil.getFeedText(feed.toString(), mFeedInfo));
+        mFeedInfo.setText(FeedTextUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));
         //查看评论点赞数
         mFeedSeeNum.setText(String.valueOf(feed.getViewNum()));
         mFeedCommentNum.setText(String.valueOf(feed.getCommentNum()));

@@ -183,8 +183,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (photos != null && photos.size() > 0) {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 int size = photos.size();
-                // 如果只有一张图，设置两列，否则三列
-                int column = size == 1 ? 2 : 3;
+                // 如果只有一张或四张图，设置两列，否则三列
+                int column = (size == 1 || size == 4) ? 2 : 3;
                 mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), column));
                 FeedPhotoAdapter adapter = new FeedPhotoAdapter(photos);
                 adapter.setOnItemClickListener(new FeedPhotoAdapter.OnItemClickListener() {
