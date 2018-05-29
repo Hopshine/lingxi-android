@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +24,7 @@ import butterknife.OnClick;
 import me.cl.library.base.BaseFragment;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.module.member.LoginActivity;
@@ -95,21 +95,16 @@ public class MineFragment extends BaseFragment {
     private void init(View view) {
         setupToolbar(mToolbar, "我的", 0, null);
         uName = SPUtil.build().getString(Constants.USER_NAME);
-        //设置TextView左右图片
-        Drawable mine_item_aet = getResources().getDrawable(R.drawable.ic_eit);
-        Drawable mine_item_right = getResources().getDrawable(R.drawable.ic_more);
-        Drawable mine_unread_right = getResources().getDrawable(R.drawable.ic_more);
-        mine_item_aet.setBounds(0, 0, mine_item_aet.getIntrinsicWidth(), mine_item_aet.getIntrinsicHeight());
-        mine_item_right.setBounds(0, 0, mine_item_right.getIntrinsicWidth(), mine_item_right.getIntrinsicHeight());
-        mine_unread_right.setBounds(0, 0, mine_unread_right.getIntrinsicWidth(), mine_unread_right.getIntrinsicHeight());
-        if (Constants.isRead) {
-            mMineRelevant.setCompoundDrawables(mine_item_aet, null, mine_item_right, null);
-        } else {
-            mMineRelevant.setCompoundDrawables(mine_item_aet, null, mine_unread_right, null);
-        }
 
         mUserName.setText(uName);
         Utils.setPersonImg(uName, mUserImg);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ContentUtil.setMoreBadge(getContext(), mMineRelevant);
+        if (Constants.isRead) ((MainActivity)getActivity()).goneBadge();
     }
 
     @OnClick({R.id.user_body, R.id.mine_reply, R.id.mine_relevant, R.id.mine_setting, R.id.mine_about, R.id.mine_sign_out})

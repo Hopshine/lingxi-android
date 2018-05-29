@@ -33,6 +33,7 @@ public class GsonUtil {
     public static <T> T toObject(String json, Type type) {
         return gson.fromJson(json, type);
     }
+
     /**
      * 解析json数组
      * @param json json字符串

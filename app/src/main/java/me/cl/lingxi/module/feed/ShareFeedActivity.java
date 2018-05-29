@@ -21,7 +21,7 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
-import me.cl.lingxi.common.util.FeedTextUtil;
+import me.cl.lingxi.common.util.FeedContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
@@ -77,13 +77,18 @@ public class ShareFeedActivity extends BaseActivity {
             onBackPressed();
             return;
         }
+
         if (text.contains("bilibili")) {
             mInfo.append("#bilibili#");
         }
 
+        if (text.contains("music.163")) {
+            mInfo.append("#网易云音乐#");
+        }
+
         mInfo.append(text);
         mFeedInfo.setEnabled(false);
-        mFeedInfo.setText(FeedTextUtil.getFeedText(mInfo.toString(), mFeedInfo));
+        mFeedInfo.setText(FeedContentUtil.getFeedText(mInfo.toString(), mFeedInfo));
 
         // 预留
         int i = text.indexOf("http");

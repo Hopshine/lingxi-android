@@ -79,17 +79,17 @@ public class WelcomeActivity extends BaseActivity {
                             SPUtil.build().putString(Constants.RC_USER, GsonUtil.toJson(data));
                             setRcUser(data);
                         }
-                        goHome(0);
+                        getUnRead();
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        goHome(0);
+                        getUnRead();
                     }
 
                     @Override
                     public void onFinish() {
-                        goHome(0);
+                        getUnRead();
                     }
                 });
     }
@@ -97,14 +97,15 @@ public class WelcomeActivity extends BaseActivity {
     /**
      * 获取未读条数
      */
-    public void getUnRead(String userId) {
+    public void getUnRead() {
+        String userId = SPUtil.build().getString(Constants.USER_ID);
         OkUtil.post()
-                .url(Api.baseUrl)
+                .url(Api.unreadComment)
                 .addParam("userId", userId)
                 .execute(new ResultCallback<Result<Integer>>() {
                     @Override
                     public void onSuccess(Result<Integer> response) {
-                        goHome(response.getData() == null ? 0 : response.getData());
+                        goHome("00000".equals(response.getCode()) ? response.getData() : 0);
                     }
 
                     @Override
@@ -121,7 +122,7 @@ public class WelcomeActivity extends BaseActivity {
 
     private void goHome(int num) {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-        intent.addFlags(num);
+        intent.putExtra(Constants.UNREAD_NUM, num);
         startActivity(intent);
         finish();
     }
@@ -149,7 +150,7 @@ public class WelcomeActivity extends BaseActivity {
                 @Override
                 public void onTokenIncorrect() {
                     Log.d("WelcomeActivity", "--onTokenIncorrect");
-                    goHome(0);
+                    getUnRead();
                 }
 
                 /**
@@ -165,7 +166,7 @@ public class WelcomeActivity extends BaseActivity {
                     } else {
                         List<User> userList = GsonUtil.toList(imUserStr, User[].class);
                         setRcUser(userList);
-                        goHome(0);
+                        getUnRead();
                     }
                 }
 
@@ -177,7 +178,7 @@ public class WelcomeActivity extends BaseActivity {
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
                     Log.d("WelcomeActivity", "--onError" + errorCode);
-                    goHome(0);
+                    getUnRead();
                 }
             });
         }

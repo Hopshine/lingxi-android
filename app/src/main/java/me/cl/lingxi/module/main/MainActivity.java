@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,6 +55,8 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     private String mExit = "MM";
     private long mExitTime = 0;
 
+    private TextView badgeView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +72,7 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         initFragment();
         initBottomNavigation();
 
-        int num = this.getIntent().getFlags();
+        initBadge();
 
         if (isCheckUpdate()) {
             checkNewVersion();
@@ -105,6 +112,35 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
                 return false;
             }
         });
+    }
+
+    private void initBadge() {
+        Intent intent = getIntent();
+        if (intent == null) return;
+        Integer num = intent.getIntExtra(Constants.UNREAD_NUM, 0);
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigation.getChildAt(0);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(3);
+        View badge = LayoutInflater.from(this).inflate(R.layout.menu_badge, menuView, false);
+        itemView.addView(badge);
+        badgeView = badge.findViewById(R.id.tv_msg_count);
+        if (num > 0) {
+            Constants.isRead = false;
+            visibleBadge();
+        } else {
+            goneBadge();
+        }
+    }
+
+    public void goneBadge(){
+        if (badgeView != null) {
+            badgeView.setVisibility(View.GONE);
+        }
+    }
+
+    public void visibleBadge(){
+        if (badgeView != null) {
+            badgeView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

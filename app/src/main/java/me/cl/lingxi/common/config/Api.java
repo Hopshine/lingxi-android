@@ -83,5 +83,12 @@ public class Api {
      * 上传动态图片
      */
     public static String uploadFeedImage = baseUrl + "/rss/upload/feed/image";
-
+    /**
+     * 未读条数
+     */
+    public static String unreadComment = baseUrl + "/feed/comment/unread";
+    /**
+     * 更新未读为已读
+     */
+    public static String updateUnread = baseUrl + "/feed/comment/unread/update";
 }

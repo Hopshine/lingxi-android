@@ -29,7 +29,7 @@ import me.cl.lingxi.module.member.UserActivity;
  * desc   : SpannableString,https://blog.csdn.net/u014620028/article/details/78394157
  * version: 1.0
  */
-public class FeedTextUtil {
+public class FeedContentUtil {
 
     private static final String AT = "@[\\w\\p{InCJKUnifiedIdeographs}-]{1,26}";
     private static final String TOPIC = "#[\\p{Print}\\p{InCJKUnifiedIdeographs}&&[^#]]+#";
@@ -87,8 +87,8 @@ public class FeedTextUtil {
                     @Override
                     public void onClick(View widget) {
                         Intent intent = new Intent(textView.getContext(), UserActivity.class);
-                        String screen_name = at.substring(1);
-                        intent.putExtra("screenName", screen_name);
+                        String username = at.substring(1);
+                        intent.putExtra("username", username);
                         textView.getContext().startActivity(intent);
                     }
                 };

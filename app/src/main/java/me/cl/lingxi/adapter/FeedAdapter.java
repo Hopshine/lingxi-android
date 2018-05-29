@@ -23,7 +23,7 @@ import me.cl.library.loadmore.LoadMoreViewHolder;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.util.DateUtil;
-import me.cl.lingxi.common.util.FeedTextUtil;
+import me.cl.lingxi.common.util.FeedContentUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Like;
@@ -177,7 +177,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(mUserImg);
             mUserName.setText(user.getUsername());
             mFeedTime.setText(DateUtil.showTime(feed.getCreateTime()));
-            mFeedInfo.setText(FeedTextUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));
+            mFeedInfo.setText(FeedContentUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));
             // 图片
             final List<String> photos = feed.getPhotoList();
             if (photos != null && photos.size() > 0) {

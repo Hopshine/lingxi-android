@@ -15,6 +15,8 @@ public class Constants {
 
     public static final String UPDATE_USER_IMG = "me.cl.update.img";
 
+    public static final String UNREAD_NUM = "unread_num";
+
     public static List<UserInfo> userList = new ArrayList<>();
     public static List<String> uidList = new ArrayList<>();
 

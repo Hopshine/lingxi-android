@@ -79,17 +79,44 @@ public class RelevantActivity extends BaseActivity {
 
         loadingProgress.show();
         getRelevantList();
+        updateUnread();
     }
 
-    //请求与我相关
+    /**
+     * 更新未读条数
+     */
+    public void updateUnread() {
+        String userId = SPUtil.build().getString(Constants.USER_ID);
+        OkUtil.post()
+                .url(Api.updateUnread)
+                .addParam("userId", userId)
+                .execute(new ResultCallback<Result<Integer>>() {
+                    @Override
+                    public void onSuccess(Result<Integer> response) {
+                        Constants.isRead = true;
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                });
+    }
+
+    // 请求与我相关
     public void getRelevantList() {
         Integer pageNum = 1;
         Integer pageSize = 20;
         OkUtil.post()
                 .url(Api.relevant)
                 .addParam("userId", saveId)
-                .addParam("pageNum", String.valueOf(pageNum))
-                .addParam("pageSize", String.valueOf(pageSize))
+                .addParam("pageNum", pageNum)
+                .addParam("pageSize", pageSize)
                 .execute(new ResultCallback<Result<PageInfo<Relevant>>>() {
                     @Override
                     public void onSuccess(Result<PageInfo<Relevant>> response) {
