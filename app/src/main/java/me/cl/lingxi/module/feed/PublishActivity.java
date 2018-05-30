@@ -76,7 +76,7 @@ public class PublishActivity extends BaseActivity {
                     PhotoPicker.builder()
                             .setPhotoCount(6)
                             .setShowCamera(true)
-                            .setShowGif(false)
+                            .setShowGif(true)
                             .setSelected((ArrayList<String>) mPhotos)
                             .setPreviewEnabled(false)
                             .start(PublishActivity.this, PhotoPicker.REQUEST_CODE);

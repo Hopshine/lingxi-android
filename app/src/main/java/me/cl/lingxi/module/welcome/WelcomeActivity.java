@@ -1,4 +1,4 @@
-package me.cl.lingxi.module;
+package me.cl.lingxi.module.welcome;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +24,7 @@ import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.User;
+import me.cl.lingxi.module.LxApplication;
 import me.cl.lingxi.module.main.MainActivity;
 import me.cl.lingxi.module.member.LoginActivity;
 import okhttp3.Call;

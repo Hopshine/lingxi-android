@@ -95,7 +95,7 @@ public class FeedFragment extends BaseFragment {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "圈子", R.menu.menu_publish, new Toolbar.OnMenuItemClickListener() {
+        setupToolbar(mToolbar, R.string.nav_camera, R.menu.menu_publish, new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
@@ -143,7 +143,7 @@ public class FeedFragment extends BaseFragment {
             public void onItemClick(View view, Feed feed, int position) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        goToUser(feed);
+                        goToUser(feed.getUser().getUsername());
                         break;
                     case R.id.feed_card:
                     case R.id.feed_comment_layout:
@@ -320,11 +320,9 @@ public class FeedFragment extends BaseFragment {
     }
 
     // 前往用户页面
-    private void goToUser(Feed feed){
+    private void goToUser(String username){
         Intent intent = new Intent(getActivity(), UserActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("feed", feed);
-        intent.putExtras(bundle);
+        intent.putExtra(Constants.USER_NAME, username);
         startActivity(intent);
     }
 }

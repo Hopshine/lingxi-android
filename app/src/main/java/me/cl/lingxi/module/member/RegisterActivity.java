@@ -70,7 +70,7 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
         if (!isMobileNum(uPhone)) {
-            Utils.toastShow(this, "请输入正确的手机号码");
+            Utils.toastShow(this, R.string.toast_phone_format_error);
             return;
         }
         postRegister(uName, uPwd, uPhone);
@@ -78,9 +78,6 @@ public class RegisterActivity extends BaseActivity {
 
     /**
      * 验证手机
-     *
-     * @param mobiles 手机好
-     * @return 是或否
      */
     public static boolean isMobileNum(String mobiles) {
         Pattern p = Pattern.compile("1[34578]\\d{9}$");
@@ -90,10 +87,6 @@ public class RegisterActivity extends BaseActivity {
 
     /**
      * 注册请求
-     *
-     * @param userName 用户名
-     * @param userPwd  秘密
-     * @param phone    手机
      */
     public void postRegister(String userName, String userPwd, String phone) {
         registerProgress.show();

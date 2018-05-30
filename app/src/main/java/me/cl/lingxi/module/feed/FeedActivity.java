@@ -19,15 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
@@ -36,6 +33,7 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.FeedContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
@@ -135,7 +133,7 @@ public class FeedActivity extends BaseActivity {
             public void onItemClick(View view, Comment comment) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        gotoUser();
+                        gotoUser(comment.getUser().getUsername());
                         break;
                     case R.id.evaluate_body:
                         MSG_MODE = MSG_REPLY;
@@ -174,12 +172,8 @@ public class FeedActivity extends BaseActivity {
         toUid = user.getId();
 
         //动态详情
-        Glide.with(this)
-                .load(Constants.IMG_URL + user.getAvatar())
-                .placeholder(R.drawable.img_user)
-                .error(R.drawable.img_user)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .into(mUserImg);
+        String url = Constants.IMG_URL + user.getAvatar();
+        ContentUtil.setUserAvatar(mUserImg, url);
         mUserName.setText(user.getUsername());
         mFeedTime.setText(feed.getCreateTime());
         mFeedInfo.setText(FeedContentUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));
@@ -207,7 +201,7 @@ public class FeedActivity extends BaseActivity {
         }
 
         postViewFeed();
-        getEvaluateList(String.valueOf(feed.getId()));
+        getEvaluateList(feed.getId());
     }
 
     private void postViewFeed() {
@@ -236,6 +230,7 @@ public class FeedActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_img:
+                gotoUser(feed.getUser().getUsername());
                 break;
             case R.id.feed_like_layout:
                 Utils.toastShow(this, "点赞");
@@ -374,11 +369,9 @@ public class FeedActivity extends BaseActivity {
     /**
      * 前往用户界面
      */
-    private void gotoUser() {
+    private void gotoUser(String username) {
         Intent intent = new Intent(this, UserActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("feed", feed);
-        intent.putExtras(bundle);
+        intent.putExtra(Constants.USER_NAME, username);
         startActivity(intent);
     }
 

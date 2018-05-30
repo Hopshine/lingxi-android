@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.cl.lingxi.R;
+import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.view.textview.ClickableImageSpan;
 import me.cl.lingxi.common.view.textview.ClickableMovementMethod;
 import me.cl.lingxi.common.view.textview.NoLineClickableSpan;
@@ -88,7 +89,7 @@ public class FeedContentUtil {
                     public void onClick(View widget) {
                         Intent intent = new Intent(textView.getContext(), UserActivity.class);
                         String username = at.substring(1);
-                        intent.putExtra("username", username);
+                        intent.putExtra(Constants.USER_NAME, username);
                         textView.getContext().startActivity(intent);
                     }
                 };

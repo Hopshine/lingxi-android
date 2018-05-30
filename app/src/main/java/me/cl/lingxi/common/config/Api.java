@@ -32,6 +32,10 @@ public class Api {
      */
     public static String userInfo = baseUrl + "/user/info";
     /**
+     * 查询用户信息
+     */
+    public static String searchUser = baseUrl + "/user/search";
+    /**
      * 融云用户列表
      */
     public static String listRcUser = baseUrl + "/user/rc/list";

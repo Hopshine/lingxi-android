@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".module.WelcomeActivity"
+            android:name=".module.welcome.WelcomeActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -36,7 +36,7 @@
         <activity android:name=".module.setting.AboutActivity"/>
         <activity android:name=".module.feed.FeedActivity"/>
         <activity
-            android:name=".module.WebActivity"
+            android:name=".module.webview.WebActivity"
             android:label="@string/open_the_app"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true">

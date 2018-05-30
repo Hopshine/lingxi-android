@@ -21,7 +21,7 @@ import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.view.MoeToast;
 import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.module.WebActivity;
+import me.cl.lingxi.module.webview.WebActivity;
 import okhttp3.Call;
 
 public class AboutActivity extends BaseActivity {

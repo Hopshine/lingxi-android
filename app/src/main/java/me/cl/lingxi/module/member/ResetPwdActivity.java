@@ -44,10 +44,10 @@ public class ResetPwdActivity extends BaseActivity {
 
     private void init() {
         setupToolbar(mToolbar, R.string.title_bar_reset_pwd, true, 0, null);
+        updateProgress = new LoadingDialog(this, R.string.dialog_loading_reset_wd);
     }
 
     public void goUpdatePwd(View view) {
-        updateProgress = new LoadingDialog(this, R.string.dialog_loading_reset_wd);
         String uName = mUsername.getText().toString().trim();
         String uPhone = mPhone.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();
@@ -67,6 +67,7 @@ public class ResetPwdActivity extends BaseActivity {
     }
 
     public void postUpdatePwd(String userName, String userPwd, String phone) {
+        updateProgress.show();
         OkUtil.post()
                 .url(Api.resetPassword)
                 .addParam("username", userName)

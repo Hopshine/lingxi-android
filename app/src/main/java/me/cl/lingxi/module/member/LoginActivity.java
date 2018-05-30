@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +30,8 @@ import me.cl.lingxi.module.main.MainActivity;
 import okhttp3.Call;
 
 public class LoginActivity extends BaseActivity {
+
+    private static final String TAG = "LoginActivity";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -68,18 +69,8 @@ public class LoginActivity extends BaseActivity {
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
             postLogin(username, password);
         } else {
-            Toast.makeText(LoginActivity.this, R.string.toast_login_null, Toast.LENGTH_SHORT).show();
+            Utils.toastShow(LoginActivity.this, R.string.toast_login_null);
         }
-    }
-
-    public void register(View view) {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
-    }
-
-    public void updatePwd(View view) {
-        Intent intent = new Intent(LoginActivity.this, ResetPwdActivity.class);
-        startActivity(intent);
     }
 
     // 登录请求
@@ -92,7 +83,6 @@ public class LoginActivity extends BaseActivity {
                 .execute(new ResultCallback<Result<UserInfo>>() {
                     @Override
                     public void onSuccess(Result<UserInfo> response) {
-                        loginProgress.dismiss();
                         String code = response.getCode();
                         switch (code) {
                             case "00000":
@@ -109,6 +99,7 @@ public class LoginActivity extends BaseActivity {
                                 }
                                 break;
                             default:
+                                loginProgress.dismiss();
                                 Utils.toastShow(LoginActivity.this, R.string.toast_pwd_error);
                                 break;
                         }
@@ -143,49 +134,51 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * 建立与融云服务器的连接
-     *
-     * @param token
      */
     private void connectRc(String token) {
         if (getApplicationInfo().packageName.equals(LxApplication.getCurProcessName(getApplicationContext()))) {
-            /**
-             * IMKit SDK调用第二步,建立与服务器的连接
-             */
+            // MKit SDK调用第二步,建立与服务器的连接
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
-                /**
-                 * Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的 Token
-                 */
+
+                // Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的 Token
                 @Override
                 public void onTokenIncorrect() {
-                    Log.d("WelcomeActivity", "--onTokenIncorrect");
-                }
-
-                /**
-                 * 连接融云成功
-                 * @param userid 当前 token
-                 */
-                @Override
-                public void onSuccess(String userid) {
-                    Log.d("WelcomeActivity", "--onSuccess" + userid);
-                    loginProgress.dismiss();
-                    Toast.makeText(LoginActivity.this, R.string.toast_login_success, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "--onTokenIncorrect");
                     goHome();
                 }
 
-                /**
-                 * 连接融云失败
-                 * @param errorCode 错误码，可到官网 查看错误码对应的注释
-                 */
+                // 连接融云成功，返回token
+                @Override
+                public void onSuccess(String userid) {
+                    Log.d(TAG, "--onSuccess" + userid);
+                    Utils.toastShow(LoginActivity.this, R.string.toast_login_success);
+                    goHome();
+                }
+
+                // 连接融云失败
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
-                    Log.d("WelcomeActivity", "--onError" + errorCode);
+                    Log.d(TAG, "--onError" + errorCode);
                     goHome();
                 }
             });
         }
     }
 
+    public void register(View view) {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
+    public void updatePwd(View view) {
+        Intent intent = new Intent(LoginActivity.this, ResetPwdActivity.class);
+        startActivity(intent);
+    }
+
     private void goHome() {
+        if (loginProgress.isShowing()) {
+            loginProgress.dismiss();
+        }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

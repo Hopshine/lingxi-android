@@ -39,7 +39,7 @@ import me.cl.lingxi.common.view.MoeToast;
 public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 
     private static final int RESULT_REQUEST_CODE = 2;
-    private static final int CAMRMA = 0X12;
+    private static final int CAMERA = 0X12;
     private static final int PIC = 0x01;
 
     @BindView(R.id.toolbar)
@@ -89,12 +89,12 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
             case R.id.person_img:
                 final Dialog dialog = new Dialog(this, R.style.AppTheme_Dialog);
                 dialog.setContentView(R.layout.dialog_photo_camera);
-                LinearLayout ll_photograph = (LinearLayout) dialog.findViewById(R.id.ll_photograph);
-                LinearLayout ll_getPicture = (LinearLayout) dialog.findViewById(R.id.ll_getPicture);
-                LinearLayout ll_cancel = (LinearLayout) dialog.findViewById(R.id.ll_cancel);
-                layoutSetClickListener(ll_photograph, dialog);
-                layoutSetClickListener(ll_getPicture, dialog);
-                layoutSetClickListener(ll_cancel, dialog);
+                LinearLayout llPhotograph = dialog.findViewById(R.id.ll_photograph);
+                LinearLayout llGetPicture = dialog.findViewById(R.id.ll_getPicture);
+                LinearLayout llCancel = dialog.findViewById(R.id.ll_cancel);
+                layoutSetClickListener(llPhotograph, dialog);
+                layoutSetClickListener(llGetPicture, dialog);
+                layoutSetClickListener(llCancel, dialog);
                 dialog.show();
                 break;
             default:
@@ -114,7 +114,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
                     startPhotoZoom(data.getData());
                 }
                 break;
-            case CAMRMA:
+            case CAMERA:
                 File temp = new File(Environment.getExternalStorageDirectory() + "/lingci/image/avatar/" + "headportraits.png");
                 startPhotoZoom(Uri.fromFile(temp));
                 break;
@@ -156,7 +156,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File temp = new File(Environment.getExternalStorageDirectory() + "/lingci/image/avatar/" + "headportraits.png");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
-        this.startActivityForResult(intent, CAMRMA);
+        this.startActivityForResult(intent, CAMERA);
     }
 
     /**

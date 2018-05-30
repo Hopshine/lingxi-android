@@ -11,12 +11,11 @@ import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
@@ -35,6 +33,7 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.ItemAnimator;
@@ -42,7 +41,7 @@ import me.cl.lingxi.common.widget.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.entity.User;
+import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
@@ -74,17 +73,18 @@ public class UserActivity extends BaseActivity {
     @BindView(R.id.contact)
     TextView mContact;
 
-    private String saveUid;
-    private String mUid;
-    private String mUName;
-    private List<Feed> mList = new ArrayList<>();
+    private String saveUserId;
+    private String mUserId;
+    private Integer uid;
+    private String mUsername;
+    private List<Feed> mFeedList = new ArrayList<>();
     private FeedAdapter mAdapter;
 
-    private int mPage = 0;
-    private int mCount = 10;
-    private final int MOD_REFRESH = 1;
-    private final int MOD_LOADING = 2;
-    private int RefreshMODE = 0;
+    private int mPageNum = 1;
+    private int mPageSize = 10;
+    private final int MODE_REFRESH = 1;
+    private final int MODE_LOADING = 2;
+    private int mRefreshMode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class UserActivity extends BaseActivity {
 
     private void init() {
         setupToolbar(mToolbar, "", true, 0, null);
-        saveUid = SPUtil.build().getString(Constants.USER_ID);
+        saveUserId = SPUtil.build().getString(Constants.USER_ID);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -105,42 +105,67 @@ public class UserActivity extends BaseActivity {
         // 隐藏最后一个item的分割线
         itemDecoration.setGoneLast(true);
         mRecyclerView.addItemDecoration(itemDecoration);
-        mAdapter = new FeedAdapter(mList);
+        mAdapter = new FeedAdapter(mFeedList);
         mRecyclerView.setAdapter(mAdapter);
 
         initView();
-        initEvent();
-        listFeed(mPage, mCount);
     }
 
     private void initView() {
-        Bundle bundle = this.getIntent().getExtras();
-        if (bundle == null) return;
-        Feed feed = (Feed) bundle.getSerializable("feed");
-        if (feed == null) return;
+        Intent intent = getIntent();
+        String username = intent.getStringExtra(Constants.USER_NAME);
 
-        User user = feed.getUser();
+        postSearchUser(username);
+    }
 
-        mUid = user.getId();
-        mUName = user.getUsername();
-        mTitleName.setText(mUName);
-        mUserName.setText(mUName);
-        if (user.getImToken() == null || "".equals(user.getImToken())) {
+    private void postSearchUser(String username) {
+        OkUtil.post()
+                .url(Api.searchUser)
+                .addParam("username", username)
+                .execute(new ResultCallback<Result<UserInfo>>() {
+
+                    @Override
+                    public void onSuccess(Result<UserInfo> response) {
+                        initUser(response.getData());
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        initUser(null);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        initUser(null);
+                    }
+                });
+    }
+
+    private void initUser(UserInfo userInfo) {
+        boolean isRc = false;
+        String url = "";
+        if (userInfo != null) {
+            mUserId = userInfo.getId();
+            uid = userInfo.getUid();
+            mUsername = userInfo.getUsername();
+            url = Constants.IMG_URL + userInfo.getAvatar();
+            if (!TextUtils.isEmpty(userInfo.getImToken())) {
+                isRc = true;
+            }
+            initEvent();
+            pageFeed(mPageNum, mPageSize);
+        } else {
+            mUsername = "未知用户";
+            Utils.toastShow(this, mUsername);
+        }
+        mTitleName.setText(mUsername);
+        mUserName.setText(mUsername);
+        if (!isRc) {
             mContact.setVisibility(View.GONE);
         }
-        String mUrl = Constants.IMG_URL + user.getAvatar();
-        Glide.with(this)
-                .load(mUrl)
-                .placeholder(R.drawable.img_user)
-                .error(R.drawable.img_user)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .into(mTitleImg);
-        Glide.with(this)
-                .load(mUrl)
-                .placeholder(R.drawable.img_user)
-                .error(R.drawable.img_user)
-                .bitmapTransform(new CropCircleTransformation(this))
-                .into(mUserImg);
+        ContentUtil.setUserAvatar(mTitleImg, url);
+        ContentUtil.setUserAvatar(mUserImg, url);
+        switchUserImage();
     }
 
     //初始化事件
@@ -149,9 +174,7 @@ public class UserActivity extends BaseActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                RefreshMODE = MOD_REFRESH;
-                mPage = 0;
-                listFeed(mPage, mCount);
+                onRefreshData();
             }
         });
 
@@ -162,12 +185,12 @@ public class UserActivity extends BaseActivity {
                 switch (view.getId()) {
                     case R.id.feed_card:
                     case R.id.feed_comment_layout:
-                        gotoMood(feed);
+                        goToFeed(feed);
                         break;
                     case R.id.feed_like_layout:
                         if (feed.isLike()) return;
                         // 未点赞点赞
-                        postAddLike(feed, position);
+                        postLike(feed, position);
                         break;
                 }
             }
@@ -182,6 +205,27 @@ public class UserActivity extends BaseActivity {
             }
         });
 
+        // 加载更多
+        mRecyclerView.addOnScrollListener(new OnLoadMoreListener() {
+
+            @Override
+            public void onLoadMore() {
+                if (mAdapter.getItemCount() < 4) return;
+
+                mRefreshMode = MODE_LOADING;
+                mAdapter.updateLoadStatus(LoadMord.LOAD_MORE);
+
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pageFeed(mPageNum, mPageSize);
+                    }
+                }, 1000);
+            }
+        });
+    }
+
+    private void switchUserImage() {
         // 头像切换
         mButtonBar.setAlpha(0);
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -209,25 +253,6 @@ public class UserActivity extends BaseActivity {
 
             }
         });
-
-        // 加载更多
-        mRecyclerView.addOnScrollListener(new OnLoadMoreListener() {
-
-            @Override
-            public void onLoadMore() {
-                if (mAdapter.getItemCount() < 4) return;
-
-                RefreshMODE = MOD_LOADING;
-                mAdapter.updateLoadStatus(LoadMord.LOAD_MORE);
-
-                mRecyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        listFeed(mPage, mCount);
-                    }
-                }, 1000);
-            }
-        });
     }
 
     @OnClick({R.id.contact})
@@ -235,24 +260,25 @@ public class UserActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.contact:
                 if (RongIM.getInstance() != null)
-                    RongIM.getInstance().startPrivateChat(this, String.valueOf(mUid), mUName);
+                    RongIM.getInstance().startPrivateChat(this, String.valueOf(uid), mUsername);
                 break;
         }
     }
 
-    private void postAddLike(Feed feed, int position) {
+    private void postLike(Feed feed, int position) {
     }
 
     // 获取动态列表
-    private void listFeed(int pageNum, int pageSize) {
-        if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH)
+    private void pageFeed(int pageNum, int pageSize) {
+        if (!mSwipeRefreshLayout.isRefreshing() && mRefreshMode == MODE_REFRESH) {
             mSwipeRefreshLayout.setRefreshing(true);
+        }
         OkUtil.post()
                 .url(Api.pageFeed)
-                .addParam("pageNum", String.valueOf(pageNum))
-                .addParam("pageSize", String.valueOf(pageSize))
-                .addParam("searchUserId", mUid)
-                .addParam("userId", saveUid)
+                .addParam("pageNum", pageNum)
+                .addParam("pageSize", pageSize)
+                .addParam("searchUserId", mUserId)
+                .addParam("userId", saveUserId)
                 .execute(new ResultCallback<Result<PageInfo<Feed>>>() {
                     @Override
                     public void onSuccess(Result<PageInfo<Feed>> response) {
@@ -269,10 +295,10 @@ public class UserActivity extends BaseActivity {
                             mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
                             return;
                         }
-                        mPage++;
+                        mPageNum++;
                         List<Feed> list = page.getList();
-                        switch (RefreshMODE) {
-                            case MOD_LOADING:
+                        switch (mRefreshMode) {
+                            case MODE_LOADING:
                                 updateData(list);
                                 break;
                             default:
@@ -303,14 +329,14 @@ public class UserActivity extends BaseActivity {
     }
 
     // 刷新数据
-    private void onRefresh() {
-        RefreshMODE = MOD_REFRESH;
-        mPage = 0;
-        listFeed(mPage, mCount);
+    private void onRefreshData() {
+        mRefreshMode = MODE_REFRESH;
+        mPageNum = 1;
+        pageFeed(mPageNum, mPageSize);
     }
 
     // 前往动态详情
-    private void gotoMood(Feed feed) {
+    private void goToFeed(Feed feed) {
         Intent intent = new Intent(this, FeedActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("feed", feed);

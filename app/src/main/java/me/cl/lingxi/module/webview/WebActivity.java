@@ -1,4 +1,4 @@
-package me.cl.lingxi.module;
+package me.cl.lingxi.module.webview;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;

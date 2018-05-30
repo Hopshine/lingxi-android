@@ -35,7 +35,7 @@ import me.cl.lingxi.common.util.GsonUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.entity.Animation;
 import me.cl.lingxi.entity.DliAnimation;
-import me.cl.lingxi.module.WebActivity;
+import me.cl.lingxi.module.webview.WebActivity;
 
 /**
  * 番剧信息
