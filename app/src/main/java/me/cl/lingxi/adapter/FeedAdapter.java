@@ -9,24 +9,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.LoadMoreViewHolder;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.DateUtil;
 import me.cl.lingxi.common.util.FeedContentUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.User;
 
 /**
@@ -168,13 +163,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mPosition = position;
             User user = feed.getUser();
             user = user == null ? new User() : user;
-            //动态详情
-            Glide.with(mUserImg.getContext())
-                    .load(Constants.IMG_URL + user.getAvatar())
-                    .placeholder(R.drawable.img_user)
-                    .error(R.drawable.img_user)
-                    .bitmapTransform(new CropCircleTransformation(mUserImg.getContext()))
-                    .into(mUserImg);
+            // 动态详情
+            ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
+
             mUserName.setText(user.getUsername());
             mFeedTime.setText(DateUtil.showTime(feed.getCreateTime()));
             mFeedInfo.setText(FeedContentUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));
@@ -186,23 +177,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 // 如果只有一张或四张图，设置两列，否则三列
                 int column = (size == 1 || size == 4) ? 2 : 3;
                 mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), column));
-                FeedPhotoAdapter adapter = new FeedPhotoAdapter(photos);
-                adapter.setOnItemClickListener(new FeedPhotoAdapter.OnItemClickListener() {
-                    @Override
-                    public void onPhotoClick(int position) {
-                        // 新对象接防止拼接后影响原来的url
-                        List<String> urls = new ArrayList<>(photos);
-                        int size = urls.size();
-                        // 拼接url
-                        for (int i = 0; i < size; i++) {
-                            String photo = urls.get(i);
-                            photo = Constants.IMG_URL + photo;
-                            urls.set(i, photo);
-                        }
-                        if (mOnItemListener != null) mOnItemListener.onPhotoClick((ArrayList<String>) urls, position);
-                    }
-                });
-                mRecyclerView.setAdapter(adapter);
+                // 设置动态图片适配器
+                ContentUtil.setFeedPhotoAdapter(mRecyclerView, photos, mOnItemListener);
             } else {
                 mRecyclerView.setVisibility(View.GONE);
             }
@@ -216,27 +192,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mFeedLikeIcon.setSelected(false);
             }
             // 点赞列表
-            List<Like> likeList = feed.getLikeList();
-            int likeNum = likeList == null ? 0 :likeList.size();
-            mFeedLikeNum.setText(String.valueOf(likeNum));
-            String likeStr = Utils.getLikeStr(likeList);
-            switch (likeNum) {
-                case 0:
-                    mFeedLikeNum.setText("赞");
-                    mLikeWindow.setVisibility(View.GONE);
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                    mLikeWindow.setVisibility(View.VISIBLE);
-                    likeStr = likeStr + "觉得很赞";
-                    break;
-                default:
-                    mLikeWindow.setVisibility(View.VISIBLE);
-                    likeStr = likeStr + "等" + likeNum + "人觉得很赞";
-                    break;
-            }
-            mLikePeople.setText(Utils.colorFormat(likeStr));
+            ContentUtil.setLikePeople(mLikePeople, mFeedLikeNum, mLikeWindow, feed.getLikeList());
         }
 
 

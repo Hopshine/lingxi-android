@@ -1,11 +1,10 @@
 package me.cl.lingxi.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.ContentUtil;
 
 /**
  * author : Bafs
@@ -42,13 +41,13 @@ public class FeedPhotoAdapter extends RecyclerView.Adapter<FeedPhotoAdapter.Phot
     }
 
     @Override
-    public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = View.inflate(parent.getContext(), R.layout.item_publish_photo, null);
         return new PhotoViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final PhotoViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final PhotoViewHolder holder, final int position) {
         holder.bindItem(mPhotos.get(position), position);
     }
 
@@ -78,14 +77,8 @@ public class FeedPhotoAdapter extends RecyclerView.Adapter<FeedPhotoAdapter.Phot
         public void bindItem(String photoUrl, final int position) {
             mPosition = position;
             mIvDelete.setVisibility(View.GONE);
-
-            photoUrl = Constants.IMG_URL + photoUrl;
-
-            Glide.with(mIvPhoto.getContext())
-                    .load(photoUrl)
-                    .centerCrop()
-                    .into(mIvPhoto);
-
+            // 加载图片
+            ContentUtil.loadFeedImage(mIvPhoto , photoUrl);
         }
 
         @OnClick({R.id.iv_photo})

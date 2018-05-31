@@ -2,14 +2,23 @@ package me.cl.lingxi.common.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import java.util.ArrayList;
+import java.util.List;
+
 import me.cl.lingxi.R;
+import me.cl.lingxi.adapter.FeedAdapter;
+import me.cl.lingxi.adapter.FeedPhotoAdapter;
 import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.glide.GlideApp;
+import me.cl.lingxi.entity.Like;
 
 /**
  * author : Bafs
@@ -19,6 +28,40 @@ import me.cl.lingxi.common.config.Constants;
  * version: 1.0
  */
 public class ContentUtil {
+
+    /**
+     * 设置用户头像，相对路径
+     */
+    public static void loadUserAvatar(ImageView imageView, String avatar) {
+        String url = Constants.IMG_URL + avatar;
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .placeholder(R.drawable.img_user)
+                .error(R.drawable.img_user)
+                .apply(RequestOptions.circleCropTransform())
+                .into(imageView);
+    }
+
+    /**
+     * 加载动态图片
+     */
+    public static void loadFeedImage(ImageView imageView, String url) {
+        url = Constants.IMG_URL + url;
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .centerCrop()
+                .into(imageView);
+    }
+
+    /**
+     * 加载图片
+     */
+    public static void loadImage(ImageView imageView, String url) {
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .centerCrop()
+                .into(imageView);
+    }
 
     /**
      * 设置与我相关提示
@@ -39,16 +82,51 @@ public class ContentUtil {
     }
 
     /**
-     * 设置用户头像
+     * 设置喜欢面板
      */
-    public static void setUserAvatar(ImageView imageView, String url) {
-        Context context = imageView.getContext();
-        Glide.with(context)
-                .load(url)
-                .placeholder(R.drawable.img_user)
-                .error(R.drawable.img_user)
-                .bitmapTransform(new CropCircleTransformation(context))
-                .into(imageView);
+    public static void setLikePeople(TextView likePeople, TextView likeNum, LinearLayout likeWindow, List<Like> likeList) {
+        int num = likeList == null ? 0 :likeList.size();
+        likeNum.setText(String.valueOf(num));
+        String likeStr = Utils.getLikeStr(likeList);
+        switch (num) {
+            case 0:
+                likeNum.setText("赞");
+                likeWindow.setVisibility(View.GONE);
+                break;
+            case 1:
+            case 2:
+            case 3:
+                likeWindow.setVisibility(View.VISIBLE);
+                likeStr = likeStr + "觉得很赞";
+                break;
+            default:
+                likeWindow.setVisibility(View.VISIBLE);
+                likeStr = likeStr + "等" + num + "人觉得很赞";
+                break;
+        }
+        likePeople.setText(Utils.colorFormat(likeStr));
     }
 
+    /**
+     * 设置动态图片适配器
+     */
+    public static void setFeedPhotoAdapter(RecyclerView recyclerView, final List<String> photos, final FeedAdapter.OnItemListener mOnItemListener) {
+        FeedPhotoAdapter adapter = new FeedPhotoAdapter(photos);
+        adapter.setOnItemClickListener(new FeedPhotoAdapter.OnItemClickListener() {
+            @Override
+            public void onPhotoClick(int position) {
+                // 新对象接防止拼接后影响原来的url
+                List<String> urls = new ArrayList<>(photos);
+                int size = urls.size();
+                // 拼接url
+                for (int i = 0; i < size; i++) {
+                    String photo = urls.get(i);
+                    photo = Constants.IMG_URL + photo;
+                    urls.set(i, photo);
+                }
+                if (mOnItemListener != null) mOnItemListener.onPhotoClick((ArrayList<String>) urls, position);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+    }
 }

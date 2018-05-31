@@ -9,16 +9,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Feed;
@@ -120,12 +117,8 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
                 relevantInfo.append(comment.getCommentInfo());
             }
 
-            Glide.with(context)
-                    .load(Constants.IMG_URL + user.getAvatar())
-                    .placeholder(R.drawable.img_user)
-                    .error(R.drawable.img_user)
-                    .bitmapTransform(new CropCircleTransformation(context))
-                    .into(mUserImg);
+            ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
+
             mUserName.setText(user.getUsername());
             mRelevantTime.setText(timeStr);
 

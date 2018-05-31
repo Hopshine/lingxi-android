@@ -18,9 +18,9 @@ import java.util.regex.Pattern;
 
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.view.textview.ClickableImageSpan;
-import me.cl.lingxi.common.view.textview.ClickableMovementMethod;
-import me.cl.lingxi.common.view.textview.NoLineClickableSpan;
+import me.cl.lingxi.view.textview.ClickableImageSpan;
+import me.cl.lingxi.view.textview.ClickableMovementMethod;
+import me.cl.lingxi.view.textview.NoLineClickableSpan;
 import me.cl.lingxi.module.member.UserActivity;
 
 /**

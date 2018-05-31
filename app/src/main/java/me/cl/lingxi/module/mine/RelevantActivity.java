@@ -22,7 +22,7 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.view.MoeToast;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Relevant;

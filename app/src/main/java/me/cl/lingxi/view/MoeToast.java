@@ -1,4 +1,4 @@
-package me.cl.lingxi.common.view;
+package me.cl.lingxi.view;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 import me.cl.lingxi.R;
 
 /**
- * Moe
+ * MoeToast
  * Created by bafsj on 16/1/21.
  */
 public class MoeToast {

@@ -1,4 +1,4 @@
-package me.cl.lingxi.common.view.textview;
+package me.cl.lingxi.view.textview;
 
 import android.content.Context;
 import android.text.TextPaint;

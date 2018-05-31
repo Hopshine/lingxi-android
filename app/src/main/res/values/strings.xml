@@ -28,6 +28,8 @@
     <string name="btn_modify">重置密码</string>
     <string name="btn_exit_login">退出登录</string>
     <string name="btn_send">发送</string>
+    <string name="btn_positive">确认</string>
+    <string name="btn_negative">取消</string>
 
     <!-- Text hint -->
     <string name="hint_username">用户名</string>

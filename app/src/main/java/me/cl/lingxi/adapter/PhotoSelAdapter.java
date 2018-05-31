@@ -5,23 +5,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.lingxi.R;
+import me.cl.lingxi.common.util.ContentUtil;
 
 /**
  * author : Bafs
  * e-mail : bafs.jy@live.com
  * time   : 2017/11/03
- * desc   :
+ * desc   : 图片选择
  * version: 1.0
  */
-
 public class PhotoSelAdapter extends RecyclerView.Adapter<PhotoSelAdapter.PhotoViewHolder> {
 
     public static final String mPhotoAdd = "file:///android_asset/icon_photo_add.png";
@@ -80,16 +78,13 @@ public class PhotoSelAdapter extends RecyclerView.Adapter<PhotoSelAdapter.PhotoV
 
         public void bindItem(String photoUrl, final int position) {
             mPosition = position;
-            if (mPhotos.get(position).equals(mPhotoAdd))
+            if (mPhotos.get(position).equals(mPhotoAdd)) {
                 mIvDelete.setVisibility(View.GONE);
-            else
+            } else {
                 mIvDelete.setVisibility(View.VISIBLE);
+            }
 
-            Glide.with(mIvPhoto.getContext())
-                    .load(photoUrl)
-                    .centerCrop()
-//                    .thumbnail(0.1f)
-                    .into(mIvPhoto);
+            ContentUtil.loadImage(mIvPhoto , photoUrl);
         }
 
         @OnClick({R.id.iv_photo, R.id.iv_delete})

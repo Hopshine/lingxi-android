@@ -10,18 +10,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.LoadMoreViewHolder;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.User;
@@ -40,7 +37,8 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface OnItemListener {
         void onItemClick(View view, Comment comment);
-        void onItemChildClick(View view,String eid, Reply reply);
+
+        void onItemChildClick(View view, String eid, Reply reply);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -129,12 +127,9 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bindItem(Context context, Comment comment) {
             mComment = comment;
             User user = comment.getUser();
-            Glide.with(context)
-                    .load(Constants.IMG_URL + user.getAvatar())
-                    .placeholder(R.drawable.img_user)
-                    .error(R.drawable.img_user)
-                    .bitmapTransform(new CropCircleTransformation(context))
-                    .into(mUserImg);
+
+            ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
+
             mUserName.setText(user.getUsername());
             mEvaluateTime.setText(comment.getCreateTime());
             mEvaluateInfo.setText(comment.getCommentInfo());

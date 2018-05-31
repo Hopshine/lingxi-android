@@ -17,9 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.view.MoeWebView;
-import me.cl.lingxi.webview.MoeChromeClient;
-import me.cl.lingxi.webview.MoeWebClient;
+import me.cl.lingxi.view.webview.MoeWebView;
+import me.cl.lingxi.view.webview.MoeChromeClient;
+import me.cl.lingxi.view.webview.MoeWebClient;
 
 public class WebActivity extends BaseActivity {
 

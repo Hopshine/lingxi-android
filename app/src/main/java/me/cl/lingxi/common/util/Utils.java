@@ -17,17 +17,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import me.cl.library.utils.ColorPhrase;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.glide.GlideApp;
 import me.cl.lingxi.entity.Like;
 
 /**
@@ -165,11 +165,11 @@ public class Utils {
         if (!new File(pathName).exists()) {
             pathName = Constants.IMG_URL + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
         }
-        Glide.with(imgView.getContext())
+        GlideApp.with(imgView.getContext())
                 .load(pathName)
                 .placeholder(R.drawable.img_user)
                 .error(R.drawable.img_user)
-                .bitmapTransform(new CropCircleTransformation(imgView.getContext()))
+                .apply(RequestOptions.circleCropTransform())
                 .into(imgView);
     }
 

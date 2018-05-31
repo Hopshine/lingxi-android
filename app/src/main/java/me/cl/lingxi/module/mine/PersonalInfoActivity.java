@@ -25,18 +25,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Constants;
+import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.view.MoeToast;
+import me.iwf.photopicker.PhotoPicker;
+import me.iwf.photopicker.PhotoPreview;
 
-public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
+public class PersonalInfoActivity extends BaseActivity {
 
     private static final int RESULT_REQUEST_CODE = 2;
     private static final int CAMERA = 0X12;
@@ -67,12 +72,12 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
     private void init() {
         setupToolbar(mToolbar, "个人信息", true, 0, null);
         loadingProgress = new LoadingDialog(this, "修改头像中...");
-        mPersonImg.setOnClickListener(this);
 
         int x = (int) (Math.random() * 5) + 1;
         if (x == 1) {
             MoeToast.makeText(this, "是谁，是谁在那里？");
         }
+
         saveName = SPUtil.build().getString(Constants.USER_NAME);
         saveId = SPUtil.build().getString(Constants.USER_ID);
         mPersonName.setText(saveName);
@@ -83,10 +88,18 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         Utils.setPersonImg(saveName, mPersonImg);
     }
 
-    @Override
+    @OnClick({R.id.person_img})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.person_img:
+                PhotoPicker.builder()
+                        .setPhotoCount(1)
+                        .setShowCamera(true)
+                        .setShowGif(false)
+                        .setPreviewEnabled(false)
+                        .start(PersonalInfoActivity.this, PhotoPicker.REQUEST_CODE);
+                break;
+            default:
                 final Dialog dialog = new Dialog(this, R.style.AppTheme_Dialog);
                 dialog.setContentView(R.layout.dialog_photo_camera);
                 LinearLayout llPhotograph = dialog.findViewById(R.id.ll_photograph);
@@ -96,8 +109,6 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
                 layoutSetClickListener(llGetPicture, dialog);
                 layoutSetClickListener(llCancel, dialog);
                 dialog.show();
-                break;
-            default:
                 break;
         }
     }
@@ -123,6 +134,19 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
                     getImageToView(data);
                 }
                 break;
+        }
+
+        if (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE) {
+
+            List<String> photos = null;
+            if (data != null) {
+                photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+            }
+            if (photos != null) {
+                String photo = photos.get(0);
+                ContentUtil.loadImage(mPersonImg, photo);
+                startPhotoZoom(Uri.fromFile(new File(photo)));
+            }
         }
     }
 
@@ -189,8 +213,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
+        intent.putExtra("outputX", 240);
+        intent.putExtra("outputY", 240);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, 2);
     }

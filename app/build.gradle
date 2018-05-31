@@ -67,11 +67,12 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:${supportVersion}"
     implementation 'com.squareup.okhttp3:okhttp:3.8.1'
     implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'jp.wasabeef:glide-transformations:2.0.0'
-    implementation 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    implementation "com.github.bumptech.glide:glide:${glideVersion}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
+    implementation "com.github.bumptech.glide:okhttp3-integration:${glideVersion}"
+    implementation 'jp.wasabeef:glide-transformations:2.0.2'
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation 'me.iwf.photopicker:PhotoPicker:0.9.0@aar'
+    implementation 'me.iwf.photopicker:PhotoPicker:0.9.12@aar'
     implementation 'id.zelory:compressor:2.1.0'
     implementation "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"

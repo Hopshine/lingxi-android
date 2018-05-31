@@ -1,4 +1,4 @@
-package me.cl.lingxi.common.view;
+package me.cl.lingxi.view.webview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

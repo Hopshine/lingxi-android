@@ -28,8 +28,6 @@ public class LxApplication extends Application {
 		// 一定要注册
 		SPUtil.newInstance().init(this);
 
-		// 为Glide加入okhttp支持
-		Glide.get(this).register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(new OkHttpClient()));
 	}
 
 	private void initRongCloud() {

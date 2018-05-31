@@ -172,8 +172,7 @@ public class FeedActivity extends BaseActivity {
         toUid = user.getId();
 
         //动态详情
-        String url = Constants.IMG_URL + user.getAvatar();
-        ContentUtil.setUserAvatar(mUserImg, url);
+        ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
         mUserName.setText(user.getUsername());
         mFeedTime.setText(feed.getCreateTime());
         mFeedInfo.setText(FeedContentUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));

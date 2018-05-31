@@ -1,4 +1,4 @@
-package me.cl.lingxi.webview;
+package me.cl.lingxi.view.webview;
 
 import android.media.MediaPlayer;
 import android.view.View;

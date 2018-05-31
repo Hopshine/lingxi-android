@@ -2,9 +2,16 @@ package me.cl.lingxi.common.util;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import me.cl.lingxi.R;
@@ -19,6 +26,10 @@ import me.cl.lingxi.module.member.LoginActivity;
  * version: 1.0
  */
 public class DialogUtil {
+
+    public interface onPositiveListener{
+        void onPositive(DialogInterface dialog, String value);
+    }
 
     /**
      * 退出登录
@@ -77,5 +88,37 @@ public class DialogUtil {
             }
         });
         dialog.show();
+    }
+
+    /**
+     * 单一编辑框DiaLog
+     * @param context 上下文
+     * @param titleId 标题
+     * @param inputType 输入类型 {@link android.text.InputType}
+     * @param str 已输入内容
+     * @param length 输入长度 {@code int}
+     * @param listener {@link onPositiveListener}
+     */
+    public static void editText(@NonNull Context context, int titleId, int inputType, String str, int length, @NonNull final onPositiveListener listener){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final EditText editText = new EditText(context);
+        editText.setInputType(inputType);
+        if(length > 0) {
+            editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(length)});
+        }
+        if (!TextUtils.isEmpty(str)) {
+            editText.setText(str);
+            editText.setSelection(str.length());
+        }
+        builder.setTitle(titleId);
+        builder.setView(editText);
+        builder.setNegativeButton(R.string.btn_negative, null);
+        builder.setPositiveButton(R.string.btn_positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                listener.onPositive(dialog, editText.getText().toString().trim());
+            }
+        });
+        builder.show();
     }
 }

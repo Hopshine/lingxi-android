@@ -18,7 +18,7 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.view.MoeToast;
+import me.cl.lingxi.view.MoeToast;
 import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.webview.WebActivity;

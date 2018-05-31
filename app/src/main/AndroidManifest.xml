@@ -96,9 +96,6 @@
         <!-- PhotoPicker end -->
 
         <meta-data
-            android:name="me.cl.lingxi.common.config.GlideModule"
-            android:value="GlideModule"/>
-        <meta-data
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz"/>
 

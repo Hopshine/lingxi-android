@@ -1,4 +1,4 @@
-package me.cl.lingxi.common.view;
+package me.cl.lingxi.view;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.ScrollView;
 
+/**
+ * 阻尼ScrollView
+ */
 public class JellyScrollView extends ScrollView {
 
     // 拖动的距离 size = 4 的意思 只允许拖动屏幕的1/4

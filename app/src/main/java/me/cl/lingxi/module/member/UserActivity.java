@@ -143,12 +143,12 @@ public class UserActivity extends BaseActivity {
 
     private void initUser(UserInfo userInfo) {
         boolean isRc = false;
-        String url = "";
+        String avatar = "";
         if (userInfo != null) {
             mUserId = userInfo.getId();
             uid = userInfo.getUid();
             mUsername = userInfo.getUsername();
-            url = Constants.IMG_URL + userInfo.getAvatar();
+            avatar = userInfo.getAvatar();
             if (!TextUtils.isEmpty(userInfo.getImToken())) {
                 isRc = true;
             }
@@ -163,8 +163,8 @@ public class UserActivity extends BaseActivity {
         if (!isRc) {
             mContact.setVisibility(View.GONE);
         }
-        ContentUtil.setUserAvatar(mTitleImg, url);
-        ContentUtil.setUserAvatar(mUserImg, url);
+        ContentUtil.loadUserAvatar(mTitleImg, avatar);
+        ContentUtil.loadUserAvatar(mUserImg, avatar);
         switchUserImage();
     }
 

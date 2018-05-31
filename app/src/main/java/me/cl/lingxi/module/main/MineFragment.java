@@ -126,12 +126,13 @@ public class MineFragment extends BaseFragment {
 
     private void initUser(UserInfo userInfo) {
         String username = getString(R.string.app_name);
-        String url = "";
+        String avatar = "";
         if (userInfo != null) {
             username = userInfo.getUsername();
+            avatar = userInfo.getAvatar();
         }
         mUserName.setText(username);
-        ContentUtil.setUserAvatar(mUserImg, url);
+        ContentUtil.loadUserAvatar(mUserImg, avatar);
     }
 
     @Override

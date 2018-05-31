@@ -20,11 +20,12 @@ allprojects {
 
 ext {
 
-    supportVersion = "26.1.0"
+    supportVersion = "27.1.1"
     butterknifeVersion = "8.4.0"
+    glideVersion = "4.1.1"
 
     android = [
-            compileSdkVersion: 26,
+            compileSdkVersion: 27,
             minSdkVersion    : 16,
             targetSdkVersion : 22
     ]

@@ -1,4 +1,4 @@
-package me.cl.lingxi.common.view.textview;
+package me.cl.lingxi.view.textview;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
