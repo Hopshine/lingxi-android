@@ -1,15 +1,23 @@
 package me.cl.lingxi.common.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
+import me.cl.lingxi.BuildConfig;
 
 /**
  * author : Bafs
@@ -19,6 +27,45 @@ import id.zelory.compressor.Compressor;
  * version: 1.0
  */
 public class ImageUtil {
+
+    private static final String TAG = "ImageUtil";
+
+    /**
+     * 调用系统图片裁剪
+     */
+    public static Intent callSystemCrop(Uri uri, String imagePath, int size) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // 添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        intent.setDataAndType(uri, "image/*");
+        // crop为true是设置在开启的intent中设置显示的view可以剪裁
+        intent.putExtra("crop", "true");
+
+        intent.putExtra("scale", true);
+
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        // outputX,outputY 是剪裁图片的宽高
+        intent.putExtra("outputX", size);
+        intent.putExtra("outputY", size);
+        intent.putExtra("return-data", false);
+        intent.putExtra("noFaceDetection", true);
+
+        // 解决return data只能返回小图的问题
+        File file = new File(imagePath);
+        if (!file.getParentFile().exists()) {
+            boolean mkdirs = file.getParentFile().mkdirs();
+            Log.d(TAG, "callSystemCrop: file mkdirs " + mkdirs);
+        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+
+        return intent;
+    }
 
     /**
      * 路径转图片文件
@@ -51,10 +98,8 @@ public class ImageUtil {
         List<String> newPaths = new ArrayList<>();
         if (filePaths == null || filePaths.size() == 0) return newPaths;
 
-        // 缓存目录
-        String dirPath = context.getCacheDir().getPath();
         // 缓存图片目录
-        String imagePath = dirPath + "/image/";
+        String imagePath = getImageCachePath(context);
         // 压缩分辨率阈值
         Integer thresholdXxh = 1080;
         Integer thresholdXh = 720;
@@ -95,12 +140,46 @@ public class ImageUtil {
     }
 
     /**
+     * 获取图片路径
+     */
+    public static String getImagePath(){
+        return getImageFilePath() + getImageName();
+    }
+
+    /**
+     * 获取图片缓存目录
+     */
+    private static String getImageCachePath(Context context){
+        return context.getCacheDir().getPath() + "/image/";
+    }
+
+    /**
+     * 获取图片存储卡目录
+     */
+    private static String getImageFilePath(){
+        return Environment.getExternalStorageDirectory() + "/Android/data/" + BuildConfig.APPLICATION_ID + "/image/";
+    }
+
+    /**
      * 获取文件类型
      */
     private static String getFileType(String filePath) {
         return filePath.substring(filePath.lastIndexOf("."), filePath.length());
     }
 
+    /**
+     * 获取临时图片文件名
+     */
+    private static String getImageName() {
+        return getUUID() + ".jpg";
+    }
+
+    /**
+     * 获取uuid
+     */
+    private static String getUUID() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
     // 预留，获取文件宽高
     private void getWH(String filePath){

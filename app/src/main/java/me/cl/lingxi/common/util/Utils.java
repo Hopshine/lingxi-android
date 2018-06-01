@@ -7,27 +7,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.RequestOptions;
-
-import java.io.File;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.cl.library.utils.ColorPhrase;
-import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.common.glide.GlideApp;
 import me.cl.lingxi.entity.Like;
 
 /**
@@ -155,22 +147,6 @@ public class Utils {
      */
     public static CharSequence colorFormat(String str) {
         return ColorPhrase.from(str).withSeparator("{}").innerColor(0xFF4FC1E9).outerColor(0xFF666666).format();
-    }
-
-    /**
-     * 设置头像
-     */
-    public static void setPersonImg(String uName, ImageView imgView) {
-        String pathName = Environment.getExternalStorageDirectory() + "/lingci/image/avatar/headportraits.png";
-        if (!new File(pathName).exists()) {
-            pathName = Constants.IMG_URL + "/image/avatar/at_" + MD5Util.MD5(uName) + ".jpg";
-        }
-        GlideApp.with(imgView.getContext())
-                .load(pathName)
-                .placeholder(R.drawable.img_user)
-                .error(R.drawable.img_user)
-                .apply(RequestOptions.circleCropTransform())
-                .into(imgView);
     }
 
     /**

@@ -34,6 +34,13 @@ public class ContentUtil {
      */
     public static void loadUserAvatar(ImageView imageView, String avatar) {
         String url = Constants.IMG_URL + avatar;
+        loadAvatar(imageView, url);
+    }
+
+    /**
+     * 设置头像，绝对路径
+     */
+    public static void loadAvatar(ImageView imageView, String url) {
         GlideApp.with(imageView.getContext())
                 .load(url)
                 .placeholder(R.drawable.img_user)
