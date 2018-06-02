@@ -15,10 +15,11 @@ public class UserInfo implements Serializable {
     private Integer uid;
     private String username;
     private String phone;
-    private Integer six;
+    private Integer sex;
     private String qq;
     private String avatar;
     private String imToken;
+    private String signature;
     private String loginTime;
     private String createTime;
     private String updateTime;
@@ -55,12 +56,12 @@ public class UserInfo implements Serializable {
         this.phone = phone;
     }
 
-    public Integer getSix() {
-        return six;
+    public Integer getSex() {
+        return sex;
     }
 
-    public void setSix(Integer six) {
-        this.six = six;
+    public void setSex(Integer sex) {
+        this.sex = sex;
     }
 
     public String getQq() {
@@ -85,6 +86,14 @@ public class UserInfo implements Serializable {
 
     public void setImToken(String imToken) {
         this.imToken = imToken;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public String getLoginTime() {
