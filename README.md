@@ -1,38 +1,48 @@
-# 关于灵悉  
+## 关于灵悉
 
 个人兴趣项目，此代码为app端代码  
 
 目前项目已能正常使用，包括融云token接入、头像上传等功能
 
-项目也一直在变，坚持全凭兴趣，服务端查看[灵悉-server](https://github.com/happycao/lingxi-server)
+项目一直在改变，坚持全凭兴趣，服务端查看[灵悉-server](https://github.com/happycao/lingxi-server)
 
 移除了okgo，因使用场景单一，只做了post请求封装，如有更多需求请选择更好的轮子  
 
-Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations版本3.0.1
+Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations版本3.0.1[new]
 
 调试请使用alpha版本，local版本为本人本地使用，online版本为发布打包版本
 
-体验请直接点击下载打包版本[点击下载测试版](http://47.100.245.128/download/lingxi-text.apk)
+体验请直接点击下载打包版本[点击下载测试版](http://47.100.245.128/download/lingxi-test.apk)
 
 如果不是用于测试，欢迎来正式版一起玩耍[点击下载正式版](http://47.100.245.128/download/lingxi.apk)
 
-## 灵悉简介  
+### 灵悉相关
 
 - 生无彩凤双飞翼，心有灵犀一点通  
 
 - 依托于社交群组，好友向社交圈，供用户吐槽交流  
 
-- 用户注册登陆  
+- [x] 用户注册登陆
 
-- 动态发布点赞评论  
+- [x] 解析网页以瀑布流展示番剧
 
-- 单聊聊天室  
+- [x] 网页视频播放支持全屏
 
-- app更新  
+- [x] 动态发布点赞评论
 
-- Toast彩蛋  
+- [x] 分享链接到灵悉
 
-- 个人信息修改(待办)  
+- [x] 单聊聊天室
+
+- [x] ~~app内更新~~现采用获取到更新前往浏览器更新的模式
+
+- [x] Toast彩蛋
+
+- [ ] 个人信息修改
+
+- [ ] 动态发布支持话题
+
+- [ ] 动态支持@用户
 
 
 ### 截图展示
