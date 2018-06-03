@@ -2,17 +2,19 @@
 
 个人兴趣项目，此代码为app端代码  
 
-目前项目处于重构中，包括融云token接入、头像上传等功能无法使用
+目前项目已能正常使用，包括融云token接入、头像上传等功能
 
 项目也一直在变，坚持全凭兴趣，服务端查看[灵悉-server](https://github.com/happycao/lingxi-server)
 
-调试请使用alpha版本，local版本为本人本地使用，online版本为发布打包版本  
-
 移除了okgo，因使用场景单一，只做了post请求封装，如有更多需求请选择更好的轮子  
 
-服务器已经迁移，之前的服务器将在六月来临之际关闭，请留意
+Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations版本3.0.1
 
-体验请直接点击下载打包版本[点我下载](http://47.100.245.128/download/lingxi.apk)
+调试请使用alpha版本，local版本为本人本地使用，online版本为发布打包版本
+
+体验请直接点击下载打包版本[点击下载测试版](http://47.100.245.128/download/lingxi-text.apk)
+
+如果不是用于测试，欢迎来正式版一起玩耍[点击下载正式版](http://47.100.245.128/download/lingxi.apk)
 
 ## 灵悉简介  
 
