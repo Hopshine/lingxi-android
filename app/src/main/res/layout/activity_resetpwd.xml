@@ -96,7 +96,7 @@
             android:layout_marginTop="15dp"
             android:background="#ff00ddff"
             android:onClick="goUpdatePwd"
-            android:text="@string/btn_modify"
+            android:text="@string/action_pwd_modify"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
     </LinearLayout>

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -29,30 +30,38 @@ import me.cl.lingxi.entity.Like;
 public class Utils {
 
     private static Toast toast;
+    private static Handler mHandler = new Handler(Looper.getMainLooper());
+
+    public static void showToast(final Context context, final String info) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                toastShow(context, info, Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+    public static void showToast(final Context context, final int infoId) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                toastShow(context, Resources.getSystem().getString(infoId), Toast.LENGTH_SHORT);
+            }
+        });
+    }
 
     @SuppressLint("ShowToast")
-    public static void toastShow(Context context, String info) {
+    private static void toastShow(Context context, String info, int duration) {
         if (toast == null) {
-            toast = Toast.makeText(context, info, Toast.LENGTH_SHORT);
+            toast = Toast.makeText(context, info, duration);
         } else {
             toast.setText(info);
         }
         toast.show();
     }
 
-    public static void toastShow(Context context, int infoId) {
-        toastShow(context, context.getResources().getString(infoId));
-    }
-
     public static int dp2px(float dpValue) {
         return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    private static final long loadTime = 1500;
-    private static long time;
-
-    public static void setTime() {
-        time = System.currentTimeMillis();
     }
 
     public static int getScreenWidth(Context context) {
@@ -60,37 +69,6 @@ public class Utils {
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.widthPixels;
-    }
-
-    public interface OnLoading {
-        void onLoading();
-    }
-
-    /**
-     * 加载延时
-     */
-    public static void loadingTime(final Handler handler, final OnLoading loading) {
-        time = System.currentTimeMillis() - time;
-        if (time < loadTime) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep((loadTime - time));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            loading.onLoading();
-                        }
-                    });
-                }
-            }).start();
-        } else {
-            loading.onLoading();
-        }
     }
 
     /**
@@ -153,14 +131,14 @@ public class Utils {
      * 获取Manifest中meta值
      */
     public static String getMetaValue(Context context, String metaKey) {
-        Bundle metaData = null;
-        String metaValue = null;
         if (context == null || TextUtils.isEmpty(metaKey)) {
             return null;
         }
+        String metaValue = null;
         try {
             ApplicationInfo app = context.getPackageManager().getApplicationInfo(
                     context.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle metaData = null;
             if (null != app) {
                 metaData = app.metaData;
             }

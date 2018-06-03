@@ -115,6 +115,8 @@ public class ImageUtil {
         // 设置宽高
         compressor.setMaxWidth(thresholdXh);
         compressor.setMaxHeight(thresholdXh);
+        // 图片格式
+        compressor.setCompressFormat(Bitmap.CompressFormat.JPEG);
         // 压缩文件
         for (String filePath : filePaths) {
             try {

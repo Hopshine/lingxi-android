@@ -54,7 +54,7 @@ public class WelcomeActivity extends BaseActivity {
             public void run() {
                 if (isLogin) {
                     if (TextUtils.isEmpty(rcToken)) {
-                        Utils.toastShow(WelcomeActivity.this, "登录过期，请重新登录");
+                        Utils.showToast(WelcomeActivity.this, "登录过期，请重新登录");
                         goLogin();
                     } else {
                         connectRc(rcToken);
@@ -136,28 +136,21 @@ public class WelcomeActivity extends BaseActivity {
 
     /**
      * 建立与融云服务器的连接
-     *
-     * @param token Token
      */
     private void connectRc(final String token) {
         if (getApplicationInfo().packageName.equals(LxApplication.getCurProcessName(getApplicationContext()))) {
-            /**
-             * IMKit SDK调用第二步,建立与服务器的连接
-             */
+
+            // IMKit SDK调用第二步,建立与服务器的连接
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
-                /**
-                 * Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的 Token
-                 */
+
+                // Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的 Token
                 @Override
                 public void onTokenIncorrect() {
                     Log.d("WelcomeActivity", "--onTokenIncorrect");
                     getUnRead();
                 }
 
-                /**
-                 * 连接融云成功
-                 * @param userid 当前 token
-                 */
+                // 连接融云成功
                 @Override
                 public void onSuccess(String userid) {
                     Log.d("WelcomeActivity", "--onSuccess" + userid);
@@ -172,10 +165,7 @@ public class WelcomeActivity extends BaseActivity {
                 }
 
 
-                /**
-                 * 连接融云失败
-                 * @param errorCode 错误码，可到官网 查看错误码对应的注释
-                 */
+                // 连接融云失败
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
                     Log.d("WelcomeActivity", "--onError" + errorCode);

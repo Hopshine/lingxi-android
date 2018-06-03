@@ -58,19 +58,19 @@ public class RegisterActivity extends BaseActivity {
         String uDoPwd = mDoPassword.getText().toString().trim();
         String uPhone = mPhone.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
-            Utils.toastShow(this, R.string.toast_reg_null);
+            Utils.showToast(this, R.string.toast_reg_null);
             return;
         }
         if (!uPwd.equals(uDoPwd)) {
-            Utils.toastShow(this, R.string.toast_again_error);
+            Utils.showToast(this, R.string.toast_again_error);
             return;
         }
         if (uPhone.length() != 11) {
-            Utils.toastShow(this, R.string.toast_phone_format_error);
+            Utils.showToast(this, R.string.toast_phone_format_error);
             return;
         }
         if (!isMobileNum(uPhone)) {
-            Utils.toastShow(this, R.string.toast_phone_format_error);
+            Utils.showToast(this, R.string.toast_phone_format_error);
             return;
         }
         postRegister(uName, uPwd, uPhone);
@@ -103,19 +103,19 @@ public class RegisterActivity extends BaseActivity {
                         String code = response.getCode();
                         switch (code) {
                             case "00000":
-                                Utils.toastShow(RegisterActivity.this, R.string.toast_reg_success);
+                                Utils.showToast(RegisterActivity.this, R.string.toast_reg_success);
                                 UserInfo user = response.getData();
                                 SPUtil.build().putString(Constants.USER_NAME, user.getUsername());
                                 onBackPressed();
                                 break;
                             case "00105":
-                                Utils.toastShow(RegisterActivity.this, R.string.toast_phone_being);
+                                Utils.showToast(RegisterActivity.this, R.string.toast_phone_being);
                                 break;
                             case "00106":
-                                Utils.toastShow(RegisterActivity.this, R.string.toast_username_being);
+                                Utils.showToast(RegisterActivity.this, R.string.toast_username_being);
                                 break;
                             default:
-                                Utils.toastShow(RegisterActivity.this, R.string.toast_reg_error);
+                                Utils.showToast(RegisterActivity.this, R.string.toast_reg_error);
                                 break;
                         }
                     }
@@ -123,13 +123,13 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         registerProgress.dismiss();
-                        Utils.toastShow(RegisterActivity.this, R.string.toast_reg_error);
+                        Utils.showToast(RegisterActivity.this, R.string.toast_reg_error);
                     }
 
                     @Override
                     public void onFinish() {
                         registerProgress.dismiss();
-                        Utils.toastShow(RegisterActivity.this, R.string.toast_reg_error);
+                        Utils.showToast(RegisterActivity.this, R.string.toast_reg_error);
                     }
                 });
     }

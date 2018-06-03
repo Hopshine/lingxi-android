@@ -77,7 +77,6 @@ public class RelevantActivity extends BaseActivity {
             }
         });
 
-        loadingProgress.show();
         getRelevantList();
         updateUnread();
     }
@@ -117,13 +116,14 @@ public class RelevantActivity extends BaseActivity {
                 .addParam("userId", saveId)
                 .addParam("pageNum", pageNum)
                 .addParam("pageSize", pageSize)
+                .setLoadDelay()
+                .setProgressDialog(loadingProgress)
                 .execute(new ResultCallback<Result<PageInfo<Relevant>>>() {
                     @Override
                     public void onSuccess(Result<PageInfo<Relevant>> response) {
-                        loadingProgress.dismiss();
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
+                            Utils.showToast(RelevantActivity.this, "加载失败，下拉重新加载");
                             return;
                         }
                         updateData(response.getData().getList());
@@ -131,14 +131,12 @@ public class RelevantActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        loadingProgress.dismiss();
-                        Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
+                        Utils.showToast(RelevantActivity.this, "加载失败，下拉重新加载");
                     }
 
                     @Override
                     public void onFinish() {
-                        loadingProgress.dismiss();
-                        Utils.toastShow(RelevantActivity.this, "加载失败，下拉重新加载");
+                        Utils.showToast(RelevantActivity.this, "加载失败，下拉重新加载");
                     }
                 });
     }
@@ -161,4 +159,9 @@ public class RelevantActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        OkUtil.newInstance().cancelAll();
+        super.onDestroy();
+    }
 }

@@ -106,7 +106,7 @@ public class PersonalInfoActivity extends BaseActivity {
                     @Override
                     public void onPositive(DialogInterface dialog, String value) {
                         if (!TextUtils.isEmpty(value) && value.length() > 4 && !saveName.equals(value)) {
-                            Utils.toastShow(PersonalInfoActivity.this, "暂不支持修改用户名");
+                            Utils.showToast(PersonalInfoActivity.this, "暂不支持修改用户名");
                             username = null;
                         }
                     }
@@ -298,20 +298,20 @@ public class PersonalInfoActivity extends BaseActivity {
      * 提示头像修改失败
      */
     private void showUserImageUpdateError() {
-        Utils.toastShow(this, "更新头像失败");
+        Utils.showToast(this, "更新头像失败");
     }
 
     /**
      * 提示用户信息更新失败
      */
     private void showUserUpdateSuccess() {
-        Utils.toastShow(this, "更新用户信息成功");
+        Utils.showToast(this, "更新用户信息成功");
     }
 
     /**
      * 提示用户信息更新失败
      */
     private void showUserUpdateError() {
-        Utils.toastShow(this, "更新用户信息失败");
+        Utils.showToast(this, "更新用户信息失败");
     }
 }

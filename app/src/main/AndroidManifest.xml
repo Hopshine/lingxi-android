@@ -59,7 +59,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.setting.PublicLicenseActivity"/>
-        <activity android:name=".module.member.UserActivity"/>
+        <activity android:name=".module.member.UserActivity"
+                  android:theme="@style/AppTheme.TransparentStatusBar"/>
         <activity android:name=".module.feed.PhotoActivity" />
 
         <!-- rong cloud start-->

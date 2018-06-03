@@ -1,6 +1,7 @@
 package me.cl.lingxi.common.okhttp;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
@@ -48,6 +49,7 @@ import okhttp3.ResponseBody;
 public class PostRequest {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final long LOAD_TIME = 1500;
 
     private String mUrl;
     private Gson mGson;
@@ -70,6 +72,12 @@ public class PostRequest {
     private boolean isJson;
     // json参数
     private String mJson;
+    // 是否加载延迟
+    private boolean isLoadDelay;
+    // 时间戳
+    private long timeStamp;
+    // 加载dialog
+    private ProgressDialog mProgressDialog;
 
     /**
      * 构造函数
@@ -173,6 +181,25 @@ public class PostRequest {
     }
 
     /**
+     * 设置加载延迟
+     */
+    public PostRequest setLoadDelay() {
+        this.isLoadDelay = true;
+        this.timeStamp = System.currentTimeMillis();
+        return this;
+    }
+
+    /**
+     * 设置加载动画
+     */
+    public PostRequest setProgressDialog(ProgressDialog progressDialog) {
+        if (progressDialog != null) {
+            this.mProgressDialog = progressDialog;
+        }
+        return this;
+    }
+
+    /**
      * header
      */
     private Headers getHeaders() {
@@ -249,6 +276,7 @@ public class PostRequest {
      * 异步请求
      */
     public void execute(@NonNull final ResultCallback callback) {
+        loadShow();
         mOkHttpClient.newCall(getRequest()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -273,39 +301,59 @@ public class PostRequest {
     }
 
     /**
+     * 异步请求，不设回调
+     */
+    public void execute() {
+        loadShow();
+        mOkHttpClient.newCall(getRequest()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
+            }
+        });
+    }
+
+    /**
      * 设置请求成功回调
      */
     private void setOnSuccess(final Reader reader, final ResultCallback callback) {
-        mDelivery.post(new Runnable() {
+        mDelivery.postDelayed(new Runnable() {
             @Override
             public void run() {
+                loadDismiss();
                 callback.onSuccess(mGson.fromJson(reader, callback.getType()));
             }
-        });
+        }, getLoadTime());
     }
 
     /**
      * 设置请求失败回调
      */
     private void setOnError(final Call call, final Exception e, final ResultCallback callback) {
-        mDelivery.post(new Runnable() {
+        mDelivery.postDelayed(new Runnable() {
             @Override
             public void run() {
+                loadDismiss();
                 callback.onError(call, e);
             }
-        });
+        }, getLoadTime());
     }
 
     /**
      * 设置请求取消回调
      */
     private void setOnFinish(final ResultCallback callback) {
-        mDelivery.post(new Runnable() {
+        mDelivery.postDelayed(new Runnable() {
             @Override
             public void run() {
+                loadDismiss();
                 callback.onFinish();
             }
-        });
+        }, getLoadTime());
     }
 
     /**
@@ -345,5 +393,36 @@ public class PostRequest {
             return MediaType.parse("application/octet-stream");
         }
         return MediaType.parse(contentType);
+    }
+
+    /**
+     * 获取加载时间
+     */
+    private long getLoadTime() {
+        if (isLoadDelay) {
+            timeStamp = System.currentTimeMillis() - timeStamp;
+            timeStamp = timeStamp > LOAD_TIME ? 0 : LOAD_TIME - timeStamp;
+        } else {
+            timeStamp = 0;
+        }
+        return timeStamp;
+    }
+
+    /**
+     * 展示加载动画
+     */
+    private void loadShow() {
+        if (mProgressDialog != null && !mProgressDialog.isShowing()) {
+            mProgressDialog.show();
+        }
+    }
+
+    /**
+     * 关闭加载动画
+     */
+    private void loadDismiss() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }

@@ -133,7 +133,7 @@ public class FeedActivity extends BaseActivity {
             public void onItemClick(View view, Comment comment) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        gotoUser(comment.getUser().getUsername());
+                        gotoUser(comment.getUser());
                         break;
                     case R.id.evaluate_body:
                         MSG_MODE = MSG_REPLY;
@@ -229,10 +229,10 @@ public class FeedActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_img:
-                gotoUser(feed.getUser().getUsername());
+                gotoUser(feed.getUser());
                 break;
             case R.id.feed_like_layout:
-                Utils.toastShow(this, "点赞");
+                Utils.showToast(this, "点赞");
                 break;
             case R.id.feed_comment_layout:
                 mEditTuCao.setHint("吐槽一下");
@@ -284,7 +284,7 @@ public class FeedActivity extends BaseActivity {
                 .execute(new ResultCallback<Result>() {
                     @Override
                     public void onSuccess(Result response) {
-                        Utils.toastShow(FeedActivity.this, "评论成功");
+                        Utils.showToast(FeedActivity.this, "评论成功");
                         mFeedCommentNum.setText(String.valueOf(Integer.valueOf(mFeedCommentNum.getText().toString()) + 1));
 
                         getEvaluateList(mFeedId);
@@ -292,12 +292,12 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.toastShow(FeedActivity.this, "评论失败");
+                        Utils.showToast(FeedActivity.this, "评论失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.toastShow(FeedActivity.this, "评论失败");
+                        Utils.showToast(FeedActivity.this, "评论失败");
                     }
                 });
     }
@@ -317,18 +317,18 @@ public class FeedActivity extends BaseActivity {
                 .execute(new ResultCallback<Result>() {
                     @Override
                     public void onSuccess(Result response) {
-                        Utils.toastShow(FeedActivity.this, "回复成功");
+                        Utils.showToast(FeedActivity.this, "回复成功");
                         getEvaluateList(mFeedId);
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.toastShow(FeedActivity.this, "回复失败");
+                        Utils.showToast(FeedActivity.this, "回复失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.toastShow(FeedActivity.this, "回复失败");
+                        Utils.showToast(FeedActivity.this, "回复失败");
                     }
                 });
     }
@@ -355,12 +355,12 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.toastShow(FeedActivity.this, R.string.toast_get_feed_error);
+                        Utils.showToast(FeedActivity.this, R.string.toast_get_feed_error);
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.toastShow(FeedActivity.this, R.string.toast_get_feed_error);
+                        Utils.showToast(FeedActivity.this, R.string.toast_get_feed_error);
                     }
                 });
     }
@@ -368,9 +368,11 @@ public class FeedActivity extends BaseActivity {
     /**
      * 前往用户界面
      */
-    private void gotoUser(String username) {
+    private void gotoUser(User user) {
         Intent intent = new Intent(this, UserActivity.class);
-        intent.putExtra(Constants.USER_NAME, username);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.USER_INFO, user);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

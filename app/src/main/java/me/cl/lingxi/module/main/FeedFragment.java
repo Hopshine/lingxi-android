@@ -34,6 +34,7 @@ import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.cl.lingxi.module.feed.PublishActivity;
 import me.cl.lingxi.module.member.UserActivity;
@@ -143,7 +144,7 @@ public class FeedFragment extends BaseFragment {
             public void onItemClick(View view, Feed feed, int position) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        goToUser(feed.getUser().getUsername());
+                        goToUser(feed.getUser());
                         break;
                     case R.id.feed_card:
                     case R.id.feed_comment_layout:
@@ -215,7 +216,7 @@ public class FeedFragment extends BaseFragment {
                     public void onSuccess(Result response) {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.toastShow(getActivity(), "点赞失败");
+                            Utils.showToast(getActivity(), "点赞失败");
                             return;
                         }
                         List<Like> likeList = new ArrayList<>(feed.getLikeList());
@@ -230,12 +231,12 @@ public class FeedFragment extends BaseFragment {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.toastShow(getActivity(), "点赞失败");
+                        Utils.showToast(getActivity(), "点赞失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.toastShow(getActivity(), "点赞失败");
+                        Utils.showToast(getActivity(), "点赞失败");
                     }
                 });
     }
@@ -256,7 +257,7 @@ public class FeedFragment extends BaseFragment {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
                             mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                            Utils.toastShow(getActivity(), R.string.toast_get_feed_error);
+                            Utils.showToast(getActivity(), R.string.toast_get_feed_error);
                             return;
                         }
                         PageInfo<Feed> page = response.getData();
@@ -281,14 +282,14 @@ public class FeedFragment extends BaseFragment {
                     public void onError(Call call, Exception e) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.toastShow(getActivity(), R.string.toast_get_feed_error);
+                        Utils.showToast(getActivity(), R.string.toast_get_feed_error);
                     }
 
                     @Override
                     public void onFinish() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.toastShow(getActivity(), R.string.toast_get_feed_error);
+                        Utils.showToast(getActivity(), R.string.toast_get_feed_error);
                     }
                 });
     }
@@ -320,9 +321,11 @@ public class FeedFragment extends BaseFragment {
     }
 
     // 前往用户页面
-    private void goToUser(String username){
+    private void goToUser(User user){
         Intent intent = new Intent(getActivity(), UserActivity.class);
-        intent.putExtra(Constants.USER_NAME, username);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.USER_INFO, user);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

@@ -14,7 +14,7 @@ import okhttp3.OkHttpClient;
  * author : Bafs
  * e-mail : bafs.jy@live.com
  * time   : 2018/04/29
- * desc   : ok http util
+ * desc   : okhttp util
  * version: 1.0
  */
 public class OkUtil {

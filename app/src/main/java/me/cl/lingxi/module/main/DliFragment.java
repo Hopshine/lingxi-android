@@ -148,7 +148,7 @@ public class DliFragment extends BaseFragment {
                         Elements emt = el.getElementsByTag("dl");
                         for (Element e : emt) {
                             Animation mAnimation = new Animation();
-                            String name = e.getElementsByTag("a").text();
+                            String name = e.getElementsByTag("h3").first().getElementsByTag("a").text();
                             String url = "http://m.dilidili.wang" + e.getElementsByTag("a").attr("href").trim();
                             String img = e.getElementsByTag("img").attr("src").trim();
                             mAnimation.setName(name);

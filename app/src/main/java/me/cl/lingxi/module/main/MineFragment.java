@@ -162,7 +162,7 @@ public class MineFragment extends BaseFragment {
             case R.id.mine_setting:
                 boolean isJoin = joinQQGroup("U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
                 if (!isJoin) {
-                    Utils.toastShow(getActivity(), "未安装手Q或安装的版本不支持");
+                    Utils.showToast(getActivity(), "未安装手Q或安装的版本不支持");
                 }
                 break;
             case R.id.mine_about:

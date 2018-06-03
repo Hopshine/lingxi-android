@@ -125,8 +125,8 @@ public class DialogUtil {
         }
         builder.setTitle(title);
         builder.setView(view);
-        builder.setNegativeButton(R.string.btn_negative, null);
-        builder.setPositiveButton(R.string.btn_positive, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.action_negative, null);
+        builder.setPositiveButton(R.string.action_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 listener.onPositive(dialog, textInputLayout.getEditText().getText().toString().trim());

@@ -103,7 +103,7 @@ public class PublishActivity extends BaseActivity {
     public void onClick() {
         mInfo = mMoodInfo.getText().toString().trim();
         if (TextUtils.isEmpty(mInfo)) {
-            Utils.toastShow(this, "好歹写点什么吧！");
+            Utils.showToast(this, "好歹写点什么吧！");
             return;
         }
         if (mPhotos.size() <= 1) {
@@ -133,6 +133,7 @@ public class PublishActivity extends BaseActivity {
     private void postUpload(List<String> photos) {
         removePhotoAdd(photos);
 
+        // 压缩图片
         photos = ImageUtil.compressorImage(this, photos);
 
         OkUtil.post()
@@ -142,8 +143,13 @@ public class PublishActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Result<List<String>> response) {
                         String code = response.getCode();
+                        if ("00100".equals(code)) {
+                            Utils.showToast(PublishActivity.this, response.getMsg());
+                            addPhotoAdd(mPhotos);
+                            return;
+                        }
                         if (!"00000".equals(code)) {
-                            Utils.toastShow(PublishActivity.this, "发布失败");
+                            Utils.showToast(PublishActivity.this, "图片上传失败");
                             addPhotoAdd(mPhotos);
                             return;
                         }
@@ -153,13 +159,13 @@ public class PublishActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.toastShow(PublishActivity.this, "发布失败");
+                        Utils.showToast(PublishActivity.this, "图片上传失败");
                         addPhotoAdd(mPhotos);
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.toastShow(PublishActivity.this, "发布失败");
+                        Utils.showToast(PublishActivity.this, "图片上传失败");
                         addPhotoAdd(mPhotos);
                     }
                 });
@@ -179,26 +185,26 @@ public class PublishActivity extends BaseActivity {
                         dismissLoading();
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.toastShow(PublishActivity.this, "发布失败");
+                            Utils.showToast(PublishActivity.this, "发布失败");
                             addPhotoAdd(mPhotos);
                             return;
                         }
                         mMoodInfo.setText(null);
-                        Utils.toastShow(PublishActivity.this, "发布成功");
+                        Utils.showToast(PublishActivity.this, "发布成功");
                         onBackPressed();
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
                         dismissLoading();
-                        Utils.toastShow(PublishActivity.this, "发布失败");
+                        Utils.showToast(PublishActivity.this, "发布失败");
                         addPhotoAdd(mPhotos);
                     }
 
                     @Override
                     public void onFinish() {
                         dismissLoading();
-                        Utils.toastShow(PublishActivity.this, "发布失败");
+                        Utils.showToast(PublishActivity.this, "发布失败");
                         addPhotoAdd(mPhotos);
                     }
                 });

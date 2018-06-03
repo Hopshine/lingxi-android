@@ -78,23 +78,23 @@ public class AboutActivity extends BaseActivity {
                         if ("00000".equals(code) && data != null) {
                             int versionCode = Utils.getAppVersionCode(AboutActivity.this);
                             if (versionCode >= data.getVersionCode()) {
-                                Utils.toastShow(AboutActivity.this, "已是最新版");
+                                Utils.showToast(AboutActivity.this, "已是最新版");
                             } else {
                                 showUpdate(data);
                             }
                         } else {
-                            Utils.toastShow(AboutActivity.this, "版本信息获取失败");
+                            Utils.showToast(AboutActivity.this, "版本信息获取失败");
                         }
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.toastShow(AboutActivity.this, "版本信息获取失败");
+                        Utils.showToast(AboutActivity.this, "版本信息获取失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.toastShow(AboutActivity.this, "版本信息获取失败");
+                        Utils.showToast(AboutActivity.this, "版本信息获取失败");
                     }
                 });
 

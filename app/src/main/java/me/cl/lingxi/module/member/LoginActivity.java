@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
             postLogin(username, password);
         } else {
-            Utils.toastShow(LoginActivity.this, R.string.toast_login_null);
+            Utils.showToast(LoginActivity.this, R.string.toast_login_null);
         }
     }
 
@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity {
                                 break;
                             default:
                                 loginProgress.dismiss();
-                                Utils.toastShow(LoginActivity.this, R.string.toast_pwd_error);
+                                Utils.showToast(LoginActivity.this, R.string.toast_pwd_error);
                                 break;
                         }
                     }
@@ -108,13 +108,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         loginProgress.dismiss();
-                        Utils.toastShow(LoginActivity.this, R.string.toast_login_error);
+                        Utils.showToast(LoginActivity.this, R.string.toast_login_error);
                     }
 
                     @Override
                     public void onFinish() {
                         loginProgress.dismiss();
-                        Utils.toastShow(LoginActivity.this, R.string.toast_login_error);
+                        Utils.showToast(LoginActivity.this, R.string.toast_login_error);
                     }
                 });
     }
@@ -151,7 +151,7 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onSuccess(String userid) {
                     Log.d(TAG, "--onSuccess" + userid);
-                    Utils.toastShow(LoginActivity.this, R.string.toast_login_success);
+                    Utils.showToast(LoginActivity.this, R.string.toast_login_success);
                     goHome();
                 }
 

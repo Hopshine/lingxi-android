@@ -87,7 +87,7 @@ public class FeedContentUtil {
                 NoLineClickableSpan myClickableSpan = new NoLineClickableSpan(textView.getContext()) {
                     @Override
                     public void onClick(View widget) {
-                        Intent intent = new Intent(textView.getContext(), UserActivity.class);
+                        Intent intent = new Intent(textView.getContext(),   UserActivity.class);
                         String username = at.substring(1);
                         intent.putExtra(Constants.USER_NAME, username);
                         textView.getContext().startActivity(intent);

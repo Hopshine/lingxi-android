@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_10"
             android:onClick="login"
-            android:text="@string/btn_login"/>
+            android:text="@string/action_login"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 android:layout_height="30dp"
                 android:background="@null"
                 android:onClick="updatePwd"
-                android:text="@string/btn_forget_pwd"
+                android:text="@string/action_forget_pwd"
                 android:textColor="@color/blue"/>
 
             <View
@@ -78,7 +78,7 @@
                 android:layout_height="30dp"
                 android:background="@null"
                 android:onClick="register"
-                android:text="@string/btn_register"
+                android:text="@string/action_register"
                 android:textColor="@color/blue"/>
         </LinearLayout>
     </LinearLayout>

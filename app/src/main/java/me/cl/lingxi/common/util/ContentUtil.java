@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.adapter.FeedPhotoAdapter;
@@ -67,6 +68,42 @@ public class ContentUtil {
         GlideApp.with(imageView.getContext())
                 .load(url)
                 .centerCrop()
+                .into(imageView);
+    }
+
+    /**
+     * 加载模糊图片，相对路径
+     */
+    public static void loadRelativeBlurImage(ImageView imageView, String url) {
+        url = Constants.IMG_URL + url;
+        loadBlurImage(imageView, url);
+    }
+
+    /**
+     * 加载模糊图片，相对路径，模糊度最大25
+     */
+    public static void loadRelativeBlurImage(ImageView imageView, String url, int radius) {
+        url = Constants.IMG_URL + url;
+        loadBlurImage(imageView, url, radius);
+    }
+
+    /**
+     * 加载模糊图片，绝对路径
+     */
+    public static void loadBlurImage(ImageView imageView, String url) {
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation()))
+                .into(imageView);
+    }
+
+    /**
+     * 加载模糊图片，绝对路径，模糊度最大25
+     */
+    public static void loadBlurImage(ImageView imageView, String url, int radius) {
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(radius)))
                 .into(imageView);
     }
 

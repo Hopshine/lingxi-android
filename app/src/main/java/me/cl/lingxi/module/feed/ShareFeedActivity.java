@@ -114,7 +114,7 @@ public class ShareFeedActivity extends BaseActivity {
                         dismissLoading();
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.toastShow(ShareFeedActivity.this, "发布失败");
+                            Utils.showToast(ShareFeedActivity.this, "发布失败");
                             return;
                         }
                         showSuccess();
@@ -123,13 +123,13 @@ public class ShareFeedActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         dismissLoading();
-                        Utils.toastShow(ShareFeedActivity.this, "发布失败");
+                        Utils.showToast(ShareFeedActivity.this, "发布失败");
                     }
 
                     @Override
                     public void onFinish() {
                         dismissLoading();
-                        Utils.toastShow(ShareFeedActivity.this, "发布失败");
+                        Utils.showToast(ShareFeedActivity.this, "发布失败");
                     }
                 });
     }
