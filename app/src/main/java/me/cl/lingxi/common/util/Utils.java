@@ -45,7 +45,7 @@ public class Utils {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                toastShow(context, Resources.getSystem().getString(infoId), Toast.LENGTH_SHORT);
+                toastShow(context, context.getResources().getString(infoId), Toast.LENGTH_SHORT);
             }
         });
     }

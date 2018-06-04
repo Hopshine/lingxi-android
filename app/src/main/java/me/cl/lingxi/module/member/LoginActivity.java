@@ -66,11 +66,11 @@ public class LoginActivity extends BaseActivity {
     public void login(View view) {
         String username = mUsername.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            postLogin(username, password);
-        } else {
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             Utils.showToast(LoginActivity.this, R.string.toast_login_null);
+            return;
         }
+        postLogin(username, password);
     }
 
     // 登录请求

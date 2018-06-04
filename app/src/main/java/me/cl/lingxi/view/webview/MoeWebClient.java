@@ -1,5 +1,7 @@
 package me.cl.lingxi.view.webview;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,8 +20,14 @@ public class MoeWebClient extends WebViewClient {
 
     private static final String TAG = "MoeWebClient";
 
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        if (url != null) view.loadUrl(url);
+    @Override
+    public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
+        if (url.startsWith("http")) {
+            view.loadUrl(url);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            view.getContext().startActivity(intent);
+        }
         return true;
     }
 
@@ -37,7 +45,6 @@ public class MoeWebClient extends WebViewClient {
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
         url = url.toLowerCase();
-//        Log.i(TAG, "shouldInterceptRequest: url = " + url);
         if (isAd(url)) {
             return new WebResourceResponse(null, null, null);
         } else {

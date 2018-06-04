@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -128,6 +129,18 @@ public class UserActivity extends BaseActivity {
         mRecyclerView.addItemDecoration(itemDecoration);
         mAdapter = new FeedAdapter(mFeedList);
         mRecyclerView.setAdapter(mAdapter);
+
+    }
+
+    private void setScroll() {
+        // 滑动冲突
+        mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                // 一定是 == ,不能是 <=
+                mSwipeRefreshLayout.setEnabled(mScrollView.getScrollY() == 0);
+            }
+        });
     }
 
     /**
@@ -259,26 +272,29 @@ public class UserActivity extends BaseActivity {
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 
             private int size = Utils.dp2px(56);
+            private int t = 0;
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 int h = appBarLayout.getTotalScrollRange();
                 int offset = Math.abs(verticalOffset);
-                Log.i(TAG, "onOffsetChanged: verticalOffset = " + offset + ":" + h);
+                if (h == offset) return;
+
+                mSwipeRefreshLayout.setEnabled(offset == 0);
 
                 int bbr = offset - 50 < 0 ? 0 : offset;
                 mButtonBar.setAlpha(1f * bbr / h);
                 int ui = offset * 2 > h ? h : offset;
                 float f = 1f - (1f * ui / h);
                 int after = (int) (size * f);
-//                mUserImg.setAlpha(1f - (1f * ui / h));
+
+                Log.i(TAG, "onOffsetChanged: verticalOffset：" + verticalOffset + "，offset：" + offset + "，h：" + h + ",size：" + size);
 
                 // 头像大小缩放
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mUserImg.getLayoutParams();
                 params.width = after;
                 params.height = after;
                 mUserImg.setLayoutParams(params);
-
             }
         });
     }

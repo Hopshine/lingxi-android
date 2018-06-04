@@ -1,5 +1,6 @@
 package me.cl.lingxi.module.main;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.UserInfo;
+import me.cl.lingxi.module.member.LoginActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
 import me.cl.lingxi.module.mine.RelevantActivity;
 import me.cl.lingxi.module.setting.AboutActivity;
@@ -62,6 +64,8 @@ public class MineFragment extends BaseFragment {
 
     private String mUserId;
     private OperateBroadcastReceiver receiver;
+
+    private Dialog mDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,29 +173,54 @@ public class MineFragment extends BaseFragment {
                 gotoAbout();
                 break;
             case R.id.mine_sign_out:
-                DialogUtil.signOut(getActivity());
+                mDialog = DialogUtil.signOut(getActivity(), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gotoLogin();
+                    }
+                });
+                mDialog.show();
                 break;
         }
     }
 
-    //前往信息修改
+    @Override
+    public void onPause() {
+        super.onPause();
+        // 解决Activity has leaked window that was originally added here
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    // 前往信息修改
     private void gotoPersonal() {
         Intent goPerson = new Intent(getActivity(), PersonalInfoActivity.class);
         startActivity(goPerson);
     }
 
-    //前往关于
+    // 前往关于
     private void gotoAbout() {
         Intent goAbout = new Intent(getActivity(), AboutActivity.class);
         startActivity(goAbout);
     }
 
-    //前往与我相关
+    // 前往与我相关
     private void gotoRelevant() {
         Intent goRelevant = new Intent(getActivity(), RelevantActivity.class);
         startActivity(goRelevant);
     }
 
+    // 前往登录
+    private void gotoLogin() {
+        MainActivity activity = (MainActivity) getActivity();
+        SPUtil.build().putBoolean(Constants.BEEN_LOGIN, false);
+        Intent intent = new Intent(activity, LoginActivity.class);
+        startActivity(intent);
+        if (activity != null) {
+            activity.finish();
+        }
+    }
 
     /**
      * 发起添加群流程。群号：大龄儿童二次元同好群(468620613) 的 key 为： U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9

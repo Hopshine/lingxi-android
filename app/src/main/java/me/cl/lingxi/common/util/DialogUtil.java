@@ -1,10 +1,8 @@
 package me.cl.lingxi.common.util;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -18,8 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
-import me.cl.lingxi.module.member.LoginActivity;
 
 /**
  * author : Bafs
@@ -37,9 +33,9 @@ public class DialogUtil {
     /**
      * 退出登录
      */
-    public static void signOut(final Activity activity) {
+    public static Dialog signOut(final Context context, View.OnClickListener listener) {
         String content = "", certain = "", cancel = "";
-        final Dialog dialog = new Dialog(activity, R.style.AppTheme_Dialog);
+        final Dialog dialog = new Dialog(context, R.style.AppTheme_Dialog);
         dialog.setContentView(R.layout.dialog_prompt);
         TextView promptInfo = dialog.findViewById(R.id.prompt_info);
         Button promptOk = dialog.findViewById(R.id.prompt_ok);
@@ -72,17 +68,8 @@ public class DialogUtil {
         }
         promptInfo.setText(content);
         promptOk.setText(certain);
+        promptOk.setOnClickListener(listener);
         promptCancel.setText(cancel);
-        promptOk.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                SPUtil.build().putBoolean(Constants.BEEN_LOGIN, false);
-                Intent intent = new Intent(activity, LoginActivity.class);
-                activity.startActivity(intent);
-                activity.finish();
-            }
-        });
         promptCancel.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -90,7 +77,7 @@ public class DialogUtil {
                 dialog.dismiss();
             }
         });
-        dialog.show();
+        return dialog;
     }
 
     /**
@@ -103,7 +90,7 @@ public class DialogUtil {
      * @param listener {@link onPositiveListener}
      */
     public static void editText(@NonNull Context context, int titleId, int inputType, String str, int length, @NonNull final onPositiveListener listener){
-        editText(context, Resources.getSystem().getString(titleId), inputType, str, length, listener);
+        editText(context, context.getResources().getString(titleId), inputType, str, length, listener);
 
     }
 
