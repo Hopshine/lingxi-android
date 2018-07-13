@@ -52,9 +52,10 @@ public class DliFragment extends BaseFragment {
     SwipeRefreshLayout mSwipeRefresh;
 
     private String baseAnimateUrl = "http://www.dilidili.wang/anime/";
-    private String[] selectAnimate = {"201804", "201801", "201710", "201707", "201704", "201701"};
+    private String[] selectAnimate = {"201807", "201804", "201801", "201710", "201707", "201704", "201701"};
     private String animateUrl = baseAnimateUrl + selectAnimate[0];
     private int mSelect = 0;
+    private boolean refresh = false;
     private ListPopupWindow mPopupWindow;
 
     private DliAnimationAdapter mAdapter;
@@ -72,8 +73,9 @@ public class DliFragment extends BaseFragment {
         setupToolbar(mToolbar, "番剧", 0, null);
         initAnimateSelect();
         initRecyclerView();
-        if (SPUtil.build().getBoolean(Constants.ANIMATE_CACHE)) {
+        if (SPUtil.build().getBoolean(Constants.ANIMATE_CACHE) && !refresh) {
             mAdapter.setData(getData());
+            Log.d(TAG, "initAnimateSelect: " + refresh);
         } else {
             analysisDli();
         }
@@ -90,6 +92,13 @@ public class DliFragment extends BaseFragment {
 
     private void initAnimateSelect() {
         mSelect = SPUtil.build().getInt(Constants.ANIMATE_SELECT, 0);
+        String quarter = SPUtil.build().getString(Constants.ANIMATE_QUARTER, "197001");
+        // 此次用于添加了新季度番,刷新本地缓存
+        if (!quarter.equals(selectAnimate[mSelect])) {
+            mSelect = 0;
+            refresh = true;
+            SPUtil.build().putString(Constants.ANIMATE_QUARTER, selectAnimate[mSelect]);
+        }
         mAnimateSelect.setText(selectAnimate[mSelect]);
         mPopupWindow = new ListPopupWindow(getActivity());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, selectAnimate);

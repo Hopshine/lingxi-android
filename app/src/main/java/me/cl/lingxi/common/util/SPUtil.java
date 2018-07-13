@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+/**
+ * SharedPreferences 工具类
+ * 需要在Application中注册{@link me.cl.lingxi.module.LxApplication}
+ */
 public class SPUtil {
 
     private SharedPreferences mSp;

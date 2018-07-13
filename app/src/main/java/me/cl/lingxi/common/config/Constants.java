@@ -1,9 +1,5 @@
 package me.cl.lingxi.common.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.rong.imlib.model.UserInfo;
 import me.cl.lingxi.BuildConfig;
 
 /**
@@ -18,18 +14,14 @@ public class Constants {
     public static final String UNREAD_NUM = "unread_num";
     public static final String USER_INFO = "user_info";
 
-    public static List<UserInfo> userList = new ArrayList<>();
-    public static List<String> uidList = new ArrayList<>();
-
     // 本地缓存key
     public static final String ANIMATE_JSON = "animate_json";
     public static final String ANIMATE_CACHE = "animate_cache";
     public static final String ANIMATE_SELECT = "animate_select";
+    public static final String ANIMATE_QUARTER = "animate_quarter";
     public static final String USER_ID = "user_id";
     public static final String USER_NAME = "user_name";
     public static final String BEEN_LOGIN = "been_login";
-    public static final String RC_USER = "rc_user";
-    public static final String RC_TOKEN = "rc_token";
     public static final String UPDATE_FLAG = "update_flag";
 
     // 页面标识

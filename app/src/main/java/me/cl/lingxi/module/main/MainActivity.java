@@ -24,8 +24,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.rong.imkit.RongIM;
-import io.rong.imlib.model.UserInfo;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.utils.BottomNavigationViewHelper;
 import me.cl.lingxi.R;
@@ -35,18 +33,17 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.view.MoeToast;
 import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.view.MoeToast;
 import okhttp3.Call;
 
-public class MainActivity extends BaseActivity implements RongIM.UserInfoProvider {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigation;
 
     private FragmentManager mFragmentManager;
-    private HomeFragment mHomeFragment;
     private DliFragment mDliFragment;
     private FeedFragment mFeedFragment;
     private MessageFragment mMessageFragment;
@@ -66,9 +63,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
     }
 
     private void init() {
-        RongIM.setUserInfoProvider(this, true);
-        RongIM.getInstance().setMessageAttachedUserInfo(true);
-
         initFragment();
         initBottomNavigation();
 
@@ -81,7 +75,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
 
     private void initFragment() {
         mFragmentManager = getSupportFragmentManager();
-        mHomeFragment = new HomeFragment();
         mDliFragment = new DliFragment();
         mFeedFragment = FeedFragment.newInstance("home");
         mMessageFragment = new MessageFragment();
@@ -211,15 +204,6 @@ public class MainActivity extends BaseActivity implements RongIM.UserInfoProvide
         super.onDestroy();
     }
 
-    @Override
-    public UserInfo getUserInfo(String s) {
-        for (UserInfo userInfo : Constants.userList) {
-            if (userInfo.getUserId().equals(s)) {
-                return userInfo;
-            }
-        }
-        return null;
-    }
 
     // 是否提示更新
     private boolean isCheckUpdate() {

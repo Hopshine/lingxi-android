@@ -24,7 +24,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.rong.imkit.RongIM;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
@@ -303,8 +302,7 @@ public class UserActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.contact:
-                if (RongIM.getInstance() != null)
-                    RongIM.getInstance().startPrivateChat(this, String.valueOf(uid), mUsername);
+                Utils.showToast(this, "紧张开发中");
                 break;
         }
     }
