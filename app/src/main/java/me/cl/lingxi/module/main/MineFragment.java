@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -87,6 +86,10 @@ public class MineFragment extends BaseFragment {
     }
 
 
+    /**
+     * 广播接收者
+     * 用于更新用户信息
+     */
     private final class OperateBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -162,12 +165,13 @@ public class MineFragment extends BaseFragment {
                 gotoPersonal();
                 break;
             case R.id.mine_reply:
+                gotoRelevant(Constants.REPLY_MINE);
                 break;
             case R.id.mine_relevant:
-                gotoRelevant();
+                gotoRelevant(Constants.REPLY_RELEVANT);
                 break;
             case R.id.mine_setting:
-                boolean isJoin = joinQQGroup("U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
+                boolean isJoin = Utils.joinQQGroup(getContext(),"U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
                 if (!isJoin) {
                     Utils.showToast(getActivity(), "未安装手Q或安装的版本不支持");
                 }
@@ -209,8 +213,9 @@ public class MineFragment extends BaseFragment {
     }
 
     // 前往与我相关
-    private void gotoRelevant() {
+    private void gotoRelevant(String type) {
         Intent goRelevant = new Intent(getActivity(), RelevantActivity.class);
+        goRelevant.putExtra(Constants.REPLY_TYPE, type);
         startActivity(goRelevant);
     }
 
@@ -225,24 +230,4 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 发起添加群流程。群号：大龄儿童二次元同好群(468620613) 的 key 为： U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9
-     * 调用 joinQQGroup(U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9) 即可发起手Q客户端申请加群 大龄儿童二次元同好群(468620613)
-     *
-     * @param key 由官网生成的key
-     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
-     */
-    private boolean joinQQGroup(String key) {
-        Intent intent = new Intent();
-        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
-        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
-        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        try {
-            startActivity(intent);
-            return true;
-        } catch (Exception e) {
-            // 未安装手Q或安装的版本不支持
-            return false;
-        }
-    }
 }

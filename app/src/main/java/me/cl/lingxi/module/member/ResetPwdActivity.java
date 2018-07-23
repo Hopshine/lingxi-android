@@ -19,6 +19,9 @@ import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.UserInfo;
 import okhttp3.Call;
 
+/**
+ * 忘记密码重置
+ */
 public class ResetPwdActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)

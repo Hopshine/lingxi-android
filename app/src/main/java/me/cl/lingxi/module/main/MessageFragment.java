@@ -20,7 +20,7 @@ public class MessageFragment extends Fragment{
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
-    private String[] tabNamArray = {"留言", "好友"};
+    private String[] tabNamArray = {"飞鸽传书", "留言"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,8 +44,9 @@ public class MessageFragment extends Fragment{
     }
 
     private void addFragment(ViewPagerAdapter mPagerAdapter) {
-        HomeFragment newsFragment = HomeFragment.newInstance("留言功能准备当中");
-        HomeFragment friendsFragment = HomeFragment.newInstance("好友功能也准备当中");
+        HomeFragment newsFragment = HomeFragment.newInstance("飞鸽传书功能准备当中\n" +
+                "有好的建议可点击下方按钮↓");
+        HomeFragment friendsFragment = HomeFragment.newInstance("留言功能也准备当中");
         mPagerAdapter.addFragment(newsFragment, tabNamArray[0]);
         mPagerAdapter.addFragment(friendsFragment, tabNamArray[1]);
     }

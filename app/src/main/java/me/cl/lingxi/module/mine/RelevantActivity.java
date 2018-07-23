@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -51,12 +52,35 @@ public class RelevantActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "与我相关", true, 0, null);
-        saveId = SPUtil.build().getString(Constants.USER_ID);
         int x = (int) (Math.random() * 4) + 1;
         if (x == 1) {
             MoeToast.makeText(this, "你能找到这个秘密吗？");
         }
+
+        Intent intent = getIntent();
+        String replyType = intent.getStringExtra(Constants.REPLY_TYPE);
+        if (TextUtils.isEmpty(replyType)) {
+            onBackPressed();
+            return;
+        }
+
+        boolean isMine = false;
+        String title = "";
+        switch (replyType) {
+            case Constants.REPLY_MINE:
+                title = "我的回复";
+                isMine = true;
+                break;
+            case Constants.REPLY_RELEVANT:
+                title = "与我相关";
+                break;
+            default:
+                onBackPressed();
+                break;
+        }
+
+        setupToolbar(mToolbar, title, true, 0, null);
+        saveId = SPUtil.build().getString(Constants.USER_ID);
         loadingProgress = new LoadingDialog(this, "正在加载...");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -77,8 +101,12 @@ public class RelevantActivity extends BaseActivity {
             }
         });
 
-        getRelevantList();
-        updateUnread();
+        if (isMine) {
+            getRelevantList(Api.mineReply);
+        } else {
+            getRelevantList(Api.relevant);
+            updateUnread();
+        }
     }
 
     /**
@@ -108,11 +136,11 @@ public class RelevantActivity extends BaseActivity {
     }
 
     // 请求与我相关
-    public void getRelevantList() {
+    public void getRelevantList(String url) {
         Integer pageNum = 1;
         Integer pageSize = 20;
         OkUtil.post()
-                .url(Api.relevant)
+                .url(url)
                 .addParam("userId", saveId)
                 .addParam("pageNum", pageNum)
                 .addParam("pageSize", pageSize)

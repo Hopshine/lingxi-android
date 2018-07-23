@@ -13,6 +13,9 @@ public class Constants {
 
     public static final String UNREAD_NUM = "unread_num";
     public static final String USER_INFO = "user_info";
+    public static final String REPLY_TYPE = "reply_type";
+    public static final String REPLY_MINE = "reply_mine";
+    public static final String REPLY_RELEVANT = "reply_relevant";
 
     // 本地缓存key
     public static final String ANIMATE_JSON = "animate_json";

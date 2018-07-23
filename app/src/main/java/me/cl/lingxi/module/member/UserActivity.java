@@ -47,6 +47,9 @@ import me.cl.lingxi.module.feed.FeedActivity;
 import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
 
+/**
+ * 用户界面
+ */
 public class UserActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)

@@ -1,16 +1,19 @@
 package me.cl.lingxi.module.main;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import me.cl.library.base.BaseFragment;
 import me.cl.lingxi.R;
+import me.cl.lingxi.common.util.Utils;
 
 public class HomeFragment extends BaseFragment {
 
@@ -18,8 +21,17 @@ public class HomeFragment extends BaseFragment {
     Toolbar mToolbar;
     @BindView(R.id.msg)
     TextView mMsg;
+    @BindView(R.id.send)
+    Button mSend;
 
     private static final String NEWS_TYPE = "news_type";
+    private boolean flag = false;
+    private int tag = 0;
+    private static final String mF = "飞鸽传书功能准备当中\n" +
+            "可以想想，在这个即时通讯的年代\n" +
+            "你的消息需要时间才能传递\n" +
+            "更有被劫的可能\n" +
+            "那被打劫了该怎么办呢？";
 
     private String mNewsType;
 
@@ -54,7 +66,35 @@ public class HomeFragment extends BaseFragment {
 
     private void init() {
         mToolbar.setVisibility(View.GONE);
+        if (mNewsType.contains("飞鸽传书")) {
+            flag = true;
+            mSend.setVisibility(View.VISIBLE);
+        } else {
+            mSend.setVisibility(View.GONE);
+        }
         mMsg.setText(mNewsType);
     }
 
+    @OnClick({R.id.msg, R.id.send})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.msg:
+                if (flag) {
+                    tag++;
+                    if (tag == 7) {
+                        tag = 0;
+                        mMsg.setText(mF);
+                    } else {
+                        mMsg.setText(mNewsType);
+                    }
+                }
+                break;
+            case R.id.send:
+                boolean isWpa = Utils.wpaQQ(getActivity(), "986417980");
+                if (!isWpa) {
+                    Utils.showToast(getActivity(), "未安装手Q或安装的版本不支持");
+                }
+                break;
+        }
+    }
 }

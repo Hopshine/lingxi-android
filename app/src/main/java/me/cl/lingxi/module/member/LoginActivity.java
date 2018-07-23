@@ -25,6 +25,9 @@ import me.cl.lingxi.module.main.MainActivity;
 import me.cl.lingxi.view.MoeToast;
 import okhttp3.Call;
 
+/**
+ * 用户登录
+ */
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
@@ -137,6 +140,7 @@ public class LoginActivity extends BaseActivity {
             loginProgress.dismiss();
         }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra(Constants.UNREAD_NUM, 0);
         startActivity(intent);
         finish();
     }

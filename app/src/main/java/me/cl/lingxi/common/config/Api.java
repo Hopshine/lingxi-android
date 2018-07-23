@@ -58,7 +58,7 @@ public class Api {
     /**
      * 我的回复
      */
-    public static String mineReply = baseUrl + "/mine/reply";
+    public static String mineReply = baseUrl + "/feed/mine/reply";
     /**
      * 新增动态操作,如点赞
      */

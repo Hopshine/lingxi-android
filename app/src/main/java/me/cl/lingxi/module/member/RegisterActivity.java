@@ -24,6 +24,9 @@ import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.UserInfo;
 import okhttp3.Call;
 
+/**
+ * 用户注册
+ */
 public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)

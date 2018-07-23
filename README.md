@@ -1,14 +1,16 @@
 ## 关于灵悉
 
-个人兴趣项目，此代码为app端代码  
+个人兴趣项目，此代码为app端代码
 
-目前项目已能正常使用，包括融云token接入、头像上传等功能
+此版本正式移除了融云即时通讯，需要包含融云单聊版本的访问[v_im分支](https://github.com/happycao/lingxi-android/tree/v_im)
+
+当前版本包含番剧展示，用户注册登录，修改头像，动态发布，评论回复，查看我的回复、与我相关等
 
 项目一直在改变，坚持全凭兴趣，服务端查看[灵悉-server](https://github.com/happycao/lingxi-server)
 
 移除了okgo，因使用场景单一，只做了post请求封装，如有更多需求请选择更好的轮子  
 
-Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations版本3.0.1[new]
+Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations版本3.0.1
 
 调试请使用alpha版本，local版本为本人本地使用，online版本为发布打包版本
 
@@ -32,8 +34,6 @@ Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations�
 
 - [x] 分享链接到灵悉
 
-- [x] 单聊聊天室
-
 - [x] ~~app内更新~~现采用获取到更新前往浏览器更新的模式
 
 - [x] Toast彩蛋
@@ -50,7 +50,6 @@ Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations�
 ![登录页](screenshot/Screenshot_login.jpg)
 ![主页](screenshot/Screenshot_home.jpg)
 ![动态页](screenshot/Screenshot_feed.jpg)
-![消息页](screenshot/Screenshot_message.jpg)
 ![我的页](screenshot/Screenshot_mine.jpg)
 ![发布页](screenshot/Screenshot_publish.jpg)
 ![用户页](screenshot/Screenshot_user.jpg)

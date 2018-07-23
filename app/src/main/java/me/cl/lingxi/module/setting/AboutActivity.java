@@ -51,11 +51,17 @@ public class AboutActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.app_update, R.id.public_license, R.id.learn_more})
+    @OnClick({R.id.app_update, R.id.feedback, R.id.public_license, R.id.learn_more})
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.app_update:
                 getAppVersion();
+                break;
+            case R.id.feedback:
+                boolean isWpa = Utils.wpaQQ(this, "986417980");
+                if (!isWpa) {
+                    Utils.showToast(this, "未安装手Q或安装的版本不支持");
+                }
                 break;
             case R.id.public_license:
                 gotoPublicLicense();
