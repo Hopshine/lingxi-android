@@ -33,16 +33,15 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.FeedContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Reply;
-import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.member.UserActivity;
 import okhttp3.Call;
@@ -105,7 +104,7 @@ public class FeedActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
+        setContentView(R.layout.feed_activity);
         ButterKnife.bind(this);
         init();
     }
@@ -115,7 +114,7 @@ public class FeedActivity extends BaseActivity {
 
         saveId = SPUtil.build().getString(Constants.USER_ID);
 
-        //输入状态模式默认为评论
+        // 输入状态模式默认为评论
         MSG_MODE = MSG_EVALUATE;
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mEditTuCao.addTextChangedListener(new EditTextWatcher());
@@ -123,6 +122,11 @@ public class FeedActivity extends BaseActivity {
         mBtnPublish.setClickable(false);
         mBtnPublish.setSelected(false);
 
+        initRecyclerView();
+        initView();
+    }
+
+    private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new EvaluateAdapter(this, new ArrayList<Comment>());
@@ -156,8 +160,6 @@ public class FeedActivity extends BaseActivity {
                 mEditMask.setVisibility(View.VISIBLE);
             }
         });
-
-        initView();
     }
 
     private void initView() {
@@ -171,33 +173,20 @@ public class FeedActivity extends BaseActivity {
         User user = feed.getUser();
         toUid = user.getId();
 
-        //动态详情
+        // 动态详情
         ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
         mUserName.setText(user.getUsername());
         mFeedTime.setText(feed.getCreateTime());
         mFeedInfo.setText(FeedContentUtil.getFeedText(feed.getFeedInfo(), mFeedInfo));
-        //查看评论点赞数
+        // 查看评论点赞数
         mFeedSeeNum.setText(String.valueOf(feed.getViewNum()));
         mFeedCommentNum.setText(String.valueOf(feed.getCommentNum()));
-        //是否已经点赞
+        // 是否已经点赞
         mFeedLikeIcon.setSelected(feed.isLike());
         mFeedLikeLayout.setClickable(feed.isLike());
-        //点赞列表
+        // 点赞列表
         List<Like> likeList = feed.getLikeList();
-        Integer likeNum = likeList == null ? 0 : likeList.size();
-        switch (likeNum) {
-            case 0:
-                mFeedLikeNum.setText("赞");
-                mLikeWindow.setVisibility(View.GONE);
-                break;
-            default:
-                String likeStr = Utils.getLongLikeStr(likeList);
-                mFeedLikeNum.setText(String.valueOf(likeNum));
-                mLikeWindow.setVisibility(View.VISIBLE);
-                likeStr = likeStr + "觉得很赞";
-                mLikePeople.setText(Utils.colorFormat(likeStr));
-                break;
-        }
+        ContentUtil.setLikePeopleAll(mLikePeople, mFeedLikeNum, mLikeWindow, likeList);
 
         postViewFeed();
         getEvaluateList(feed.getId());
@@ -207,24 +196,12 @@ public class FeedActivity extends BaseActivity {
         OkUtil.post()
                 .url(Api.viewFeed)
                 .addParam("id", mFeedId)
-                .execute(new ResultCallback<Result>() {
-                    @Override
-                    public void onSuccess(Result response) {
-
-                    }
-
-                    @Override
-                    public void onError(Call call, Exception e) {
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-
-                    }
-                });
+                .execute();
     }
 
+    /**
+     * 点击事件
+     */
     @OnClick({R.id.user_img, R.id.feed_like_layout, R.id.feed_comment_layout, R.id.edit_mask, R.id.edit_tu_cao, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -232,7 +209,7 @@ public class FeedActivity extends BaseActivity {
                 gotoUser(feed.getUser());
                 break;
             case R.id.feed_like_layout:
-                Utils.showToast(this, "点赞");
+                showToast("点赞");
                 break;
             case R.id.feed_comment_layout:
                 mEditTuCao.setHint("吐槽一下");
@@ -284,7 +261,7 @@ public class FeedActivity extends BaseActivity {
                 .execute(new ResultCallback<Result>() {
                     @Override
                     public void onSuccess(Result response) {
-                        Utils.showToast(FeedActivity.this, "评论成功");
+                        showToast("评论成功");
                         mFeedCommentNum.setText(String.valueOf(Integer.valueOf(mFeedCommentNum.getText().toString()) + 1));
 
                         getEvaluateList(mFeedId);
@@ -292,12 +269,12 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(FeedActivity.this, "评论失败");
+                        showToast("评论失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(FeedActivity.this, "评论失败");
+                        showToast("评论失败");
                     }
                 });
     }
@@ -317,18 +294,18 @@ public class FeedActivity extends BaseActivity {
                 .execute(new ResultCallback<Result>() {
                     @Override
                     public void onSuccess(Result response) {
-                        Utils.showToast(FeedActivity.this, "回复成功");
+                        showToast("回复成功");
                         getEvaluateList(mFeedId);
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(FeedActivity.this, "回复失败");
+                        showToast("回复失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(FeedActivity.this, "回复失败");
+                        showToast("回复失败");
                     }
                 });
     }
@@ -355,12 +332,12 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(FeedActivity.this, R.string.toast_get_feed_error);
+                        showToast( R.string.toast_get_feed_error);
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(FeedActivity.this, R.string.toast_get_feed_error);
+                        showToast( R.string.toast_get_feed_error);
                     }
                 });
     }

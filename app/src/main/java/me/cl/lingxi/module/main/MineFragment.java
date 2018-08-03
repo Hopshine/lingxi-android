@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +28,11 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
-import me.cl.lingxi.common.util.DialogUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.dialog.LogoutDialog;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.member.LoginActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
@@ -71,7 +75,7 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mine, container, false);
+        View view = inflater.inflate(R.layout.mine_fragment, container, false);
         ButterKnife.bind(this, view);
         init(view);
         initReceiver();
@@ -180,15 +184,45 @@ public class MineFragment extends BaseFragment {
                 gotoAbout();
                 break;
             case R.id.mine_sign_out:
-                mDialog = DialogUtil.signOut(getActivity(), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gotoLogin();
-                    }
-                });
-                mDialog.show();
+//                mDialog = DialogUtil.signOut(getActivity(), new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        gotoLogin();
+//                    }
+//                });
+//                mDialog.show();
+
+                showLogoutDialog();
                 break;
         }
+    }
+
+    /**
+     * 展示登出Dialog
+     */
+    private void showLogoutDialog() {
+        String tag = "logout";
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        // 清除已经存在的，同样的fragment
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+        if (fragment != null) {
+            transaction.remove(fragment);
+        }
+        transaction.addToBackStack(null);
+        // 展示dialog
+        LogoutDialog logoutDialog = LogoutDialog.newInstance();
+        logoutDialog.show(transaction, tag);
+        logoutDialog.setLogoutListener(new LogoutDialog.LogoutListener() {
+            @Override
+            public void onLogout() {
+                gotoLogin();
+            }
+        });
     }
 
     @Override

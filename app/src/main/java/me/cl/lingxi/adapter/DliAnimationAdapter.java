@@ -20,6 +20,9 @@ import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Animation;
 import me.cl.lingxi.entity.DliAnimation;
 
+/**
+ * 嘀哩嘀哩动画番剧
+ */
 public class DliAnimationAdapter extends RecyclerView.Adapter<DliAnimationAdapter.ViewHolder> {
 
     private List<Animation> mAnimationList = new ArrayList<>();
@@ -45,7 +48,7 @@ public class DliAnimationAdapter extends RecyclerView.Adapter<DliAnimationAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(this.mInflater.inflate(R.layout.item_dili, parent, false));
+        return new ViewHolder(this.mInflater.inflate(R.layout.dili_recycle_item, parent, false));
     }
 
     @Override

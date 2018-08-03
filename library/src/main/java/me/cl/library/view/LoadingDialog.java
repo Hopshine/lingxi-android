@@ -18,7 +18,6 @@ import me.cl.library.R;
  * desc   : 加载动画
  * version: 1.0
  */
-
 public class LoadingDialog extends ProgressDialog {
 
     private Context mContext;
@@ -33,7 +32,7 @@ public class LoadingDialog extends ProgressDialog {
     }
 
     public LoadingDialog(Context context, CharSequence tip) {
-        this(context, R.style.Lib_Dialog, tip, R.drawable.frame_loading);
+        this(context, R.style.Lib_Dialog, tip, R.drawable.loading_frame);
     }
 
     public LoadingDialog(Context context, @StyleRes int theme, CharSequence tip, int id) {

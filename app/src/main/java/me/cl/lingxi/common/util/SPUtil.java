@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * SharedPreferences 工具类
- * 需要在Application中注册{@link me.cl.lingxi.module.LxApplication}
+ * 需要在Application中注册{@link me.cl.lingxi.module.LxApplication#onCreate()}
  */
 public class SPUtil {
 

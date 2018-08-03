@@ -43,7 +43,7 @@ public class PublicLicenseAdapter extends RecyclerView.Adapter<PublicLicenseAdap
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_public_license, null);
+        View view = View.inflate(parent.getContext(), R.layout.public_license_recycle_item, null);
         return new ViewHolder(view);
     }
 

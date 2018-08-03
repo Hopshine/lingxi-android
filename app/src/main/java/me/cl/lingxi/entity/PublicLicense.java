@@ -9,7 +9,6 @@ import java.io.Serializable;
  * desc   : 开源相关
  * version: 1.0
  */
-
 public class PublicLicense implements Serializable{
 
     private String name;

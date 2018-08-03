@@ -25,17 +25,17 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
-import me.cl.library.utils.BottomNavigationViewHelper;
+import me.cl.library.util.BottomNavigationViewHelper;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
+import me.cl.lingxi.common.result.ResultConstant;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.AppVersion;
-import me.cl.lingxi.entity.Result;
-import me.cl.lingxi.view.MoeToast;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity {
@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mian_activity);
         ButterKnife.bind(this);
         init();
     }
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity {
         Integer num = intent.getIntExtra(Constants.UNREAD_NUM, 0);
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigation.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(3);
-        View badge = LayoutInflater.from(this).inflate(R.layout.menu_badge, menuView, false);
+        View badge = LayoutInflater.from(this).inflate(R.layout.main_menu_badge, menuView, false);
         itemView.addView(badge);
         badgeView = badge.findViewById(R.id.tv_msg_count);
         if (num > 0) {
@@ -173,19 +173,20 @@ public class MainActivity extends BaseActivity {
         transaction.commitAllowingStateLoss();
     }
 
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
-                MoeToast.makeText(this, "(ಥ _ ಥ)你难道要再按一次离开我么");
+                showMoeToast("(ಥ _ ಥ)你难道要再按一次离开我么");
                 mExitTime = System.currentTimeMillis();
             } else {
                 int x = (int) (Math.random() * 10) + 1;
                 if ("MM".equals(mExit)) {
                     if (x == 10) {
-                        MoeToast.makeText(this, "恭喜你找到隐藏的偶，Game over!");
+                        showMoeToast("恭喜你找到隐藏的偶，Game over!");
                         finish();
                     } else {
-                        MoeToast.makeText(this, "你果然想要离开我(＠￣ー￣＠)");
+                        showMoeToast("你果然想要离开我(＠￣ー￣＠)");
                     }
                     mExitTime = System.currentTimeMillis();
                     mExit = "mm";
@@ -229,7 +230,7 @@ public class MainActivity extends BaseActivity {
                     public void onSuccess(Result<AppVersion> response) {
                         String code = response.getCode();
                         AppVersion data = response.getData();
-                        if ("00000".equals(code) && data != null) {
+                        if (ResultConstant.CODE_SUCCESS.equals(code) && data != null) {
                             int versionCode = Utils.getAppVersionCode(MainActivity.this);
                             if (versionCode < data.getVersionCode()) {
                                 showUpdate(data);

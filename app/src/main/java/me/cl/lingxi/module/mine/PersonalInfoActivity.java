@@ -1,12 +1,10 @@
 package me.cl.lingxi.module.mine;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,19 +19,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
+import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
-import me.cl.lingxi.common.util.DialogUtil;
 import me.cl.lingxi.common.util.ImageUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.dialog.EditTextDialog;
 import me.cl.lingxi.entity.UserInfo;
-import me.cl.lingxi.view.MoeToast;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
@@ -70,18 +68,18 @@ public class PersonalInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_info);
+        setContentView(R.layout.personal_info_activity);
         ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        setupToolbar(mToolbar, "个人信息", true, 0, null);
-        loadingProgress = new LoadingDialog(this, "修改头像中...");
+        setupToolbar(mToolbar, R.string.title_activity_personal_info, true, 0, null);
+        loadingProgress = new LoadingDialog(this, R.string.dialog_update_avatar);
 
         int x = (int) (Math.random() * 5) + 1;
         if (x == 1) {
-            MoeToast.makeText(this, "是谁，是谁在那里？");
+            MoeToast.makeText(this, R.string.egg_who_is_there);
         }
 
         mUserId = SPUtil.build().getString(Constants.USER_ID);
@@ -102,9 +100,11 @@ public class PersonalInfoActivity extends BaseActivity {
                         .start(PersonalInfoActivity.this, PhotoPicker.REQUEST_CODE);
                 break;
             case R.id.person_name:
-                DialogUtil.editText(PersonalInfoActivity.this, "修改用户名", InputType.TYPE_CLASS_TEXT, saveName, 24, new DialogUtil.onPositiveListener() {
+                EditTextDialog editTextDialog = EditTextDialog.newInstance("修改用户名", saveName, 24);
+                editTextDialog.show(getSupportFragmentManager(), "edit");
+                editTextDialog.setPositiveListener(new EditTextDialog.PositiveListener() {
                     @Override
-                    public void onPositive(DialogInterface dialog, String value) {
+                    public void Positive(String value) {
                         if (!TextUtils.isEmpty(value) && value.length() > 4 && !saveName.equals(value)) {
                             Utils.showToast(PersonalInfoActivity.this, "暂不支持修改用户名");
                             username = null;
@@ -298,20 +298,20 @@ public class PersonalInfoActivity extends BaseActivity {
      * 提示头像修改失败
      */
     private void showUserImageUpdateError() {
-        Utils.showToast(this, "更新头像失败");
+        showToast("更新头像失败");
     }
 
     /**
      * 提示用户信息更新失败
      */
     private void showUserUpdateSuccess() {
-        Utils.showToast(this, "更新用户信息成功");
+        showToast("更新用户信息成功");
     }
 
     /**
      * 提示用户信息更新失败
      */
     private void showUserUpdateError() {
-        Utils.showToast(this, "更新用户信息失败");
+        showToast("更新用户信息失败");
     }
 }

@@ -63,7 +63,7 @@ public class DliFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dili, container, false);
+        View rootView = inflater.inflate(R.layout.dili_fragment, container, false);
         ButterKnife.bind(this, rootView);
         init();
         return rootView;
@@ -101,7 +101,7 @@ public class DliFragment extends BaseFragment {
         }
         mAnimateSelect.setText(selectAnimate[mSelect]);
         mPopupWindow = new ListPopupWindow(getActivity());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, selectAnimate);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dili_spinner_item, selectAnimate);
         mPopupWindow.setAdapter(adapter);
         mPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);

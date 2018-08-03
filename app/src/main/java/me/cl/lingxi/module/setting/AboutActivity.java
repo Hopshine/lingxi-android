@@ -17,10 +17,11 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.ResultConstant;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.view.MoeToast;
+import me.cl.library.view.MoeToast;
 import me.cl.lingxi.entity.AppVersion;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.module.webview.WebActivity;
 import okhttp3.Call;
 
@@ -34,7 +35,7 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.about_activity);
         ButterKnife.bind(this);
         init();
     }
@@ -60,7 +61,7 @@ public class AboutActivity extends BaseActivity {
             case R.id.feedback:
                 boolean isWpa = Utils.wpaQQ(this, "986417980");
                 if (!isWpa) {
-                    Utils.showToast(this, "未安装手Q或安装的版本不支持");
+                    showToast("未安装手Q或安装的版本不支持");
                 }
                 break;
             case R.id.public_license:
@@ -81,15 +82,15 @@ public class AboutActivity extends BaseActivity {
                     public void onSuccess(Result<AppVersion> response) {
                         String code = response.getCode();
                         AppVersion data = response.getData();
-                        if ("00000".equals(code) && data != null) {
+                        if (ResultConstant.CODE_SUCCESS.equals(code) && data != null) {
                             int versionCode = Utils.getAppVersionCode(AboutActivity.this);
                             if (versionCode >= data.getVersionCode()) {
-                                Utils.showToast(AboutActivity.this, "已是最新版");
+                                showToast( "已是最新版");
                             } else {
                                 showUpdate(data);
                             }
                         } else {
-                            Utils.showToast(AboutActivity.this, "版本信息获取失败");
+                            showToast("版本信息获取失败");
                         }
                     }
 

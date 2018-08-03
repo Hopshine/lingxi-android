@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 
 import me.cl.library.R;
+import me.cl.library.util.ToastUtil;
+import me.cl.library.view.MoeToast;
 
 public class BaseFragment extends Fragment {
 
@@ -19,7 +21,7 @@ public class BaseFragment extends Fragment {
      * @param listener Menu监听
      */
     public void setupToolbar(@NonNull Toolbar toolbar, @StringRes int titleId, int menuId, Toolbar.OnMenuItemClickListener listener) {
-        setupToolbar(toolbar, getActivity().getString(titleId), menuId, listener);
+        setupToolbar(toolbar, getString(titleId), menuId, listener);
     }
 
     /**
@@ -37,4 +39,21 @@ public class BaseFragment extends Fragment {
             toolbar.setOnMenuItemClickListener(listener);
         }
     }
+
+    public void showToast(@StringRes int msgId) {
+        ToastUtil.showToast(getContext(), msgId);
+    }
+
+    public void showToast(String msg) {
+        ToastUtil.showToast(getContext(), msg);
+    }
+
+    public void showMoeToast(@StringRes int msgId) {
+        MoeToast.makeText(getContext(), msgId);
+    }
+
+    public void showMoeToast(String msg) {
+        MoeToast.makeText(getContext(), msg);
+    }
+
 }

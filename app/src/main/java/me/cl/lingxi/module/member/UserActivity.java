@@ -36,11 +36,11 @@ import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.widget.ItemAnimator;
-import me.cl.lingxi.common.widget.ItemDecoration;
+import me.cl.library.recycle.ItemAnimator;
+import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.feed.FeedActivity;
@@ -96,7 +96,7 @@ public class UserActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.user_activity);
         ButterKnife.bind(this);
         init();
     }

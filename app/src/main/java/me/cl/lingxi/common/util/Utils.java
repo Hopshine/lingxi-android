@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.cl.library.utils.ColorPhrase;
+import me.cl.library.util.ColorPhrase;
 import me.cl.lingxi.entity.Like;
 
 /**
@@ -177,12 +177,13 @@ public class Utils {
         }
     }
 
+    // qq临时会话，仅用于开通了qq推广的用户
     public static boolean wpaQQ(Context context, String key) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=" + key));
-        try {
+        if (context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null){
             context.startActivity(intent);
             return true;
-        } catch (Exception e) {
+        } else {
             // 未安装手Q或安装的版本不支持
             return false;
         }
@@ -200,10 +201,10 @@ public class Utils {
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
         // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
         // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        try {
+        if (context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null){
             context.startActivity(intent);
             return true;
-        } catch (Exception e) {
+        } else {
             // 未安装手Q或安装的版本不支持
             return false;
         }

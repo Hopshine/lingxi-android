@@ -19,10 +19,10 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.main.MainActivity;
-import me.cl.lingxi.view.MoeToast;
+import me.cl.library.view.MoeToast;
 import okhttp3.Call;
 
 /**
@@ -45,7 +45,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login_activity);
         ButterKnife.bind(this);
         init();
     }

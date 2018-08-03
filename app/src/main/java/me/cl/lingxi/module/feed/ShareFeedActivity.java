@@ -21,11 +21,10 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.FeedContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.entity.Result;
 import me.cl.lingxi.module.main.MainActivity;
 import okhttp3.Call;
 
@@ -46,7 +45,7 @@ public class ShareFeedActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish);
+        setContentView(R.layout.publish_activity);
         ButterKnife.bind(this);
         init();
     }
@@ -114,7 +113,7 @@ public class ShareFeedActivity extends BaseActivity {
                         dismissLoading();
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.showToast(ShareFeedActivity.this, "发布失败");
+                            showToast("发布失败");
                             return;
                         }
                         showSuccess();
@@ -123,13 +122,13 @@ public class ShareFeedActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         dismissLoading();
-                        Utils.showToast(ShareFeedActivity.this, "发布失败");
+                        showToast("发布失败");
                     }
 
                     @Override
                     public void onFinish() {
                         dismissLoading();
-                        Utils.showToast(ShareFeedActivity.this, "发布失败");
+                        showToast("发布失败");
                     }
                 });
     }

@@ -152,6 +152,27 @@ public class ContentUtil {
     }
 
     /**
+     * 设置喜欢面板-所有
+     */
+    public static void setLikePeopleAll(TextView likePeople, TextView likeNum, LinearLayout likeWindow, List<Like> likeList) {
+        int num = likeList == null ? 0 : likeList.size();
+        likeNum.setText(String.valueOf(num));
+        switch (num) {
+            case 0:
+                likeNum.setText("赞");
+                likeWindow.setVisibility(View.GONE);
+                break;
+            default:
+                String likeStr = Utils.getLongLikeStr(likeList);
+                likeNum.setText(String.valueOf(likeNum));
+                likeWindow.setVisibility(View.VISIBLE);
+                likeStr = likeStr + "觉得很赞";
+                likePeople.setText(Utils.colorFormat(likeStr));
+                break;
+        }
+    }
+
+    /**
      * 设置动态图片适配器
      */
     public static void setFeedPhotoAdapter(RecyclerView recyclerView, final List<String> photos, final FeedAdapter.OnItemListener mOnItemListener) {

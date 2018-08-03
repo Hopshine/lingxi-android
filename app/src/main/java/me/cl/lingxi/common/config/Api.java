@@ -9,7 +9,7 @@ import me.cl.lingxi.BuildConfig;
 public class Api {
 
     // 版本设置由gradle接管，通过flavor控制多版本
-    public static String baseUrl = BuildConfig.ApiUrl;
+    private static String baseUrl = BuildConfig.ApiUrl;
 
     /**
      * 用户注册

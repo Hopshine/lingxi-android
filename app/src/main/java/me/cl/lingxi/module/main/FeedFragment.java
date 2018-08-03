@@ -28,12 +28,12 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.common.widget.ItemAnimator;
-import me.cl.lingxi.common.widget.ItemDecoration;
+import me.cl.library.recycle.ItemAnimator;
+import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.PageInfo;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.cl.lingxi.module.feed.PublishActivity;
@@ -89,7 +89,7 @@ public class FeedFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        View view = inflater.inflate(R.layout.feed_fragment, container, false);
         ButterKnife.bind(this, view);
         init();
         return view;

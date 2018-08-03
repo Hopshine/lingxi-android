@@ -9,7 +9,6 @@ import android.support.design.widget.AppBarLayout;
  * desc   :
  * version: 1.0
  */
-
 public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
 
     public enum State {

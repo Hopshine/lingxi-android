@@ -2,6 +2,9 @@ package me.cl.lingxi.entity;
 
 import java.io.Serializable;
 
+/**
+ * 动画番剧
+ */
 public class Animation implements Serializable {
 
     private String name;

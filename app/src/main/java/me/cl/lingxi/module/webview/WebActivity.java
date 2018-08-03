@@ -21,6 +21,11 @@ import me.cl.lingxi.view.webview.MoeWebView;
 import me.cl.lingxi.view.webview.MoeChromeClient;
 import me.cl.lingxi.view.webview.MoeWebClient;
 
+/**
+ * WebActivity
+ * 设置独立的web进程，与主进程隔开
+ * {@code <activity android:name=".webview.WebViewActivity" android:launchMode="singleTop" android:process=":remote" android:screenOrientation="unspecified" />}
+ */
 public class WebActivity extends BaseActivity {
 
     private static final String TAG = "WebActivity";
@@ -41,7 +46,7 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
+        setContentView(R.layout.web_activity);
         ButterKnife.bind(this);
         init();
     }
@@ -177,29 +182,25 @@ public class WebActivity extends BaseActivity {
     protected void onDestroy() {
         clearWebView();
         super.onDestroy();
+        // 因为独立的web进程，与主进程隔开，在关闭WebActivity时销毁进程
+        System.exit(0);
     }
 
     private void pauseWebView() {
-        if (mWebView != null) {
-            mWebView.onPause();
-            mWebView.pauseTimers();
-        }
+        mWebView.onPause();
+        mWebView.pauseTimers();
     }
 
     private void resumeWebView() {
-        if (mWebView != null) {
-            mWebView.resumeTimers();
-            mWebView.onResume();
-        }
+        mWebView.resumeTimers();
+        mWebView.onResume();
     }
 
     private void clearWebView() {
-        if (mWebView != null) {
-            mWebView.clearHistory();
-            mWebView.clearCache(true);
-            mWebView.loadUrl("about:blank");
-            mWebView.pauseTimers();
-        }
+        mWebView.clearHistory();
+        mWebView.clearCache(true);
+        mWebView.loadUrl("about:blank");
+        mWebView.pauseTimers();
     }
 
     @Override

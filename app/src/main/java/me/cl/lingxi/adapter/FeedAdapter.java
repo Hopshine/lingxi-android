@@ -66,7 +66,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View loadView = View.inflate(parent.getContext(), R.layout.lib_load_more, null);
             return mLoadMoreViewHolder = new LoadMoreViewHolder(loadView);
         } else {
-            View feedView = View.inflate(parent.getContext(), R.layout.item_feed_detail, null);
+            View feedView = View.inflate(parent.getContext(), R.layout.feed_detail_recycle_item, null);
             return new MoodViewHolder(feedView);
         }
     }

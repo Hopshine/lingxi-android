@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".module.welcome.WelcomeActivity"
+            android:name=".module.splash.SplashActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -35,11 +35,16 @@
         <activity android:name=".module.mine.RelevantActivity"/>
         <activity android:name=".module.setting.AboutActivity"/>
         <activity android:name=".module.feed.FeedActivity"/>
+
+        <!-- 独立的web进程 -->
         <activity
             android:name=".module.webview.WebActivity"
             android:label="@string/open_the_app"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:process=":remote"
+            android:screenOrientation="unspecified">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.SEND" />

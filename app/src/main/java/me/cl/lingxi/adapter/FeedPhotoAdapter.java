@@ -42,7 +42,7 @@ public class FeedPhotoAdapter extends RecyclerView.Adapter<FeedPhotoAdapter.Phot
 
     @Override
     public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_publish_photo, null);
+        View view = View.inflate(parent.getContext(), R.layout.publish_photo_recycle_item, null);
         return new PhotoViewHolder(view);
     }
 

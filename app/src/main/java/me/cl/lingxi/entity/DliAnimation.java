@@ -3,6 +3,9 @@ package me.cl.lingxi.entity;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 嘀哩嘀哩动画
+ */
 public class DliAnimation implements Serializable {
 
     private String category;

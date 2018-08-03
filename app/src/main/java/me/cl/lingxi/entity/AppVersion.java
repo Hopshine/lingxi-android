@@ -2,6 +2,9 @@ package me.cl.lingxi.entity;
 
 import java.io.Serializable;
 
+/**
+ * App版本
+ */
 public class AppVersion implements Serializable {
 
     private String versionName;

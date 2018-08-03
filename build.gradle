@@ -22,6 +22,7 @@ ext {
 
     supportVersion = "27.1.1"
     butterknifeVersion = "8.4.0"
+    okhttpVersion = "3.8.1"
     glideVersion = "4.1.1"
 
     android = [

@@ -31,7 +31,7 @@ public class PublicLicenseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_public_license);
+        setContentView(R.layout.public_license_activity);
         ButterKnife.bind(this);
         init();
     }

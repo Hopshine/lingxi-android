@@ -20,7 +20,7 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.UserInfo;
 import okhttp3.Call;
 
@@ -45,7 +45,7 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registe);
+        setContentView(R.layout.registe_activity);
         ButterKnife.bind(this);
         init();
     }

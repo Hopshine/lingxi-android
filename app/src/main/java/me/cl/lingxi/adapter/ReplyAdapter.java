@@ -40,7 +40,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
 
     @Override
     public ReplyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_reply, null);
+        View view = View.inflate(parent.getContext(), R.layout.feed_reply_recycle_item, null);
         return new ReplyViewHolder(view);
     }
 

@@ -8,7 +8,7 @@
     <string name="app_name_alpha">灵悉测试</string>
     <string name="app_name_local">灵悉本地</string>
     <string name="app_desc">心有灵犀一点通</string>
-    <string name="app_placeholder">占位字符</string>
+    <string name="app_placeholder">占位符</string>
     <string name="action_settings">设置</string>
     <string name="share_text">分享到灵悉</string>
     <string name="open_the_app">用灵悉打开</string>
@@ -69,6 +69,7 @@
     <string name="dialog_loading_reg">正在注册&#8230;</string>
     <string name="dialog_loading_reset_wd">正在重置密码&#8230;</string>
     <string name="dialog_loading_more">正在加载更更多&#8230;</string>
+    <string name="dialog_update_avatar">修改头像中&#8230;</string>
 
     <!-- Toast String -->
     <string name="toast_login_null">请输入完整的登陆信息</string>
@@ -90,6 +91,8 @@
     <string name="toast_get_feed_error">获取动态失败</string>
     <string name="toast_again_exit">(ಥ _ ಥ)你难道要再按一次离开我么</string>
 
-    <!-- painted eggshell -->
+    <!-- Easter eggs -->
+    <string name="egg_end">然而一切都指向大结局！</string>
+    <string name="egg_who_is_there">是谁，是谁在那里？</string>
 
 </resources>

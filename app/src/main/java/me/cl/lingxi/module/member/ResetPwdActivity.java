@@ -15,7 +15,7 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.util.Utils;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.UserInfo;
 import okhttp3.Call;
 
@@ -40,7 +40,7 @@ public class ResetPwdActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resetpwd);
+        setContentView(R.layout.resetpwd_activity);
         ButterKnife.bind(this);
         init();
     }

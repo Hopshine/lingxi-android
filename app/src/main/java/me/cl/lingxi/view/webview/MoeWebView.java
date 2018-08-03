@@ -13,7 +13,6 @@ import me.cl.lingxi.BuildConfig;
  * WebView
  * Created by bafsj on 2016-12-28.
  */
-
 public class MoeWebView extends WebView {
 
     public MoeWebView(Context context) {

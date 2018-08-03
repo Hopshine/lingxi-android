@@ -48,7 +48,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
 
     @Override
     public RelevantViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_relevant, null);
+        View view = View.inflate(parent.getContext(), R.layout.relevant_recycle_item, null);
         return new RelevantViewHolder(view);
     }
 

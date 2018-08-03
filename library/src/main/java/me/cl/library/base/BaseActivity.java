@@ -7,7 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import me.cl.library.R;
+import me.cl.library.util.ToastUtil;
 import me.cl.library.view.LoadingDialog;
+import me.cl.library.view.MoeToast;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -39,7 +41,7 @@ public class BaseActivity extends AppCompatActivity {
         if (mLoading == null) return;
         if (mLoading.isShowing()) mLoading.dismiss();
     }
-    //加载动画结束
+    // 加载动画结束
 
     /**
      * setupToolbar
@@ -77,5 +79,21 @@ public class BaseActivity extends AppCompatActivity {
             toolbar.inflateMenu(menuId);
             toolbar.setOnMenuItemClickListener(listener);
         }
+    }
+
+    public void showToast(@StringRes int msgId) {
+        ToastUtil.showToast(this, msgId);
+    }
+
+    public void showToast(String msg) {
+        ToastUtil.showToast(this, msg);
+    }
+
+    public void showMoeToast(@StringRes int msgId) {
+        MoeToast.makeText(this, msgId);
+    }
+
+    public void showMoeToast(String msg) {
+        MoeToast.makeText(this, msg);
     }
 }

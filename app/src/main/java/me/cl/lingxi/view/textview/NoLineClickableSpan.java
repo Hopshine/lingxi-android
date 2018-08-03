@@ -34,6 +34,4 @@ public class NoLineClickableSpan extends ClickableSpan {
         // 去掉超链接下划线
         ds.setUnderlineText(false);
     }
-
-
 }

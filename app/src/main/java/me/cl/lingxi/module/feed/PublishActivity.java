@@ -26,7 +26,7 @@ import me.cl.lingxi.common.util.ImageUtil;
 import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.entity.Result;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.module.main.MainActivity;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
@@ -52,7 +52,7 @@ public class PublishActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_publish);
+        setContentView(R.layout.publish_activity);
         ButterKnife.bind(this);
         init();
     }

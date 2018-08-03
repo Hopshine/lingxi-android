@@ -66,7 +66,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             View view = View.inflate(parent.getContext(), R.layout.lib_load_more, null);
             return new LoadMoreViewHolder(view);
         } else {
-            View view = View.inflate(parent.getContext(), R.layout.item_evaluate, null);
+            View view = View.inflate(parent.getContext(), R.layout.feed_evaluate_recycle_item, null);
             return new EvaluateViewHolder(view);
         }
     }
