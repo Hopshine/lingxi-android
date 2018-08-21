@@ -12,17 +12,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
+import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
-import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.result.Result;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.main.MainActivity;
-import me.cl.library.view.MoeToast;
 import okhttp3.Call;
 
 /**
@@ -66,7 +65,7 @@ public class LoginActivity extends BaseActivity {
         String username = mUsername.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            Utils.showToast(LoginActivity.this, R.string.toast_login_null);
+            showToast(R.string.toast_login_null);
             return;
         }
         postLogin(username, password);
@@ -93,7 +92,7 @@ public class LoginActivity extends BaseActivity {
                                 break;
                             default:
                                 loginProgress.dismiss();
-                                Utils.showToast(LoginActivity.this, R.string.toast_pwd_error);
+                                showToast(R.string.toast_pwd_error);
                                 break;
                         }
                     }
@@ -101,13 +100,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         loginProgress.dismiss();
-                        Utils.showToast(LoginActivity.this, R.string.toast_login_error);
+                        showToast(R.string.toast_login_error);
                     }
 
                     @Override
                     public void onFinish() {
                         loginProgress.dismiss();
-                        Utils.showToast(LoginActivity.this, R.string.toast_login_error);
+                        showToast(R.string.toast_login_error);
                     }
                 });
     }

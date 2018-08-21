@@ -1,11 +1,11 @@
 package me.cl.lingxi.module.main;
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -71,10 +71,8 @@ public class MineFragment extends BaseFragment {
     private String mUserId;
     private OperateBroadcastReceiver receiver;
 
-    private Dialog mDialog;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mine_fragment, container, false);
         ButterKnife.bind(this, view);
         init(view);
@@ -85,7 +83,7 @@ public class MineFragment extends BaseFragment {
     private void init(View view) {
         setupToolbar(mToolbar, R.string.nav_mine, 0, null);
         mUserId = SPUtil.build().getString(Constants.USER_ID);
-
+        // 获取用户信息
         postUserInfo(mUserId);
     }
 
@@ -177,21 +175,13 @@ public class MineFragment extends BaseFragment {
             case R.id.mine_setting:
                 boolean isJoin = Utils.joinQQGroup(getContext(),"U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
                 if (!isJoin) {
-                    Utils.showToast(getActivity(), "未安装手Q或安装的版本不支持");
+                    showToast("未安装手Q或安装的版本不支持");
                 }
                 break;
             case R.id.mine_about:
                 gotoAbout();
                 break;
             case R.id.mine_sign_out:
-//                mDialog = DialogUtil.signOut(getActivity(), new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        gotoLogin();
-//                    }
-//                });
-//                mDialog.show();
-
                 showLogoutDialog();
                 break;
         }
@@ -229,9 +219,7 @@ public class MineFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         // 解决Activity has leaked window that was originally added here
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
+        // 如果dialog存在或显示，dismiss
     }
 
     // 前往信息修改

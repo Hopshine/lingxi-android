@@ -29,7 +29,6 @@ import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.ImageUtil;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.dialog.EditTextDialog;
 import me.cl.lingxi.entity.UserInfo;
 import me.iwf.photopicker.PhotoPicker;
@@ -106,7 +105,7 @@ public class PersonalInfoActivity extends BaseActivity {
                     @Override
                     public void Positive(String value) {
                         if (!TextUtils.isEmpty(value) && value.length() > 4 && !saveName.equals(value)) {
-                            Utils.showToast(PersonalInfoActivity.this, "暂不支持修改用户名");
+                            showToast("暂不支持修改用户名");
                             username = null;
                         }
                     }

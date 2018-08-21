@@ -1,6 +1,5 @@
 package me.cl.lingxi.common.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -9,14 +8,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,37 +26,6 @@ import me.cl.lingxi.entity.Like;
  * Created by bafsj on 17/3/1.
  */
 public class Utils {
-
-    private static Toast toast;
-    private static Handler mHandler = new Handler(Looper.getMainLooper());
-
-    public static void showToast(final Context context, final String info) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                toastShow(context, info, Toast.LENGTH_SHORT);
-            }
-        });
-    }
-
-    public static void showToast(final Context context, final int infoId) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                toastShow(context, context.getResources().getString(infoId), Toast.LENGTH_SHORT);
-            }
-        });
-    }
-
-    @SuppressLint("ShowToast")
-    private static void toastShow(Context context, String info, int duration) {
-        if (toast == null) {
-            toast = Toast.makeText(context, info, duration);
-        } else {
-            toast.setText(info);
-        }
-        toast.show();
-    }
 
     public static int dp2px(float dpValue) {
         return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);

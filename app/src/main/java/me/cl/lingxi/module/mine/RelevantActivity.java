@@ -15,19 +15,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
+import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.RelevantAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
-import me.cl.library.view.MoeToast;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Relevant;
-import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.module.feed.FeedActivity;
 import okhttp3.Call;
 
@@ -151,7 +150,7 @@ public class RelevantActivity extends BaseActivity {
                     public void onSuccess(Result<PageInfo<Relevant>> response) {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.showToast(RelevantActivity.this, "加载失败，下拉重新加载");
+                            showToast("加载失败，下拉重新加载");
                             return;
                         }
                         updateData(response.getData().getList());
@@ -159,12 +158,12 @@ public class RelevantActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(RelevantActivity.this, "加载失败，下拉重新加载");
+                        showToast("加载失败，下拉重新加载");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(RelevantActivity.this, "加载失败，下拉重新加载");
+                        showToast("加载失败，下拉重新加载");
                     }
                 });
     }

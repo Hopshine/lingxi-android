@@ -92,7 +92,7 @@ public class HomeFragment extends BaseFragment {
             case R.id.send:
                 boolean isWpa = Utils.wpaQQ(getActivity(), "986417980");
                 if (!isWpa) {
-                    Utils.showToast(getActivity(), "未安装手Q或安装的版本不支持");
+                    showToast("未安装手Q或安装的版本不支持");
                 }
                 break;
         }

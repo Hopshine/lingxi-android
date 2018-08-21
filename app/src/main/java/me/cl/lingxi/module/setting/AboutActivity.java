@@ -96,12 +96,12 @@ public class AboutActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(AboutActivity.this, "版本信息获取失败");
+                        showToast("版本信息获取失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(AboutActivity.this, "版本信息获取失败");
+                        showToast("版本信息获取失败");
                     }
                 });
 

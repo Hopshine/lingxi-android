@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:minLines="2"/>
+            android:minLines="1"/>
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

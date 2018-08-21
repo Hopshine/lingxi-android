@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 def configInfo = rootProject.ext.android
 
@@ -70,7 +69,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:${glideVersion}"
     annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
     implementation "com.github.bumptech.glide:okhttp3-integration:${glideVersion}"
-    implementation 'jp.wasabeef:glide-transformations:3.0.1'
+    implementation "jp.wasabeef:glide-transformations:${glideTransformations}"
     implementation 'org.jsoup:jsoup:1.10.2'
     implementation 'me.iwf.photopicker:PhotoPicker:0.9.12@aar'
     implementation 'id.zelory:compressor:2.1.0'

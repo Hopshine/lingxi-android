@@ -4,16 +4,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,20 +23,19 @@ import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
+import me.cl.library.recycle.ItemAnimator;
+import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
-import me.cl.library.recycle.ItemAnimator;
-import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
-import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.feed.FeedActivity;
@@ -54,8 +49,6 @@ public class UserActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.scrollView)
-    NestedScrollView mScrollView;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view)
@@ -63,15 +56,11 @@ public class UserActivity extends BaseActivity {
     @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
     @BindView(R.id.button_bar)
-    ButtonBarLayout mButtonBar;
+    RelativeLayout mButtonBar;
     @BindView(R.id.parallax)
     ImageView mParallax;
-    @BindView(R.id.title_img)
-    ImageView mTitleImg;
     @BindView(R.id.title_name)
     TextView mTitleName;
-    @BindView(R.id.user_img)
-    ImageView mUserImg;
     @BindView(R.id.user_name)
     TextView mUserName;
     @BindView(R.id.contact)
@@ -82,7 +71,6 @@ public class UserActivity extends BaseActivity {
     private boolean isPostUser = true;
     private String saveUserId;
     private String mUserId;
-    private Integer uid;
     private String mUsername;
     private List<Feed> mFeedList = new ArrayList<>();
     private FeedAdapter mAdapter;
@@ -134,17 +122,6 @@ public class UserActivity extends BaseActivity {
 
     }
 
-    private void setScroll() {
-        // 滑动冲突
-        mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                // 一定是 == ,不能是 <=
-                mSwipeRefreshLayout.setEnabled(mScrollView.getScrollY() == 0);
-            }
-        });
-    }
-
     /**
      * 搜索用户
      */
@@ -179,7 +156,6 @@ public class UserActivity extends BaseActivity {
         String avatar = "";
         if (userInfo != null) {
             mUserId = userInfo.getId();
-            uid = userInfo.getUid();
             mUsername = userInfo.getUsername();
             avatar = userInfo.getAvatar();
             if (!TextUtils.isEmpty(userInfo.getImToken())) {
@@ -189,7 +165,7 @@ public class UserActivity extends BaseActivity {
             pageFeed(mPageNum, mPageSize);
         } else {
             mUsername = "未知用户";
-            Utils.showToast(this, mUsername);
+            showToast(mUsername);
         }
         mTitleName.setText(mUsername);
         mUserName.setText(mUsername);
@@ -205,10 +181,10 @@ public class UserActivity extends BaseActivity {
      * 设置头像相关图片
      */
     public void setAvatar(String avatar) {
-        ContentUtil.loadUserAvatar(mTitleImg, avatar);
-        ContentUtil.loadUserAvatar(mUserImg, avatar);
+//        ContentUtil.loadUserAvatar(mTitleImg, avatar);
+//        ContentUtil.loadUserAvatar(mUserImg, avatar);
         ContentUtil.loadRelativeBlurImage(mParallax, avatar, 10);
-        switchUserImage();
+        switchTitle();
     }
 
     // 初始化事件
@@ -268,13 +244,10 @@ public class UserActivity extends BaseActivity {
         });
     }
 
-    private void switchUserImage() {
-        // 头像切换
+    private void switchTitle() {
+        // 标题切换
         mButtonBar.setAlpha(0);
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-
-            private int size = Utils.dp2px(56);
-            private int t = 0;
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -286,17 +259,6 @@ public class UserActivity extends BaseActivity {
 
                 int bbr = offset - 50 < 0 ? 0 : offset;
                 mButtonBar.setAlpha(1f * bbr / h);
-                int ui = offset * 2 > h ? h : offset;
-                float f = 1f - (1f * ui / h);
-                int after = (int) (size * f);
-
-                Log.i(TAG, "onOffsetChanged: verticalOffset：" + verticalOffset + "，offset：" + offset + "，h：" + h + ",size：" + size);
-
-                // 头像大小缩放
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mUserImg.getLayoutParams();
-                params.width = after;
-                params.height = after;
-                mUserImg.setLayoutParams(params);
             }
         });
     }
@@ -305,7 +267,7 @@ public class UserActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.contact:
-                Utils.showToast(this, "紧张开发中");
+                showToast("紧张开发中");
                 break;
         }
     }
@@ -331,7 +293,7 @@ public class UserActivity extends BaseActivity {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
                             mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                            Utils.showToast(UserActivity.this, R.string.toast_get_feed_error);
+                            showToast(R.string.toast_get_feed_error);
                             return;
                         }
                         PageInfo<Feed> page = response.getData();
@@ -357,14 +319,14 @@ public class UserActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.showToast(UserActivity.this, R.string.toast_get_feed_error);
+                        showToast(R.string.toast_get_feed_error);
                     }
 
                     @Override
                     public void onFinish() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.showToast(UserActivity.this, R.string.toast_get_feed_error);
+                        showToast(R.string.toast_get_feed_error);
                     }
                 });
     }

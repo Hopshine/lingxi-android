@@ -22,11 +22,10 @@ import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ImageUtil;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.module.main.MainActivity;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
@@ -103,7 +102,7 @@ public class PublishActivity extends BaseActivity {
     public void onClick() {
         mInfo = mMoodInfo.getText().toString().trim();
         if (TextUtils.isEmpty(mInfo)) {
-            Utils.showToast(this, "好歹写点什么吧！");
+            showToast("好歹写点什么吧！");
             return;
         }
         if (mPhotos.size() <= 1) {
@@ -144,12 +143,12 @@ public class PublishActivity extends BaseActivity {
                     public void onSuccess(Result<List<String>> response) {
                         String code = response.getCode();
                         if ("00100".equals(code)) {
-                            Utils.showToast(PublishActivity.this, response.getMsg());
+                            showToast(response.getMsg());
                             addPhotoAdd(mPhotos);
                             return;
                         }
                         if (!"00000".equals(code)) {
-                            Utils.showToast(PublishActivity.this, "图片上传失败");
+                            showToast("图片上传失败");
                             addPhotoAdd(mPhotos);
                             return;
                         }
@@ -159,13 +158,13 @@ public class PublishActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(PublishActivity.this, "图片上传失败");
+                        showToast("图片上传失败");
                         addPhotoAdd(mPhotos);
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(PublishActivity.this, "图片上传失败");
+                        showToast("图片上传失败");
                         addPhotoAdd(mPhotos);
                     }
                 });
@@ -185,26 +184,26 @@ public class PublishActivity extends BaseActivity {
                         dismissLoading();
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.showToast(PublishActivity.this, "发布失败");
+                            showToast("发布失败");
                             addPhotoAdd(mPhotos);
                             return;
                         }
                         mMoodInfo.setText(null);
-                        Utils.showToast(PublishActivity.this, "发布成功");
+                        showToast("发布成功");
                         onBackPressed();
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
                         dismissLoading();
-                        Utils.showToast(PublishActivity.this, "发布失败");
+                        showToast("发布失败");
                         addPhotoAdd(mPhotos);
                     }
 
                     @Override
                     public void onFinish() {
                         dismissLoading();
-                        Utils.showToast(PublishActivity.this, "发布失败");
+                        showToast("发布失败");
                         addPhotoAdd(mPhotos);
                     }
                 });

@@ -20,20 +20,19 @@ import butterknife.ButterKnife;
 import me.cl.library.base.BaseFragment;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
+import me.cl.library.recycle.ItemAnimator;
+import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
-import me.cl.library.recycle.ItemAnimator;
-import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.PageInfo;
-import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.cl.lingxi.module.feed.PublishActivity;
@@ -216,7 +215,7 @@ public class FeedFragment extends BaseFragment {
                     public void onSuccess(Result response) {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
-                            Utils.showToast(getActivity(), "点赞失败");
+                            showToast("点赞失败");
                             return;
                         }
                         List<Like> likeList = new ArrayList<>(feed.getLikeList());
@@ -231,12 +230,12 @@ public class FeedFragment extends BaseFragment {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Utils.showToast(getActivity(), "点赞失败");
+                        showToast("点赞失败");
                     }
 
                     @Override
                     public void onFinish() {
-                        Utils.showToast(getActivity(), "点赞失败");
+                        showToast("点赞失败");
                     }
                 });
     }
@@ -257,7 +256,7 @@ public class FeedFragment extends BaseFragment {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
                             mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                            Utils.showToast(getActivity(), R.string.toast_get_feed_error);
+                            showToast(R.string.toast_get_feed_error);
                             return;
                         }
                         PageInfo<Feed> page = response.getData();
@@ -282,14 +281,14 @@ public class FeedFragment extends BaseFragment {
                     public void onError(Call call, Exception e) {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.showToast(getActivity(), R.string.toast_get_feed_error);
+                        showToast(R.string.toast_get_feed_error);
                     }
 
                     @Override
                     public void onFinish() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        Utils.showToast(getActivity(), R.string.toast_get_feed_error);
+                        showToast(R.string.toast_get_feed_error);
                     }
                 });
     }

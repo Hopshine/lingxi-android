@@ -14,7 +14,6 @@ import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.entity.UserInfo;
 import okhttp3.Call;
@@ -56,14 +55,14 @@ public class ResetPwdActivity extends BaseActivity {
         String uPwd = mPassword.getText().toString().trim();
         String uDoPwd = mDoPassword.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
-            Utils.showToast(this, R.string.toast_reg_null);
+            showToast(R.string.toast_reg_null);
         }
         if (uPhone.length() != 11) {
-            Utils.showToast(this, R.string.toast_phone_format_error);
+            showToast(R.string.toast_phone_format_error);
             return;
         }
         if (!uPwd.equals(uDoPwd)) {
-            Utils.showToast(this, R.string.toast_again_error);
+            showToast(R.string.toast_again_error);
             return;
         }
         postUpdatePwd(uName, uPwd, uPhone);
@@ -84,14 +83,14 @@ public class ResetPwdActivity extends BaseActivity {
                         String code = response.getCode();
                         switch (code) {
                             case "00000":
-                                Utils.showToast(ResetPwdActivity.this, R.string.toast_reset_ped_success);
+                                showToast(R.string.toast_reset_ped_success);
                                 onBackPressed();
                                 break;
                             case "00104":
-                                Utils.showToast(ResetPwdActivity.this, R.string.toast_reset_pwd_user);
+                                showToast(R.string.toast_reset_pwd_user);
                                 break;
                             default:
-                                Utils.showToast(ResetPwdActivity.this, R.string.toast_reset_pwd_error);
+                                showToast(R.string.toast_reset_pwd_error);
                                 break;
                         }
                     }
@@ -99,13 +98,13 @@ public class ResetPwdActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         updateProgress.dismiss();
-                        Utils.showToast(ResetPwdActivity.this, R.string.toast_reset_pwd_error);
+                        showToast(R.string.toast_reset_pwd_error);
                     }
 
                     @Override
                     public void onFinish() {
                         updateProgress.dismiss();
-                        Utils.showToast(ResetPwdActivity.this, R.string.toast_reset_pwd_error);
+                        showToast(R.string.toast_reset_pwd_error);
                     }
                 });
     }
