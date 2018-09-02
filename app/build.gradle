@@ -67,6 +67,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation "com.github.bumptech.glide:glide:${glideVersion}"
+    implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
     implementation "com.github.bumptech.glide:okhttp3-integration:${glideVersion}"
     implementation "jp.wasabeef:glide-transformations:${glideTransformations}"

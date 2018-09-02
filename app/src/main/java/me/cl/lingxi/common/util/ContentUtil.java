@@ -163,9 +163,9 @@ public class ContentUtil {
                 likeWindow.setVisibility(View.GONE);
                 break;
             default:
-                String likeStr = Utils.getLongLikeStr(likeList);
-                likeNum.setText(String.valueOf(likeNum));
+                likeNum.setText(String.valueOf(num));
                 likeWindow.setVisibility(View.VISIBLE);
+                String likeStr = Utils.getLongLikeStr(likeList);
                 likeStr = likeStr + "觉得很赞";
                 likePeople.setText(Utils.colorFormat(likeStr));
                 break;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,7 @@ import me.cl.library.base.BaseActivity;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.EvaluateAdapter;
+import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
@@ -44,6 +46,7 @@ import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.member.UserActivity;
+import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
 
 public class FeedActivity extends BaseActivity {
@@ -86,6 +89,8 @@ public class FeedActivity extends BaseActivity {
     AppCompatEditText mEditTuCao;
     @BindView(R.id.btn_publish)
     Button mBtnPublish;
+    @BindView(R.id.photo_recycler_view)
+    RecyclerView mPhotoRecyclerView;
 
     private int MSG_MODE;
     private final int MSG_EVALUATE = 0;
@@ -187,6 +192,34 @@ public class FeedActivity extends BaseActivity {
         // 点赞列表
         List<Like> likeList = feed.getLikeList();
         ContentUtil.setLikePeopleAll(mLikePeople, mFeedLikeNum, mLikeWindow, likeList);
+
+        // 图片
+        final List<String> photos = feed.getPhotoList();
+        if (photos != null && photos.size() > 0) {
+            mPhotoRecyclerView.setVisibility(View.VISIBLE);
+            int size = photos.size();
+            // 如果只有一张或四张图，设置两列，否则三列
+            int column = (size == 1 || size == 4) ? 2 : 3;
+            mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(mPhotoRecyclerView.getContext(), column));
+            // 设置动态图片适配器
+            ContentUtil.setFeedPhotoAdapter(mPhotoRecyclerView, photos, new FeedAdapter.OnItemListener() {
+                @Override
+                public void onItemClick(View view, Feed feed, int position) {
+
+                }
+
+                @Override
+                public void onPhotoClick(ArrayList<String> photos, int position) {
+                    PhotoPreview.builder()
+                            .setPhotos(photos)
+                            .setCurrentItem(position)
+                            .setShowDeleteButton(false)
+                            .start(FeedActivity.this);
+                }
+            });
+        } else {
+            mPhotoRecyclerView.setVisibility(View.GONE);
+        }
 
         postViewFeed();
         getEvaluateList(feed.getId());
@@ -332,12 +365,12 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast( R.string.toast_get_feed_error);
+                        showToast(R.string.toast_get_feed_error);
                     }
 
                     @Override
                     public void onFinish() {
-                        showToast( R.string.toast_get_feed_error);
+                        showToast(R.string.toast_get_feed_error);
                     }
                 });
     }

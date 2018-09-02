@@ -44,6 +44,15 @@
 
                         <include layout="@layout/feed_info_include"/>
 
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/photo_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/spacing_16"
+                            android:paddingRight="@dimen/spacing_16"
+                            android:overScrollMode="never"
+                            android:scrollbars="none"/>
+
                         <include layout="@layout/feed_action_include"/>
 
                         <include layout="@layout/feed_like_include"/>

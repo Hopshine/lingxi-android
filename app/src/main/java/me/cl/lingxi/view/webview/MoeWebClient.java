@@ -1,13 +1,17 @@
 package me.cl.lingxi.view.webview;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.cl.lingxi.R;
 
 /**
  * author : Bafs
@@ -25,8 +29,8 @@ public class MoeWebClient extends WebViewClient {
         if (url.startsWith("http")) {
             view.loadUrl(url);
         } else {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            view.getContext().startActivity(intent);
+            // 这里交给用户选择
+            openUrl(view, url);
         }
         return true;
     }
@@ -50,6 +54,21 @@ public class MoeWebClient extends WebViewClient {
         } else {
             return super.shouldInterceptRequest(view, url);
         }
+    }
+
+    // 打开第三方url
+    private void openUrl(final WebView view, final String url) {
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(view.getContext());
+        mDialog.setTitle("是否使用第三方软件打开");
+        mDialog.setMessage("可能含有广告，谨慎选择");
+        mDialog.setNegativeButton(R.string.action_negative, null);
+        mDialog.setPositiveButton(R.string.action_positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                view.getContext().startActivity(intent);
+            }
+        }).setCancelable(false).create().show();
     }
 
     // 网页去广告

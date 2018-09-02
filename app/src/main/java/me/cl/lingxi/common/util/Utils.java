@@ -154,6 +154,23 @@ public class Utils {
         }
     }
 
+    // 另一种qq会话，通过浏览器，当前无法实现，可能需要使用qq自带的浏览器才能实现
+    public static boolean wpaQQ2(Context context, String key) {
+        String url = "http://wpa.qq.com/msgrd?v=3&site=qq&menu=yes&uin=" + key;
+        // 优先判断是否有安装qq
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("mqqwpa://"));
+        if (context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null){
+            intent.setData(Uri.parse(url));
+            context.startActivity(intent);
+            return true;
+        } else {
+            // 未安装手Q或安装的版本不支持
+            return false;
+        }
+    }
+
     /**
      * 发起添加群流程。群号：大龄儿童二次元同好群(468620613) 的 key 为： U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9
      * 调用 joinQQGroup(U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9) 即可发起手Q客户端申请加群 大龄儿童二次元同好群(468620613)
