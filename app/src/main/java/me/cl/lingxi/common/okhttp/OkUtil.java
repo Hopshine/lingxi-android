@@ -68,6 +68,13 @@ public class OkUtil {
         return new PostRequest();
     }
 
+    /**
+     * 番剧请求
+     */
+    public static ArcRequest arc() {
+        return new ArcRequest();
+    }
+
     public Handler getDelivery() {
         return mDelivery;
     }

@@ -72,6 +72,19 @@ public class ContentUtil {
     }
 
     /**
+     * 加载圆形图片
+     */
+    public static void loadCircleCropImage(ImageView imageView, String url) {
+        GlideApp.with(imageView.getContext())
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.img_user)
+                .error(R.drawable.img_user)
+                .apply(RequestOptions.circleCropTransform())
+                .into(imageView);
+    }
+
+    /**
      * 加载模糊图片，相对路径
      */
     public static void loadRelativeBlurImage(ImageView imageView, String url) {

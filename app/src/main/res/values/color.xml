@@ -10,12 +10,13 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="light_black">#212121</color>
+    <color name="black_light">#212121</color>
     <color name="transparent">#00ffffff</color>
-    <color name="aqua_blue">#4fc1e9</color>
+    <color name="blue_aqua">#4fc1e9</color>
     <color name="blue">#25c6fc</color>
-    <color name="dark_gray">#656D78</color>
-    <color name="light_gray">#ffdbe4e7</color>
+    <color name="gray_dark">#656D78</color>
+    <color name="gray_light">#ffdbe4e7</color>
+    <color name="gray_light2">#f2f2f2</color>
     <color name="grapefruit">#ED5565</color>
     <color name="mine_select_black">#ffeeeeee</color>
 </resources>

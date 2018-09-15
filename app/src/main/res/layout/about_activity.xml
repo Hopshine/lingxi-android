@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:gravity="center"
-                android:textColor="@color/aqua_blue"
+                android:textColor="@color/blue_aqua"
                 android:text="了解更多"/>
 
             <TextView

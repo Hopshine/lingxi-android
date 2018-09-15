@@ -9,9 +9,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
@@ -27,15 +25,27 @@ import me.cl.lingxi.entity.Like;
  */
 public class Utils {
 
+    /**
+     * dp2px
+     */
     public static int dp2px(float dpValue) {
-        return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);
+        float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
-    public static int getScreenWidth(Context context) {
-        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        manager.getDefaultDisplay().getMetrics(outMetrics);
-        return outMetrics.widthPixels;
+    /**
+     * px2dp
+     */
+    public static int px2dp(float pxValue){
+        float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 屏幕宽度
+     */
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     /**
@@ -53,7 +63,7 @@ public class Utils {
     public static void HideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isActive()) {
+        if (imm != null && imm.isActive()) {
             imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
 
         }
@@ -63,28 +73,28 @@ public class Utils {
      * 获取点赞人字符串
      */
     public static String getLikeStr(List<Like> likes) {
-        String likeStr = "";
+        StringBuilder likeStr = new StringBuilder();
         for (int i = 0, size = likes.size(); i < size; i++) {
             if (i == 3) break;
-            likeStr = likeStr + "{" + likes.get(i).getUsername() + "、}" + "";
+            likeStr.append("{").append(likes.get(i).getUsername()).append("、}");
         }
-        if (likes.size() > 0) likeStr = likeStr.substring(0, likeStr.length() - 2) + "}";
-        return likeStr;
+        if (likes.size() > 0) likeStr = new StringBuilder(likeStr.substring(0, likeStr.length() - 2) + "}");
+        return likeStr.toString();
     }
 
     /**
      * 获取所有点赞人字符串
      */
     public static String getLongLikeStr(List<Like> likes) {
-        String likeStr = "";
+        StringBuilder likeStr = new StringBuilder();
         for (int i = 0; i < likes.size(); i++) {
             if (i == likes.size() - 1) {
-                likeStr = likeStr + "{" + likes.get(i).getUsername() + "}";
+                likeStr.append("{").append(likes.get(i).getUsername()).append("}");
             } else {
-                likeStr = likeStr + "{" + likes.get(i).getUsername() + "、}";
+                likeStr.append("{").append(likes.get(i).getUsername()).append("、}");
             }
         }
-        return likeStr;
+        return likeStr.toString();
     }
 
     /**

@@ -38,18 +38,13 @@ public class MoeWebClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        view.loadUrl("javascript:(function() { " +
-                "       var ad = document.getElementById('fage');" +
-                "       if(ad != null && ad.style.display == 'block'){" +
-                "           ad.style.display = 'none';" +
-                "       };" +
-                "   })()");
+        view.loadUrl("javascript:(function(){var ad=document.getElementById('fage');if(ad!=null&&ad.style.display=='block'){ad.style.display='none'}})();");
     }
 
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-        url = url.toLowerCase();
-        if (isAd(url)) {
+        String tmp = url.toLowerCase();
+        if (isAd(tmp)) {
             return new WebResourceResponse(null, null, null);
         } else {
             return super.shouldInterceptRequest(view, url);
@@ -61,7 +56,12 @@ public class MoeWebClient extends WebViewClient {
         AlertDialog.Builder mDialog = new AlertDialog.Builder(view.getContext());
         mDialog.setTitle("是否使用第三方软件打开");
         mDialog.setMessage("可能含有广告，谨慎选择");
-        mDialog.setNegativeButton(R.string.action_negative, null);
+        mDialog.setNegativeButton(R.string.action_negative, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                view.loadUrl(url);
+            }
+        });
         mDialog.setPositiveButton(R.string.action_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

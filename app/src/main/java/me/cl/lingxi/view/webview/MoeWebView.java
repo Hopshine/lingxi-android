@@ -36,17 +36,19 @@ public class MoeWebView extends WebView {
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         // JavaScript
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         // 允许访问文件
         webSettings.setAllowFileAccess(true);
-
+        // 可以有数据库
         webSettings.setDatabaseEnabled(false);
 
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+        // 可以使用localStorage
         webSettings.setDomStorageEnabled(true);
         // 保存表单数据
         webSettings.setSaveFormData(true);
         // 缓存
         webSettings.setAppCacheEnabled(true);
-        // 缓存模式
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         // setUseWideViewPort方法设置webview推荐使用的窗口
         // setLoadWithOverviewMode方法是设置webview加载的页面的模式。
@@ -60,6 +62,10 @@ public class MoeWebView extends WebView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            webSettings.setMediaPlaybackRequiresUserGesture(false);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

@@ -17,9 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
 import me.cl.lingxi.R;
-import me.cl.lingxi.view.webview.MoeWebView;
 import me.cl.lingxi.view.webview.MoeChromeClient;
 import me.cl.lingxi.view.webview.MoeWebClient;
+import me.cl.lingxi.view.webview.MoeWebView;
 
 /**
  * WebActivity
@@ -117,7 +117,6 @@ public class WebActivity extends BaseActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -130,21 +129,22 @@ public class WebActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (inCustomView()) {
-                hideCustomView();
-                return true;
-            } else {
-                String url = mWebView.getUrl();
-                if (url.contains(mUrl)) {
-                    clearWebView();
-                    this.finish();
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (inCustomView()) {
+                    hideCustomView();
                 } else {
-                    mWebView.goBack();
+                    if (mWebView.canGoBack()) {
+                        mWebView.goBack();
+                    } else {
+                        clearWebView();
+                        this.finish();
+                    }
                 }
-            }
+                return true;
+            default:
+                return super.onKeyDown(keyCode, event);
         }
-        return true;
     }
 
     /**

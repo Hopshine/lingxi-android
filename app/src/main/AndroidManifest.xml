@@ -66,6 +66,13 @@
         <activity android:name=".module.setting.PublicLicenseActivity"/>
         <activity android:name=".module.member.UserActivity"
                   android:theme="@style/AppTheme.TransparentStatusBar"/>
+
+        <activity android:name=".module.dd.ArcPlayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="unspecified"
+            android:theme="@style/AppTheme.TransparentStatusBar"/>
+
         <activity android:name=".module.feed.PhotoActivity" />
 
         <!-- PhotoPicker start -->

@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView mBottomNavigation;
 
     private FragmentManager mFragmentManager;
-    private DliFragment mDliFragment;
+    private DDFragment mDDFragment;
     private FeedFragment mFeedFragment;
     private MessageFragment mMessageFragment;
     private MineFragment mMineFragment;
@@ -75,11 +75,11 @@ public class MainActivity extends BaseActivity {
 
     private void initFragment() {
         mFragmentManager = getSupportFragmentManager();
-        mDliFragment = new DliFragment();
+        mDDFragment = DDFragment.newInstance("none");
         mFeedFragment = FeedFragment.newInstance("home");
         mMessageFragment = new MessageFragment();
         mMineFragment = new MineFragment();
-        switchFragment(mDliFragment);
+        switchFragment(mDDFragment);
     }
 
     //底部导航
@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        switchFragment(mDliFragment);
+                        switchFragment(mDDFragment);
                         return true;
                     case R.id.navigation_camera:
                         switchFragment(mFeedFragment);

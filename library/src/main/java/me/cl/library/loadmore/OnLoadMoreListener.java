@@ -2,6 +2,7 @@ package me.cl.library.loadmore;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 /**
  * RecyclerView加载更多
@@ -16,10 +17,17 @@ public abstract class OnLoadMoreListener extends RecyclerView.OnScrollListener {
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-            itemCount = layoutManager.getItemCount();
-            lastPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager) {
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+            itemCount = linearLayoutManager.getItemCount();
+            lastPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
+            itemCount = staggeredGridLayoutManager.getItemCount();
+            int spanCount = staggeredGridLayoutManager.getSpanCount();
+            int[] itemPositions = staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(new int[spanCount]);
+            lastPosition = findLast(itemPositions);
         }
     }
 
@@ -30,5 +38,18 @@ public abstract class OnLoadMoreListener extends RecyclerView.OnScrollListener {
         if (newState == RecyclerView.SCROLL_STATE_IDLE && lastPosition == itemCount - 1) {
             this.onLoadMore();
         }
+    }
+
+    /**
+     * 找到最后一个item
+     */
+    private int findLast(int[] items) {
+        int last = items[0];
+        for (int item : items) {
+            if (item > last) {
+                last = item;
+            }
+        }
+        return last;
     }
 }
