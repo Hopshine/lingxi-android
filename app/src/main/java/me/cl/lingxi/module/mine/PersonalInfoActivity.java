@@ -81,8 +81,8 @@ public class PersonalInfoActivity extends BaseActivity {
             MoeToast.makeText(this, R.string.egg_who_is_there);
         }
 
-        mUserId = SPUtil.build().getString(Constants.USER_ID);
-        saveName = SPUtil.build().getString(Constants.USER_NAME);
+        mUserId = SPUtil.build().getString(Constants.SP_USER_ID);
+        saveName = SPUtil.build().getString(Constants.SP_USER_NAME);
         mPersonName.setText(saveName);
         postUserInfo();
     }

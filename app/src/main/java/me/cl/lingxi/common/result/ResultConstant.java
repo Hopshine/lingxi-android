@@ -9,6 +9,9 @@ package me.cl.lingxi.common.result;
  */
 public class ResultConstant {
 
+    /**
+     * 成功code
+     */
     public static final String CODE_SUCCESS = "00000";
 
 }

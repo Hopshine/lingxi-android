@@ -1,7 +1,6 @@
 package me.cl.lingxi.module.dd;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import me.cl.library.base.BaseActivity;
 import me.cl.library.recycle.ItemAnimator;
 import me.cl.library.recycle.ItemDecoration;
 import me.cl.lingxi.R;
-import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.config.DDApi;
 import me.cl.lingxi.common.okhttp.ArcCallback;
 import me.cl.lingxi.common.okhttp.OkUtil;
@@ -99,7 +97,7 @@ public class ArcPlayActivity extends BaseActivity {
         String arcId = intent.getStringExtra("arc_id");
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            mArcInfo = (ArcInfo) bundle.getSerializable(Constants.USER_INFO);
+            mArcInfo = (ArcInfo) bundle.getSerializable("temp");
             if (mArcInfo != null) {
                 mArcName.setText(mArcInfo.getTypename());
                 ContentUtil.loadImage(mArcPic, mArcInfo.getSuoluetudizhi());
@@ -118,13 +116,13 @@ public class ArcPlayActivity extends BaseActivity {
         mWebClient = new MoeWebClient();
         mChromeClient = new MoeChromeClient(mVideoView, new MoeChromeClient.onChangedListener() {
             @Override
-            public void onShow() {
-                setLandscape();
-            }
-
-            @Override
-            public void onHide() {
-                setPortrait();
+            public void onFullscreen(boolean fullscreen) {
+                if (fullscreen) {
+                    mWebView.setVisibility(View.GONE);
+                } else {
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                setFullscreen(fullscreen);
             }
         });
         mWebView.setWebViewClient(mWebClient);
@@ -235,7 +233,9 @@ public class ArcPlayActivity extends BaseActivity {
     private void setHiveDetail(HiveDetail detail) {
         String body = detail.getBody();
         String url = defaultPlayConfig + body;
-        setPlayUrl(url);
+
+        mWebView.loadUrl(url);
+//        setPlayUrl(url);
     }
 
     private void switchTitle() {
@@ -255,11 +255,14 @@ public class ArcPlayActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.arc_pic})
+    @OnClick({R.id.arc_pic, R.id.web_view})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.arc_pic:
                 onClickWebView();
+                break;
+            case R.id.web_view:
+                showToast("111");
                 break;
         }
     }
@@ -294,26 +297,6 @@ public class ArcPlayActivity extends BaseActivity {
         } else {
             mWebView.loadUrl(script);
         }
-    }
-
-    private void setLandscape() {
-        mWebView.setVisibility(View.GONE);
-        // 设置横屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        // 隐藏状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // 常亮
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    private void setPortrait() {
-        mWebView.setVisibility(View.VISIBLE);
-        // 设置竖屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        // 显示状态栏
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // 清除常亮
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override

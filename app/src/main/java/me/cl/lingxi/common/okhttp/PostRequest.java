@@ -101,6 +101,8 @@ public class PostRequest {
             }
         });
         mGson = gsonBuilder.create();
+
+        headers.putAll(okUtil.getCommonHeaders());
     }
 
     /**

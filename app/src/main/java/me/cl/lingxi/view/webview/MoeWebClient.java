@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -35,10 +37,30 @@ public class MoeWebClient extends WebViewClient {
         return true;
     }
 
+    /**
+     * 页面加载结束时调用
+     */
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
-        view.loadUrl("javascript:(function(){var ad=document.getElementById('fage');if(ad!=null&&ad.style.display=='block'){ad.style.display='none'}})();");
+    }
+
+    /**
+     * WebView发生改变时调用
+     */
+    @Override
+    public void onScaleChanged(WebView view, float oldScale, float newScale) {
+        super.onScaleChanged(view, oldScale, newScale);
+        Log.d(TAG, "onScaleChanged: oldScale、" + oldScale + "，newScale、" + newScale);
+    }
+
+    /**
+     * 浏览器中的按键事件
+     */
+    @Override
+    public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+        Log.d(TAG, "shouldOverrideKeyEvent: " + event.getAction());
+        return super.shouldOverrideKeyEvent(view, event);
     }
 
     @Override

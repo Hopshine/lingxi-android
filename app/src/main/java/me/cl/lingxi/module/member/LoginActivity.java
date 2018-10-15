@@ -19,8 +19,9 @@ import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.result.Result;
+import me.cl.lingxi.common.result.ResultConstant;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.entity.UserInfo;
+import me.cl.lingxi.entity.UserToken;
 import me.cl.lingxi.module.main.MainActivity;
 import okhttp3.Call;
 
@@ -56,7 +57,7 @@ public class LoginActivity extends BaseActivity {
         int x = (int) (Math.random() * 6) + 1;
         if (x == 5) MoeToast.makeText(this, "从哪里来到哪里去？你明白吗？");
 
-        String saveName = SPUtil.build().getString(Constants.USER_NAME);
+        String saveName = SPUtil.build().getString(Constants.SP_USER_NAME);
         mUsername.setText(saveName);
         mUsername.setSelection(saveName.length());
     }
@@ -78,16 +79,18 @@ public class LoginActivity extends BaseActivity {
                 .url(Api.userLogin)
                 .addParam("username", userName)
                 .addParam("password", userPwd)
-                .execute(new ResultCallback<Result<UserInfo>>() {
+                .execute(new ResultCallback<Result<UserToken>>() {
                     @Override
-                    public void onSuccess(Result<UserInfo> response) {
+                    public void onSuccess(Result<UserToken> response) {
                         String code = response.getCode();
                         switch (code) {
-                            case "00000":
-                                UserInfo user = response.getData();
-                                SPUtil.build().putBoolean(Constants.BEEN_LOGIN, true);
-                                SPUtil.build().putString(Constants.USER_ID, user.getId());
-                                SPUtil.build().putString(Constants.USER_NAME, user.getUsername());
+                            case ResultConstant.CODE_SUCCESS:
+                                UserToken user = response.getData();
+                                SPUtil.build().putBoolean(Constants.SP_BEEN_LOGIN, true);
+                                SPUtil.build().putString(Constants.SP_USER_ID, user.getId());
+                                SPUtil.build().putString(Constants.SP_USER_NAME, user.getUsername());
+                                SPUtil.build().putString(Api.X_APP_TOKEN, user.getToken());
+                                OkUtil.newInstance().addCommonHeader(Api.X_APP_TOKEN, user.getToken());
                                 goHome();
                                 break;
                             default:
@@ -139,7 +142,7 @@ public class LoginActivity extends BaseActivity {
             loginProgress.dismiss();
         }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra(Constants.UNREAD_NUM, 0);
+        intent.putExtra(Constants.PASSED_UNREAD_NUM, 0);
         startActivity(intent);
         finish();
     }

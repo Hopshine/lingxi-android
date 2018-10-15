@@ -79,7 +79,7 @@ public class RelevantActivity extends BaseActivity {
         }
 
         setupToolbar(mToolbar, title, true, 0, null);
-        saveId = SPUtil.build().getString(Constants.USER_ID);
+        saveId = SPUtil.build().getString(Constants.SP_USER_ID);
         loadingProgress = new LoadingDialog(this, "正在加载...");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -112,7 +112,7 @@ public class RelevantActivity extends BaseActivity {
      * 更新未读条数
      */
     public void updateUnread() {
-        String userId = SPUtil.build().getString(Constants.USER_ID);
+        String userId = SPUtil.build().getString(Constants.SP_USER_ID);
         OkUtil.post()
                 .url(Api.updateUnread)
                 .addParam("userId", userId)

@@ -27,7 +27,8 @@ import me.cl.lingxi.module.member.UserActivity;
  * author : Bafs
  * e-mail : bafs.jy@live.com
  * time   : 2018/05/27
- * desc   : SpannableString,https://blog.csdn.net/u014620028/article/details/78394157
+ * desc   : SpannableString,话题等处理
+ * 参考：https://blog.csdn.net/u014620028/article/details/78394157
  * version: 1.0
  */
 public class FeedContentUtil {
@@ -87,9 +88,9 @@ public class FeedContentUtil {
                 NoLineClickableSpan myClickableSpan = new NoLineClickableSpan(textView.getContext()) {
                     @Override
                     public void onClick(View widget) {
-                        Intent intent = new Intent(textView.getContext(),   UserActivity.class);
+                        Intent intent = new Intent(textView.getContext(), UserActivity.class);
                         String username = at.substring(1);
-                        intent.putExtra(Constants.USER_NAME, username);
+                        intent.putExtra(Constants.PASSED_USER_NAME, username);
                         textView.getContext().startActivity(intent);
                     }
                 };

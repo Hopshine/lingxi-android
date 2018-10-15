@@ -1,5 +1,9 @@
 package me.cl.lingxi.common.result;
 
+/**
+ * 返回结果
+ * @param <T> data
+ */
 public class Result<T> {
 
     private String code;

@@ -117,7 +117,7 @@ public class FeedActivity extends BaseActivity {
     private void init() {
         setupToolbar(mToolbar, R.string.title_activity_feed, true, 0, null);
 
-        saveId = SPUtil.build().getString(Constants.USER_ID);
+        saveId = SPUtil.build().getString(Constants.SP_USER_ID);
 
         // 输入状态模式默认为评论
         MSG_MODE = MSG_EVALUATE;
@@ -381,7 +381,7 @@ public class FeedActivity extends BaseActivity {
     private void gotoUser(User user) {
         Intent intent = new Intent(this, UserActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.USER_INFO, user);
+        bundle.putSerializable(Constants.PASSED_USER_INFO, user);
         intent.putExtras(bundle);
         startActivity(intent);
     }

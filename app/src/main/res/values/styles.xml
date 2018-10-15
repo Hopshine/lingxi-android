@@ -9,14 +9,13 @@
         <item name="colorButtonNormal">@color/blue</item>
     </style>
 
-    <style name="AppTheme" parent="AppTheme.Base"/>
+    <style name="AppTheme" parent="AppTheme.Base" />
 
     <style name="AppTheme.Fullscreen" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
-    
-    <style name="AppTheme.TransparentStatusBar" parent="AppTheme">
-    </style>
+
+    <style name="AppTheme.TransparentStatusBar" parent="AppTheme"></style>
 
     <style name="LoginFormContainer">
         <item name="android:layout_width">match_parent</item>
@@ -68,6 +67,26 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="AppTheme.FutureText">
+        <item name="android:layout_height">@dimen/spacing_32</item>
+        <item name="android:paddingLeft">@dimen/spacing_6</item>
+        <item name="android:paddingRight">@dimen/spacing_6</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="AppTheme.FutureText.Check" parent="AppTheme.FutureText">
+        <item name="android:button">@color/transparent</item>
+        <item name="android:background">@drawable/future_selector</item>
+        <item name="android:textColor">@color/future_selector</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="AppTheme.FutureText.Edit" parent="AppTheme.FutureText">
+        <item name="android:background">@drawable/future_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/font_14</item>
     </style>
 
     <!--PhotoPicker start-->

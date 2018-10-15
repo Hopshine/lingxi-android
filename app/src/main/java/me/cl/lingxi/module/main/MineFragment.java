@@ -82,7 +82,7 @@ public class MineFragment extends BaseFragment {
 
     private void init(View view) {
         setupToolbar(mToolbar, R.string.nav_mine, 0, null);
-        mUserId = SPUtil.build().getString(Constants.USER_ID);
+        mUserId = SPUtil.build().getString(Constants.SP_USER_ID);
         // 获取用户信息
         postUserInfo(mUserId);
     }
@@ -157,7 +157,9 @@ public class MineFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         ContentUtil.setMoreBadge(mMineRelevant);
-        if (Constants.isRead) ((MainActivity)getActivity()).goneBadge();
+        if (Constants.isRead) {
+            ((MainActivity) getActivity()).goneBadge();
+        }
     }
 
     @OnClick({R.id.user_body, R.id.mine_reply, R.id.mine_relevant, R.id.mine_setting, R.id.mine_about, R.id.mine_sign_out})
@@ -173,7 +175,7 @@ public class MineFragment extends BaseFragment {
                 gotoRelevant(Constants.REPLY_RELEVANT);
                 break;
             case R.id.mine_setting:
-                boolean isJoin = Utils.joinQQGroup(getContext(),"U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
+                boolean isJoin = Utils.joinQQGroup(getContext(), "U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
                 if (!isJoin) {
                     showToast("未安装手Q或安装的版本不支持");
                 }
@@ -244,7 +246,7 @@ public class MineFragment extends BaseFragment {
     // 前往登录
     private void gotoLogin() {
         MainActivity activity = (MainActivity) getActivity();
-        SPUtil.build().putBoolean(Constants.BEEN_LOGIN, false);
+        SPUtil.build().putBoolean(Constants.SP_BEEN_LOGIN, false);
         Intent intent = new Intent(activity, LoginActivity.class);
         startActivity(intent);
         if (activity != null) {

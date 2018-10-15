@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- App -->
     <string name="app_name">灵悉</string>
     <string name="app_name_alpha">灵悉测试</string>
     <string name="app_name_local">灵悉本地</string>
@@ -32,6 +33,8 @@
     <string name="action_negative">取消</string>
     <string name="action_contact">联系</string>
     <string name="action_attention">关注</string>
+    <string name="action_give_up">放弃</string>
+    <string name="action_convey">传达</string>
 
     <!-- Text hint -->
     <string name="hint_username">用户名</string>
@@ -48,6 +51,8 @@
     <string name="hint_feed">动态</string>
     <string name="hint_all_feed">全部动态</string>
     <string name="hint_confidential">保密</string>
+    <string name="hint_future">致未来的我：</string>
+    <string name="hint_future_mail">填入送达邮箱</string>
 
     <!-- Nav String -->
     <string name="nav_home">首页</string>
@@ -62,6 +67,7 @@
     <string name="title_bar_index">首页</string>
     <string name="title_bar_share">分享</string>
     <string name="title_bar_mine">我的</string>
+    <string name="title_bar_future">未来的未来</string>
 
     <!-- Dialog String -->
     <string name="dialog_loading">正在加载&#8230;</string>
@@ -71,6 +77,17 @@
     <string name="dialog_loading_reset_wd">正在重置密码&#8230;</string>
     <string name="dialog_loading_more">正在加载更更多&#8230;</string>
     <string name="dialog_update_avatar">修改头像中&#8230;</string>
+    <string name="dialog_future_title">信件传达</string>
+    <string name="dialog_future_type">传达类型</string>
+    <string name="dialog_future_type_app">APP内展示</string>
+    <string name="dialog_future_type_mail">邮箱传达</string>
+    <string name="dialog_future_time">传达时间(不建议选择太久，APP不一定能存活)</string>
+    <string name="dialog_future_time_one">半年内</string>
+    <string name="dialog_future_time_two">半年到一年</string>
+    <string name="dialog_future_time_three">一年到两年</string>
+    <string name="dialog_future_time_other">自填时间</string>
+    <string name="dialog_future_time_bar">-</string>
+    <string name="dialog_future_time_month">个月</string>
 
     <!-- Toast String -->
     <string name="toast_login_null">请输入完整的登陆信息</string>

@@ -1,6 +1,7 @@
 package me.cl.lingxi.module.main;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -20,10 +21,10 @@ public class MessageFragment extends Fragment{
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
-    private String[] tabNamArray = {"飞鸽传书", "留言"};
+    private String[] tabNamArray = {"写给未来", "飞鸽传书"};
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.message_fragment, container, false);
         ButterKnife.bind(this, view);
         init();
@@ -44,11 +45,11 @@ public class MessageFragment extends Fragment{
     }
 
     private void addFragment(ViewPagerAdapter mPagerAdapter) {
+        HomeFragment futureFragment = HomeFragment.newInstance("很久很久以前没有留下信件\n现在去写给未来");
         HomeFragment newsFragment = HomeFragment.newInstance("飞鸽传书功能准备当中\n" +
                 "有好的建议可点击下方按钮↓");
-        HomeFragment friendsFragment = HomeFragment.newInstance("留言功能也准备当中");
-        mPagerAdapter.addFragment(newsFragment, tabNamArray[0]);
-        mPagerAdapter.addFragment(friendsFragment, tabNamArray[1]);
+        mPagerAdapter.addFragment(futureFragment, tabNamArray[0]);
+        mPagerAdapter.addFragment(newsFragment, tabNamArray[1]);
     }
 
 }

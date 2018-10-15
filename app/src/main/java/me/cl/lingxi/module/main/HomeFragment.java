@@ -1,5 +1,6 @@
 package me.cl.lingxi.module.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import butterknife.OnClick;
 import me.cl.library.base.BaseFragment;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.util.Utils;
+import me.cl.lingxi.module.future.FutureActivity;
 
 public class HomeFragment extends BaseFragment {
 
@@ -71,7 +73,8 @@ public class HomeFragment extends BaseFragment {
             flag = true;
             mSend.setVisibility(View.VISIBLE);
         } else {
-            mSend.setVisibility(View.GONE);
+            mSend.setText("编写");
+            mSend.setVisibility(View.VISIBLE);
         }
         mMsg.setText(mNewsType);
     }
@@ -91,11 +94,20 @@ public class HomeFragment extends BaseFragment {
                 }
                 break;
             case R.id.send:
-                boolean isWpa = Utils.wpaQQ(getActivity(), "986417980");
-                if (!isWpa) {
-                    showToast("未安装手Q或安装的版本不支持");
+                if (flag) {
+                    boolean isWpa = Utils.wpaQQ(getActivity(), "986417980");
+                    if (!isWpa) {
+                        showToast("未安装手Q或安装的版本不支持");
+                    }
+                } else {
+                    gotoFuture();
                 }
                 break;
         }
+    }
+
+    private void gotoFuture() {
+        Intent intent = new Intent(getActivity(), FutureActivity.class);
+        startActivity(intent);
     }
 }

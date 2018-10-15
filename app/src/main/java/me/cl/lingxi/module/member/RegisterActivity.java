@@ -107,7 +107,7 @@ public class RegisterActivity extends BaseActivity {
                             case "00000":
                                 showToast(R.string.toast_reg_success);
                                 UserInfo user = response.getData();
-                                SPUtil.build().putString(Constants.USER_NAME, user.getUsername());
+                                SPUtil.build().putString(Constants.SP_USER_NAME, user.getUsername());
                                 onBackPressed();
                                 break;
                             case "00105":

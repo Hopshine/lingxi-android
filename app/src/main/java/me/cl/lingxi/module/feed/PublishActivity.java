@@ -57,7 +57,7 @@ public class PublishActivity extends BaseActivity {
     }
 
     private void init() {
-        mUid = SPUtil.build().getString(Constants.USER_ID);
+        mUid = SPUtil.build().getString(Constants.SP_USER_ID);
         setupToolbar(mToolbar, "发布新动态", true, 0, null);
         setLoading("发布中...");
         initRecycleView();

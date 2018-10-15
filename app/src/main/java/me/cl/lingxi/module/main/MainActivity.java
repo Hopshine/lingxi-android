@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
     private void initBadge() {
         Intent intent = getIntent();
         if (intent == null) return;
-        Integer num = intent.getIntExtra(Constants.UNREAD_NUM, 0);
+        Integer num = intent.getIntExtra(Constants.PASSED_UNREAD_NUM, 0);
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottomNavigation.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(3);
         View badge = LayoutInflater.from(this).inflate(R.layout.main_menu_badge, menuView, false);
@@ -208,7 +208,7 @@ public class MainActivity extends BaseActivity {
 
     // 是否提示更新
     private boolean isCheckUpdate() {
-        int updateFlag = SPUtil.build().getInt(Constants.UPDATE_FLAG);
+        int updateFlag = SPUtil.build().getInt(Constants.SP_UPDATE_FLAG);
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd", Locale.SIMPLIFIED_CHINESE);
         int dateInt = Integer.parseInt(sdf.format(new Date()));
         return (dateInt + 1) != updateFlag;
@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity {
     private void saveUpdateFlag(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd", Locale.SIMPLIFIED_CHINESE);
         int dateInt = Integer.parseInt(sdf.format(new Date()));
-        SPUtil.build().putInt(Constants.UPDATE_FLAG, (dateInt + 1));
+        SPUtil.build().putInt(Constants.SP_UPDATE_FLAG, (dateInt + 1));
     }
 
     // 检查新版本

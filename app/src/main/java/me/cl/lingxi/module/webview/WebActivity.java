@@ -1,7 +1,6 @@
 package me.cl.lingxi.module.webview;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import butterknife.BindView;
@@ -82,39 +80,19 @@ public class WebActivity extends BaseActivity {
         mWebClient = new MoeWebClient();
         mChromeClient = new MoeChromeClient(mVideoView, new MoeChromeClient.onChangedListener() {
             @Override
-            public void onShow() {
-                setLandscape();
-            }
-
-            @Override
-            public void onHide() {
-                setPortrait();
+            public void onFullscreen(boolean fullscreen) {
+                if (fullscreen) {
+                    mWebView.setVisibility(View.GONE);
+                } else {
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                setFullscreen(fullscreen);
             }
         });
         mWebView.setWebViewClient(mWebClient);
         mWebView.setWebChromeClient(mChromeClient);
 
         mWebView.loadUrl(mUrl);
-    }
-
-    private void setLandscape() {
-        mWebView.setVisibility(View.GONE);
-        // 设置横屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        // 隐藏状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // 常亮
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    private void setPortrait() {
-        mWebView.setVisibility(View.VISIBLE);
-        // 设置竖屏
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        // 显示状态栏
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // 清除常亮
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override

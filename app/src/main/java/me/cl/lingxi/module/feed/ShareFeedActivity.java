@@ -51,7 +51,7 @@ public class ShareFeedActivity extends BaseActivity {
     }
 
     private void init() {
-        mUid = SPUtil.build().getString(Constants.USER_ID);
+        mUid = SPUtil.build().getString(Constants.SP_USER_ID);
         setupToolbar(mToolbar, "分享到灵悉", true, 0, null);
         setLoading("发布中...");
         mRecyclerView.setVisibility(View.GONE);

@@ -96,7 +96,7 @@ public class FeedFragment extends BaseFragment {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.nav_camera, R.menu.menu_publish, new Toolbar.OnMenuItemClickListener() {
+        setupToolbar(mToolbar, R.string.nav_camera, R.menu.publish_menu, new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
@@ -108,8 +108,8 @@ public class FeedFragment extends BaseFragment {
             }
         });
 
-        saveUid = SPUtil.build().getString(Constants.USER_ID);
-        saveUName = SPUtil.build().getString(Constants.USER_NAME);
+        saveUid = SPUtil.build().getString(Constants.SP_USER_ID);
+        saveUName = SPUtil.build().getString(Constants.SP_USER_NAME);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -244,7 +244,7 @@ public class FeedFragment extends BaseFragment {
     // 获取动态列表
     private void getMoodList(int pageNum, int pageSize) {
         if (!mSwipeRefreshLayout.isRefreshing() && RefreshMODE == MOD_REFRESH) mSwipeRefreshLayout.setRefreshing(true);
-        String uid = SPUtil.build().getString(Constants.USER_ID);
+        String uid = SPUtil.build().getString(Constants.SP_USER_ID);
         OkUtil.post()
                 .url(Api.pageFeed)
                 .addParam("userId", uid)
@@ -320,11 +320,13 @@ public class FeedFragment extends BaseFragment {
         }
     }
 
-    // 前往用户页面
+    /**
+     * 前往用户页面
+     */
     private void goToUser(User user){
         Intent intent = new Intent(getActivity(), UserActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.USER_INFO, user);
+        bundle.putSerializable(Constants.PASSED_USER_INFO, user);
         intent.putExtras(bundle);
         startActivity(intent);
     }

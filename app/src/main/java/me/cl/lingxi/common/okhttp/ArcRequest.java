@@ -209,7 +209,7 @@ public class ArcRequest {
                         setOnError(new Exception("body is null"), callback);
                     }
                 } catch (Exception e) {
-                    setOnError( e, callback);
+                    setOnError(e, callback);
                 }
 
             }

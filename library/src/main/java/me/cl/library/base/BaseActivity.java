@@ -1,10 +1,12 @@
 package me.cl.library.base;
 
+import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 
 import me.cl.library.R;
 import me.cl.library.util.ToastUtil;
@@ -95,5 +97,27 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showMoeToast(String msg) {
         MoeToast.makeText(this, msg);
+    }
+
+    /**
+     * 切换全屏，屏幕常量
+     * @param fullscreen 是否全屏
+     */
+    public void setFullscreen(boolean fullscreen) {
+        if (fullscreen) {
+            // 设置横屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            // 隐藏状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            // 常亮
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            // 设置竖屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            // 显示状态栏
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            // 清除常亮
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }

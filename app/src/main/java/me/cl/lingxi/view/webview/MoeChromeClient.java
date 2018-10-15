@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
  */
 public class MoeChromeClient extends WebChromeClient implements MediaPlayer.OnCompletionListener {
 
+    private static final String TAG = "MoeChromeClient";
+
     private FrameLayout mVideoView;
     private View mCustomView;
     private CustomViewCallback mCallback;
@@ -21,8 +23,7 @@ public class MoeChromeClient extends WebChromeClient implements MediaPlayer.OnCo
     private onChangedListener mOnChangedListener;
 
     public interface onChangedListener {
-        void onShow();
-        void onHide();
+        void onFullscreen(boolean fullscreen);
     }
 
     public View getCustomView() {
@@ -35,11 +36,13 @@ public class MoeChromeClient extends WebChromeClient implements MediaPlayer.OnCo
     }
 
     @Override
-    public void onCompletion(MediaPlayer player) {
-        if (player != null) {
-            if (player.isPlaying()) player.stop();
-            player.reset();
-            player.release();
+    public void onCompletion(MediaPlayer mp) {
+        if (mp != null) {
+            if (mp.isPlaying()) {
+                mp.stop();
+            }
+            mp.reset();
+            mp.release();
         }
     }
 
@@ -51,7 +54,7 @@ public class MoeChromeClient extends WebChromeClient implements MediaPlayer.OnCo
             return;
         }
         if (mOnChangedListener != null) {
-            mOnChangedListener.onShow();
+            mOnChangedListener.onFullscreen(true);
         }
         mCustomView = view;
         mVideoView.addView(view);
@@ -66,7 +69,7 @@ public class MoeChromeClient extends WebChromeClient implements MediaPlayer.OnCo
             return;
         }
         if (mOnChangedListener != null) {
-            mOnChangedListener.onHide();
+            mOnChangedListener.onFullscreen(false);
         }
         mCustomView.setVisibility(View.GONE);
         mVideoView.removeView(mCustomView);

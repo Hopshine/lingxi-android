@@ -8,8 +8,34 @@ import me.cl.lingxi.BuildConfig;
  */
 public class Api {
 
-    // 版本设置由gradle接管，通过flavor控制多版本
-    private static String baseUrl = BuildConfig.ApiUrl;
+    /**
+     * token
+     */
+    public static final String X_APP_TOKEN = "X-App-Token";
+
+    /**
+     * 收束gradle的flavor控制，将url变量在此接管
+     */
+    private static String baseUrl = "http://47.100.245.128/lingxi";
+    public static String rssUrl = "http://47.100.245.128/rss/lingxi";
+
+    static {
+        String flavor = BuildConfig.FLAVOR;
+        switch (flavor) {
+            case "alpha":
+                baseUrl = "http://47.100.245.128/lingxi-test";
+                rssUrl = "http://47.100.245.128/rss/lingxi-test";
+                break;
+            case "local":
+                baseUrl = "http://192.168.26.108:8090/lingxi";
+                rssUrl = "http://192.168.26.108/rss/lingxi-test";
+                break;
+            case "online":
+                baseUrl = "http://47.100.245.128/lingxi";
+                rssUrl = "http://47.100.245.128/rss/lingxi";
+                break;
+        }
+    }
 
     /**
      * 用户注册
@@ -95,4 +121,8 @@ public class Api {
      * 更新未读为已读
      */
     public static String updateUnread = baseUrl + "/feed/comment/unread/update";
+    /**
+     * 保存写给未来
+     */
+    public static String saveFuture = baseUrl + "/future/save";
 }

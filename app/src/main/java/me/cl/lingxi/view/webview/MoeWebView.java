@@ -61,6 +61,7 @@ public class MoeWebView extends WebView {
         webSettings.setDisplayZoomControls(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.getMixedContentMode();
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 

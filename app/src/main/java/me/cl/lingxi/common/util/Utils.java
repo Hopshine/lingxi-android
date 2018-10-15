@@ -58,6 +58,16 @@ public class Utils {
     }
 
     /**
+     * 邮箱验证
+     */
+    public static boolean isMail(String mail) {
+        String pattern = "\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(mail);
+        return m.matches();
+    }
+
+    /**
      * 隐藏虚拟键盘
      */
     public static void HideKeyboard(View v) {
@@ -156,23 +166,6 @@ public class Utils {
     public static boolean wpaQQ(Context context, String key) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=" + key));
         if (context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null){
-            context.startActivity(intent);
-            return true;
-        } else {
-            // 未安装手Q或安装的版本不支持
-            return false;
-        }
-    }
-
-    // 另一种qq会话，通过浏览器，当前无法实现，可能需要使用qq自带的浏览器才能实现
-    public static boolean wpaQQ2(Context context, String key) {
-        String url = "http://wpa.qq.com/msgrd?v=3&site=qq&menu=yes&uin=" + key;
-        // 优先判断是否有安装qq
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("mqqwpa://"));
-        if (context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null){
-            intent.setData(Uri.parse(url));
             context.startActivity(intent);
             return true;
         } else {

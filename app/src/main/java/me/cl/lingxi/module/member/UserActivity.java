@@ -91,13 +91,13 @@ public class UserActivity extends BaseActivity {
 
     private void init() {
         setupToolbar(mToolbar, "", true, 0, null);
-        saveUserId = SPUtil.build().getString(Constants.USER_ID);
+        saveUserId = SPUtil.build().getString(Constants.SP_USER_ID);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String username = intent.getStringExtra(Constants.USER_NAME);
+        String username = intent.getStringExtra(Constants.PASSED_USER_NAME);
         if (bundle != null) {
-            User user = (User) bundle.getSerializable(Constants.USER_INFO);
+            User user = (User) bundle.getSerializable(Constants.PASSED_USER_INFO);
             if (user != null) {
                 isPostUser = false;
                 username = user.getUsername();
