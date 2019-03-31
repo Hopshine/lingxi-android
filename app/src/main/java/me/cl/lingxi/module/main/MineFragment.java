@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseFragment;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
@@ -81,7 +82,11 @@ public class MineFragment extends BaseFragment {
     }
 
     private void init(View view) {
-        setupToolbar(mToolbar, R.string.nav_mine, 0, null);
+        ToolbarUtil.init(mToolbar, getActivity())
+                .setTitle(R.string.nav_mine)
+                .setTitleCenter()
+                .build();
+
         mUserId = SPUtil.build().getString(Constants.SP_USER_ID);
         // 获取用户信息
         postUserInfo(mUserId);
@@ -128,11 +133,6 @@ public class MineFragment extends BaseFragment {
                     public void onError(Call call, Exception e) {
                         initUser(null);
                     }
-
-                    @Override
-                    public void onFinish() {
-                        initUser(null);
-                    }
                 });
     }
 
@@ -169,7 +169,7 @@ public class MineFragment extends BaseFragment {
                 gotoPersonal();
                 break;
             case R.id.mine_reply:
-                gotoRelevant(Constants.REPLY_MINE);
+                gotoRelevant(Constants.REPLY_MY);
                 break;
             case R.id.mine_relevant:
                 gotoRelevant(Constants.REPLY_RELEVANT);

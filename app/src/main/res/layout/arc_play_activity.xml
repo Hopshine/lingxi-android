@@ -55,7 +55,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
-                        android:textColor="@color/white"
+                        android:textColor="@color/textColorPrimary"
+                        android:lines="1"
                         android:textSize="16sp" />
 
                 </RelativeLayout>
@@ -97,34 +98,37 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/spacing_10"
                     android:layout_toRightOf="@id/arc_pic"
-                    android:text="@string/app_name" />
+                    android:textColor="@color/textColorPrimary"
+                    android:text="@string/app_placeholder" />
 
                 <TextView
+                    android:id="@+id/arc_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/arc_name"
                     android:layout_marginLeft="@dimen/spacing_10"
                     android:layout_toRightOf="@id/arc_pic"
-                    android:text="@string/hint_attention" />
+                    android:text="@string/app_placeholder" />
 
                 <TextView
+                    android:id="@+id/arc_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/arc_desc"
+                    android:layout_below="@id/arc_name"
                     android:layout_marginLeft="@dimen/spacing_10"
-                    android:layout_toRightOf="@id/arc_pic"
-                    android:text="@string/hint_fans" />
+                    android:layout_toRightOf="@id/arc_type"
+                    android:text="@string/app_placeholder" />
 
 
                 <TextView
                     android:id="@+id/arc_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/arc_pic"
+                    android:layout_below="@id/arc_label"
                     android:layout_marginLeft="@dimen/spacing_10"
                     android:layout_toRightOf="@id/arc_pic"
-                    android:maxLines="2"
-                    android:text="@string/hint_signature_default" />
+                    android:maxLines="5"
+                    android:text="@string/app_placeholder" />
 
             </RelativeLayout>
 
@@ -134,6 +138,13 @@
                 android:padding="@dimen/spacing_8"
                 android:text="播放源" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/config_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_48"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,7 +152,7 @@
                 android:text="选集" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/hive_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_48"
                 android:overScrollMode="never"

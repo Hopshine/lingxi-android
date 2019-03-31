@@ -13,8 +13,6 @@ public abstract class ResultCallback<T> {
 
     public abstract void onError(Call call, Exception e);
 
-    public abstract void onFinish();
-
     Type getType() {
         Type superclass = getClass().getGenericSuperclass();
         if (superclass instanceof Class) {

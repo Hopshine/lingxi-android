@@ -24,6 +24,7 @@
     <dimen name="spacing_56">56dp</dimen>
     <dimen name="spacing_60">60dp</dimen>
     <dimen name="spacing_68">68dp</dimen>
+    <dimen name="spacing_200">200dp</dimen>
 
     <!-- font size -->
     <dimen name="font_12">12dp</dimen>

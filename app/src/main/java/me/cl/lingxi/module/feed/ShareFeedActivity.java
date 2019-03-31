@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
@@ -28,6 +29,9 @@ import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.module.main.MainActivity;
 import okhttp3.Call;
 
+/**
+ * 动态发布
+ */
 public class ShareFeedActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
@@ -51,8 +55,13 @@ public class ShareFeedActivity extends BaseActivity {
     }
 
     private void init() {
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.share_text)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
+
         mUid = SPUtil.build().getString(Constants.SP_USER_ID);
-        setupToolbar(mToolbar, "分享到灵悉", true, 0, null);
         setLoading("发布中...");
         mRecyclerView.setVisibility(View.GONE);
 
@@ -121,12 +130,6 @@ public class ShareFeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        dismissLoading();
-                        showToast("发布失败");
-                    }
-
-                    @Override
-                    public void onFinish() {
                         dismissLoading();
                         showToast("发布失败");
                     }

@@ -31,6 +31,7 @@ import java.util.Stack;
  * <p/>
  * The {@link #format()} method iterates over the tokens, replacing and coloring the text as it iterates. The
  * doubly-linked list allows each token to ask its predecessor for the expanded length.
+ * https://github.com/THEONE10211024/ColorPhrase/blob/master/src/com/medusa/lib/ColorPhrase.java
  */
 public class ColorPhrase {
     /**

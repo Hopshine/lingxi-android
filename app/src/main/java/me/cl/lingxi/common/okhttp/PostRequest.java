@@ -282,7 +282,7 @@ public class PostRequest {
         mOkHttpClient.newCall(getRequest()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                setOnFinish(callback);
+                setOnError(call, e, callback);
             }
 
             @Override
@@ -314,7 +314,6 @@ public class PostRequest {
 
             @Override
             public void onResponse(Call call, okhttp3.Response response) throws IOException {
-
             }
         });
     }
@@ -341,19 +340,6 @@ public class PostRequest {
             public void run() {
                 loadDismiss();
                 callback.onError(call, e);
-            }
-        }, getLoadTime());
-    }
-
-    /**
-     * 设置请求取消回调
-     */
-    private void setOnFinish(final ResultCallback callback) {
-        mDelivery.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadDismiss();
-                callback.onFinish();
             }
         }, getLoadTime());
     }

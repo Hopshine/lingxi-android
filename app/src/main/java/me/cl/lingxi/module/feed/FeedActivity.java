@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.EvaluateAdapter;
@@ -115,7 +116,11 @@ public class FeedActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.title_activity_feed, true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_feed_detail)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
 
         saveId = SPUtil.build().getString(Constants.SP_USER_ID);
 
@@ -304,11 +309,6 @@ public class FeedActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
                         showToast("评论失败");
                     }
-
-                    @Override
-                    public void onFinish() {
-                        showToast("评论失败");
-                    }
                 });
     }
 
@@ -333,11 +333,6 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast("回复失败");
-                    }
-
-                    @Override
-                    public void onFinish() {
                         showToast("回复失败");
                     }
                 });
@@ -365,11 +360,6 @@ public class FeedActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast(R.string.toast_get_feed_error);
-                    }
-
-                    @Override
-                    public void onFinish() {
                         showToast(R.string.toast_get_feed_error);
                     }
                 });

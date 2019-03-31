@@ -58,28 +58,30 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <Button
-                style="@null"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:background="@null"
-                android:onClick="updatePwd"
+                android:gravity="center_vertical"
                 android:text="@string/action_forget_pwd"
-                android:textColor="@color/blue"/>
+                android:textColor="@color/blue"
+                android:focusable="true"
+                android:clickable="true"
+                android:onClick="updatePwd" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="28dp"
                 android:layout_weight="1"/>
 
-            <Button
-                style="@null"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:background="@null"
-                android:onClick="register"
+                android:gravity="center_vertical"
                 android:text="@string/action_register"
-                android:textColor="@color/blue"/>
+                android:textColor="@color/blue"
+                android:focusable="true"
+                android:clickable="true"
+                android:onClick="register"/>
         </LinearLayout>
     </LinearLayout>
 

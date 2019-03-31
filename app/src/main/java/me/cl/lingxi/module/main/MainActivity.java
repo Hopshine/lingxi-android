@@ -25,7 +25,6 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
-import me.cl.library.util.BottomNavigationViewHelper;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
@@ -84,7 +83,6 @@ public class MainActivity extends BaseActivity {
 
     //底部导航
     private void initBottomNavigation() {
-        BottomNavigationViewHelper.disableShiftMode(mBottomNavigation);
         mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -240,10 +238,6 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                    }
-
-                    @Override
-                    public void onFinish() {
                     }
                 });
     }

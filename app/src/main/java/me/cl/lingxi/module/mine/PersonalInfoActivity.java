@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
@@ -73,7 +74,12 @@ public class PersonalInfoActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.title_activity_personal_info, true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_personal_info)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
+
         loadingProgress = new LoadingDialog(this, R.string.dialog_update_avatar);
 
         int x = (int) (Math.random() * 5) + 1;
@@ -171,11 +177,6 @@ public class PersonalInfoActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
                         onBackPressed();
                     }
-
-                    @Override
-                    public void onFinish() {
-                        onBackPressed();
-                    }
                 });
     }
 
@@ -209,11 +210,6 @@ public class PersonalInfoActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
                         showUserImageUpdateError();
                     }
-
-                    @Override
-                    public void onFinish() {
-                        showUserImageUpdateError();
-                    }
                 });
     }
 
@@ -240,11 +236,6 @@ public class PersonalInfoActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showUserUpdateError();
-                    }
-
-                    @Override
-                    public void onFinish() {
                         showUserUpdateError();
                     }
                 });

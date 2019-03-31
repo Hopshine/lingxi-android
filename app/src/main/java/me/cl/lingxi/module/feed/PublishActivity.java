@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.PhotoSelAdapter;
 import me.cl.lingxi.common.config.Api;
@@ -57,8 +58,13 @@ public class PublishActivity extends BaseActivity {
     }
 
     private void init() {
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle("发布新动态")
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
+
         mUid = SPUtil.build().getString(Constants.SP_USER_ID);
-        setupToolbar(mToolbar, "发布新动态", true, 0, null);
         setLoading("发布中...");
         initRecycleView();
     }
@@ -80,8 +86,7 @@ public class PublishActivity extends BaseActivity {
                             .setPreviewEnabled(false)
                             .start(PublishActivity.this, PhotoPicker.REQUEST_CODE);
                 } else {
-                    if (mPhotos.contains(PhotoSelAdapter.mPhotoAdd))
-                        mPhotos.remove(PhotoSelAdapter.mPhotoAdd);
+                    mPhotos.remove(PhotoSelAdapter.mPhotoAdd);
                     PhotoPreview.builder()
                             .setPhotos((ArrayList<String>) mPhotos)
                             .setCurrentItem(position)
@@ -161,12 +166,6 @@ public class PublishActivity extends BaseActivity {
                         showToast("图片上传失败");
                         addPhotoAdd(mPhotos);
                     }
-
-                    @Override
-                    public void onFinish() {
-                        showToast("图片上传失败");
-                        addPhotoAdd(mPhotos);
-                    }
                 });
     }
 
@@ -199,13 +198,6 @@ public class PublishActivity extends BaseActivity {
                         showToast("发布失败");
                         addPhotoAdd(mPhotos);
                     }
-
-                    @Override
-                    public void onFinish() {
-                        dismissLoading();
-                        showToast("发布失败");
-                        addPhotoAdd(mPhotos);
-                    }
                 });
     }
 
@@ -218,9 +210,7 @@ public class PublishActivity extends BaseActivity {
 
     // 去除添加图片按钮
     private void removePhotoAdd(List<String> photList) {
-        if (photList.contains(PhotoSelAdapter.mPhotoAdd)) {
-            photList.remove(PhotoSelAdapter.mPhotoAdd);
-        }
+        photList.remove(PhotoSelAdapter.mPhotoAdd);
     }
 
     @Override

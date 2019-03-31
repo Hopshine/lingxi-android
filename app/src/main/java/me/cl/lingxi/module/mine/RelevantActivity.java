@@ -14,6 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
@@ -53,7 +54,7 @@ public class RelevantActivity extends BaseActivity {
     private void init() {
         int x = (int) (Math.random() * 4) + 1;
         if (x == 1) {
-            MoeToast.makeText(this, "你能找到这个秘密吗？");
+            MoeToast.makeText(this, R.string.egg_can_you_find);
         }
 
         Intent intent = getIntent();
@@ -66,21 +67,26 @@ public class RelevantActivity extends BaseActivity {
         boolean isMine = false;
         String title = "";
         switch (replyType) {
-            case Constants.REPLY_MINE:
-                title = "我的回复";
+            case Constants.REPLY_MY:
+                title = getString(R.string.title_bar_my_reply);
                 isMine = true;
                 break;
             case Constants.REPLY_RELEVANT:
-                title = "与我相关";
+                title = getString(R.string.title_bar_relevant);
                 break;
             default:
                 onBackPressed();
                 break;
         }
 
-        setupToolbar(mToolbar, title, true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(title)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
+
         saveId = SPUtil.build().getString(Constants.SP_USER_ID);
-        loadingProgress = new LoadingDialog(this, "正在加载...");
+        loadingProgress = new LoadingDialog(this, R.string.dialog_loading);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -126,11 +132,6 @@ public class RelevantActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
 
                     }
-
-                    @Override
-                    public void onFinish() {
-
-                    }
                 });
     }
 
@@ -158,11 +159,6 @@ public class RelevantActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast("加载失败，下拉重新加载");
-                    }
-
-                    @Override
-                    public void onFinish() {
                         showToast("加载失败，下拉重新加载");
                     }
                 });

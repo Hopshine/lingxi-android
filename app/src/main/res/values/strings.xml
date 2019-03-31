@@ -10,17 +10,9 @@
     <string name="app_name_local">灵悉本地</string>
     <string name="app_desc">心有灵犀一点通</string>
     <string name="app_placeholder">占位符</string>
-    <string name="action_settings">设置</string>
     <string name="share_text">分享到灵悉</string>
     <string name="open_the_app">用灵悉打开</string>
     <string name="zero_num">0</string>
-
-    <!-- App Title -->
-    <string name="title_activity_feed">动态详情</string>
-    <string name="title_activity_personal_info">个人信息</string>
-    <string name="title_activity_about">关于灵悉</string>
-    <string name="title_activity_relevant">与我相关</string>
-    <string name="title_activity_conversation">会话</string>
 
     <!-- Button String -->
     <string name="action_login">登录</string>
@@ -35,6 +27,7 @@
     <string name="action_attention">关注</string>
     <string name="action_give_up">放弃</string>
     <string name="action_convey">传达</string>
+    <string name="action_settings">设置</string>
 
     <!-- Text hint -->
     <string name="hint_username">用户名</string>
@@ -64,10 +57,17 @@
     <string name="title_bar_login">用户登录</string>
     <string name="title_bar_reg">注册用户</string>
     <string name="title_bar_reset_pwd">重置密码</string>
-    <string name="title_bar_index">首页</string>
+    <string name="title_bar_home">首页</string>
     <string name="title_bar_share">分享</string>
     <string name="title_bar_mine">我的</string>
     <string name="title_bar_future">未来的未来</string>
+    <string name="title_bar_feed_detail">动态详情</string>
+    <string name="title_bar_personal_info">个人信息</string>
+    <string name="title_bar_about">关于灵悉</string>
+    <string name="title_bar_my_reply">我的回复</string>
+    <string name="title_bar_relevant">与我相关</string>
+    <string name="title_bar_conversation">会话</string>
+    <string name="title_bar_public_license">开源相关</string>
 
     <!-- Dialog String -->
     <string name="dialog_loading">正在加载&#8230;</string>
@@ -110,7 +110,10 @@
     <string name="toast_again_exit">(ಥ _ ಥ)你难道要再按一次离开我么</string>
 
     <!-- Easter eggs -->
-    <string name="egg_end">然而一切都指向大结局！</string>
+    <string name="egg_hidden_secrets">据说这APP隐藏着一个不为人知的秘密！</string>
     <string name="egg_who_is_there">是谁，是谁在那里？</string>
+    <string name="egg_can_you_find">你能找到这个秘密吗</string>
+    <string name="egg_from_where">从哪里来到哪里去？你明白吗？</string>
+    <string name="egg_end">然而一切都指向大结局！</string>
 
 </resources>

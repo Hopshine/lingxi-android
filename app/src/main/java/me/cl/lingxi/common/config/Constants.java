@@ -13,7 +13,7 @@ public class Constants {
 
     // 与我相关&我的回复
     public static final String REPLY_TYPE = "reply_type";
-    public static final String REPLY_MINE = "reply_mine";
+    public static final String REPLY_MY = "reply_my";
     public static final String REPLY_RELEVANT = "reply_relevant";
 
     // 本地缓存key
@@ -21,7 +21,6 @@ public class Constants {
     public static final String SP_USER_NAME = "user_name";
     public static final String SP_BEEN_LOGIN = "been_login";
     public static final String SP_UPDATE_FLAG = "update_flag";
-    public static final String SP_USER_TOKEN_INFO = "sp_user_token";
     public static final String SP_FUTURE_INFO = "sp_future_info";
 
     // 参数传递

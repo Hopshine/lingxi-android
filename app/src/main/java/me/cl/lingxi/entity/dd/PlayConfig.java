@@ -17,27 +17,27 @@ public class PlayConfig {
 
     private String sourcelib;
 
+    public String getId() {
+        return id;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getId() {
-        return this.id;
+    public List<String> getLine() {
+        return line;
     }
 
-    public void setString(List<String> line) {
+    public void setLine(List<String> line) {
         this.line = line;
     }
 
-    public List<String> getString() {
-        return this.line;
+    public String getSourcelib() {
+        return sourcelib;
     }
 
     public void setSourcelib(String sourcelib) {
         this.sourcelib = sourcelib;
-    }
-
-    public String getSourcelib() {
-        return this.sourcelib;
     }
 }

@@ -23,6 +23,7 @@ import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
 import me.cl.library.recycle.ItemAnimator;
 import me.cl.library.recycle.ItemDecoration;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
@@ -96,17 +97,21 @@ public class FeedFragment extends BaseFragment {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.nav_camera, R.menu.publish_menu, new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.action_share:
-                        gotoPublish();
-                        break;
-                }
-                return false;
-            }
-        });
+        ToolbarUtil.init(mToolbar, getActivity())
+                .setTitle(R.string.nav_camera)
+                .setTitleCenter()
+                .setMenu(R.menu.publish_menu, new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.action_share:
+                                gotoPublish();
+                                break;
+                        }
+                        return false;
+                    }
+                })
+                .build();
 
         saveUid = SPUtil.build().getString(Constants.SP_USER_ID);
         saveUName = SPUtil.build().getString(Constants.SP_USER_NAME);
@@ -233,11 +238,6 @@ public class FeedFragment extends BaseFragment {
                     public void onError(Call call, Exception e) {
                         showToast("点赞失败");
                     }
-
-                    @Override
-                    public void onFinish() {
-                        showToast("点赞失败");
-                    }
                 });
     }
 
@@ -280,13 +280,6 @@ public class FeedFragment extends BaseFragment {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        showToast(R.string.toast_get_feed_error);
-                    }
-
-                    @Override
-                    public void onFinish() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
                         showToast(R.string.toast_get_feed_error);

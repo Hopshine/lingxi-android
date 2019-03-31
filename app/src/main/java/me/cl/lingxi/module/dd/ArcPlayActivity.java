@@ -10,6 +10,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +30,7 @@ import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.recycle.ItemAnimator;
 import me.cl.library.recycle.ItemDecoration;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.DDApi;
 import me.cl.lingxi.common.okhttp.ArcCallback;
@@ -40,6 +42,7 @@ import me.cl.lingxi.entity.dd.Hive;
 import me.cl.lingxi.entity.dd.HiveDetail;
 import me.cl.lingxi.entity.dd.HiveInfo;
 import me.cl.lingxi.entity.dd.HiveResult;
+import me.cl.lingxi.entity.dd.PlayConfig;
 import me.cl.lingxi.view.webview.MoeChromeClient;
 import me.cl.lingxi.view.webview.MoeWebClient;
 import me.cl.lingxi.view.webview.MoeWebView;
@@ -51,8 +54,6 @@ public class ArcPlayActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
     @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
     @BindView(R.id.button_bar)
@@ -65,20 +66,28 @@ public class ArcPlayActivity extends BaseActivity {
     MoeWebView mWebView;
     @BindView(R.id.video_view)
     FrameLayout mVideoView;
+    @BindView(R.id.config_recycler_view)
+    RecyclerView mConfigRecyclerView;
+    @BindView(R.id.hive_recycler_view)
+    RecyclerView mHiveRecyclerView;
     @BindView(R.id.arc_pic)
     ImageView mArcPic;
     @BindView(R.id.arc_name)
     TextView mArcName;
+    @BindView(R.id.arc_type)
+    TextView mArcType;
+    @BindView(R.id.arc_label)
+    TextView mArcLabel;
     @BindView(R.id.arc_desc)
     TextView mArcDesc;
     @BindView(R.id.nested_scroll_view)
     NestedScrollView mNestedScrollView;
 
-    private ArcInfo mArcInfo;
     private ArcHiveAdapter mArcHiveAdapter;
-    private String defaultPlayConfig = "https://www.skyfollowsnow.pro/?url=";
+    private PlayConfigAdapter mPlayConfigAdapter;
+    private String mPlayConfig = "";
+    private String mVideoUrl = "";
 
-    private MoeWebClient mWebClient;
     private MoeChromeClient mChromeClient;
 
 
@@ -91,16 +100,18 @@ public class ArcPlayActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "", true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setBack()
+                .build();
 
         Intent intent = getIntent();
         String arcId = intent.getStringExtra("arc_id");
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            mArcInfo = (ArcInfo) bundle.getSerializable("temp");
-            if (mArcInfo != null) {
-                mArcName.setText(mArcInfo.getTypename());
-                ContentUtil.loadImage(mArcPic, mArcInfo.getSuoluetudizhi());
+            ArcInfo arcInfo = (ArcInfo) bundle.getSerializable("temp");
+            if (arcInfo != null) {
+                mArcName.setText(arcInfo.getTypename());
+                ContentUtil.loadImage(mArcPic, arcInfo.getSuoluetudizhi());
             }
         }
 
@@ -111,9 +122,12 @@ public class ArcPlayActivity extends BaseActivity {
         switchTitle();
     }
 
+    /**
+     * 初始化WebView
+     */
     private void initWebView() {
         String payHtml = "file:///android_asset/arcplayer.html";
-        mWebClient = new MoeWebClient();
+        MoeWebClient webClient = new MoeWebClient();
         mChromeClient = new MoeChromeClient(mVideoView, new MoeChromeClient.onChangedListener() {
             @Override
             public void onFullscreen(boolean fullscreen) {
@@ -125,50 +139,94 @@ public class ArcPlayActivity extends BaseActivity {
                 setFullscreen(fullscreen);
             }
         });
-        mWebView.setWebViewClient(mWebClient);
+        mWebView.setWebViewClient(webClient);
         mWebView.setWebChromeClient(mChromeClient);
 
         mWebView.loadUrl(payHtml);
 
     }
 
+    /**
+     * 初始化RecyclerView
+     */
     private void initRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new ItemAnimator());
         ItemDecoration itemDecoration = new ItemDecoration(ItemDecoration.HORIZONTAL, 10, Color.parseColor("#ffffff"));
         itemDecoration.setGoneLast(true);
-        mRecyclerView.addItemDecoration(itemDecoration);
+        // 剧集
+        LinearLayoutManager hiveLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mHiveRecyclerView.setLayoutManager(hiveLayoutManager);
+        mHiveRecyclerView.setItemAnimator(new ItemAnimator());
+        mHiveRecyclerView.addItemDecoration(itemDecoration);
 
         List<Hive> hives = new ArrayList<>();
         mArcHiveAdapter = new ArcHiveAdapter(hives);
-        mRecyclerView.setAdapter(mArcHiveAdapter);
-
+        mHiveRecyclerView.setAdapter(mArcHiveAdapter);
         mArcHiveAdapter.setOnItemListener(new ArcHiveAdapter.OnItemListener() {
             @Override
             public void onItemClick(View view, Hive hive, int position) {
                 getHiveDetail(hive);
             }
         });
+
+        // 播放源
+        LinearLayoutManager configLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mConfigRecyclerView.setLayoutManager(configLayoutManager);
+        mConfigRecyclerView.setItemAnimator(new ItemAnimator());
+        mConfigRecyclerView.addItemDecoration(itemDecoration);
+
+        List<String> configs = new ArrayList<>();
+        mPlayConfigAdapter = new PlayConfigAdapter(configs);
+        mConfigRecyclerView.setAdapter(mPlayConfigAdapter);
+        mPlayConfigAdapter.setOnItemListener(new PlayConfigAdapter.OnItemListener() {
+            @Override
+            public void onItemClick(View view, String playConfig) {
+                mPlayConfig = playConfig;
+                loadPlay();
+            }
+        });
     }
 
+    /**
+     * 获取网络数据
+     */
     private void getData(String arcId) {
+        getPlayConfig();
         getArcInfo(arcId);
         getArcHive(arcId);
     }
 
-    private void setArcInfo(ArcInfo arcInfo) {
-        mTitleName.setText(arcInfo.getTypename());
-        mArcName.setText(arcInfo.getTypename());
-        mArcDesc.setText(arcInfo.getDescription());
-        ContentUtil.loadImage(mArcPic, arcInfo.getSuoluetudizhi());
+    /**
+     * 获取播放配置
+     */
+    private void getPlayConfig() {
+        OkUtil.arc()
+                .url(DDApi.playConfig)
+                .addParam("id", "1")
+                .execute(new ArcCallback<PlayConfig>() {
+                    @Override
+                    public void onSuccess(PlayConfig response) {
+                        List<String> line = response.getLine();
+                        if (line != null) {
+                            if (line.contains(" ")) {
+                                line.remove(" ");
+                            }
+                            mPlayConfig = line.get(0);
+                            mPlayConfigAdapter.setData(line);
+//                            mConfigRecyclerView.scrollToPosition(0);
+                        }
+                    }
 
-        String xiazaidizhi = arcInfo.getXiazaidizhi();
+                    @Override
+                    public void onError(Exception e) {
 
-        List<ArcQuarter> duoJiInfo = arcInfo.getDuoji_info();
+                    }
+                });
 
     }
 
+    /**
+     * 获取番剧信息
+     */
     private void getArcInfo(String arcId) {
         OkUtil.arc()
                 .url(DDApi.arcTypeInfo)
@@ -186,6 +244,9 @@ public class ArcPlayActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 获取番剧剧集
+     */
     private void getArcHive(String arcId) {
         OkUtil.arc()
                 .url(DDApi.arcHive)
@@ -196,7 +257,7 @@ public class ArcPlayActivity extends BaseActivity {
                         List<Hive> list = response.getList();
                         if (list != null) {
                             mArcHiveAdapter.setData(list);
-                            mRecyclerView.scrollToPosition(list.size() - 1);
+                            mHiveRecyclerView.scrollToPosition(list.size() - 1);
                         }
                         Hive last = response.getLastitem();
                         if (last != null) {
@@ -211,6 +272,9 @@ public class ArcPlayActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 获取番剧详情
+     */
     private void getHiveDetail(Hive hive) {
         String id = hive.getId();
         OkUtil.arc()
@@ -220,7 +284,8 @@ public class ArcPlayActivity extends BaseActivity {
                     @Override
                     public void onSuccess(HiveInfo response) {
                         HiveDetail detail = response.getDetail();
-                        setHiveDetail(detail);
+                        mVideoUrl = detail.getBody();
+                        loadPlay();
                     }
 
                     @Override
@@ -230,16 +295,40 @@ public class ArcPlayActivity extends BaseActivity {
                 });
     }
 
-    private void setHiveDetail(HiveDetail detail) {
-        String body = detail.getBody();
-        String url = defaultPlayConfig + body;
+    /**
+     * 设置番剧信息
+     */
+    private void setArcInfo(ArcInfo arcInfo) {
+        mTitleName.setText(arcInfo.getTypename());
+        mArcName.setText(arcInfo.getTypename());
+        mArcType.setText(arcInfo.getZhuangtai());
+        mArcLabel.setText(arcInfo.getBiaoqian());
+        mArcDesc.setText(arcInfo.getDescription());
+        ContentUtil.loadImage(mArcPic, arcInfo.getSuoluetudizhi());
 
-        mWebView.loadUrl(url);
-//        setPlayUrl(url);
+        String xiazaidizhi = arcInfo.getXiazaidizhi();
+
+        List<ArcQuarter> duoJiInfo = arcInfo.getDuoji_info();
+
     }
 
+    /**
+     * 加载播放
+     */
+    private void loadPlay() {
+        if (TextUtils.isEmpty(mVideoUrl)) {
+            showToast("获取资源失败，请重试或观看其他番剧");
+            return;
+        }
+        String url = mPlayConfig + mVideoUrl;
+        mWebView.loadUrl(url);
+    }
+
+
+    /**
+     * 标题切换
+     */
     private void switchTitle() {
-        // 标题切换
         mButtonBar.setAlpha(0);
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 
@@ -262,11 +351,14 @@ public class ArcPlayActivity extends BaseActivity {
                 onClickWebView();
                 break;
             case R.id.web_view:
-                showToast("111");
+
                 break;
         }
     }
 
+    /**
+     * 隐藏状态栏
+     */
     private void onClickWebView() {
         int visibility = mToolbar.getVisibility();
         showToast(String.valueOf(visibility));
@@ -285,6 +377,9 @@ public class ArcPlayActivity extends BaseActivity {
 
     }
 
+    /**
+     * 设置WebView链接，模拟器5.0失效，暂不使用
+     */
     private void setPlayUrl(String playUrl) {
         String script = "javascript:setPlayerUrl('" + playUrl + "')";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -368,5 +463,4 @@ public class ArcPlayActivity extends BaseActivity {
         mWebView.loadUrl("about:blank");
         mWebView.pauseTimers();
     }
-
 }

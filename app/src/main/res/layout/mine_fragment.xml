@@ -100,7 +100,7 @@
                 style="@style/AppTheme.MoreEntry"
                 android:drawableLeft="@drawable/ic_accessory"
                 android:drawableRight="@drawable/ic_more"
-                android:text="@string/title_activity_about"/>
+                android:text="@string/title_bar_about"/>
 
             <TextView
                 android:id="@+id/mine_sign_out"

@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.view.webview.MoeChromeClient;
 import me.cl.lingxi.view.webview.MoeWebClient;
@@ -75,7 +76,11 @@ public class WebActivity extends BaseActivity {
             }
         }
 
-        setupToolbar(mToolbar, mTittle, true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(mTittle)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
 
         mWebClient = new MoeWebClient();
         mChromeClient = new MoeChromeClient(mVideoView, new MoeChromeClient.onChangedListener() {

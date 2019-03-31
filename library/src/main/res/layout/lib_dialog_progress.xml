@@ -20,7 +20,7 @@
         android:layout_alignBottom="@+id/lib_loading_img"
         android:layout_centerHorizontal="true"
         android:text="@string/lib_dialog_loading"
-        android:textColor="#ff00ddff"
+        android:textColor="@color/lib_load_text"
         android:textSize="18sp"/>
 
 </RelativeLayout>

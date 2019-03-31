@@ -6,12 +6,14 @@
     <string name="lib_load_none">没有更多</string>
     <string name="lib_load_end">加载完成</string>
 
+    <color name="lib_load_text">#00ddff</color>
 
-    <style name="Lib" >
+
+    <style name="Lib">
 
     </style>
 
-    <style name="Lib.AppTextAppearance" >
+    <style name="Lib.AppTextAppearance">
 
     </style>
 
@@ -23,30 +25,5 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- china color -->
-    <color name="mudanfenhong">#eea2a4</color>
-    <color name="xiangyehong">#f07c82</color>
-    <color name="yanhong">#ed5a65</color>
-    <color name="yuhong">#c04851</color>
-    <color name="anyuzi">#5c2223</color>
-    <color name="lizi">#5a191b</color>
-    <color name="putaojiangzi">#5a1216</color>
-    <color name="kongquelan">#13afc8</color>
-    <color name="gulan">#0c90bb</color>
-    <color name="huaqing">#2376b7</color>
-
-
 
 </resources>

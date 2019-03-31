@@ -8,9 +8,12 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
@@ -51,11 +54,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.title_bar_login, false, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_login)
+                .setTitleCenter()
+                .build();
+
         loginProgress = new LoadingDialog(this, R.string.dialog_loading_login);
 
         int x = (int) (Math.random() * 6) + 1;
-        if (x == 5) MoeToast.makeText(this, "从哪里来到哪里去？你明白吗？");
+        if (x == 5) MoeToast.makeText(this, R.string.egg_from_where);
 
         String saveName = SPUtil.build().getString(Constants.SP_USER_NAME);
         mUsername.setText(saveName);
@@ -63,8 +70,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void login(View view) {
-        String username = mUsername.getText().toString().trim();
-        String password = mPassword.getText().toString().trim();
+        String username = Objects.requireNonNull(mUsername.getText()).toString().trim();
+        String password = Objects.requireNonNull(mPassword.getText()).toString().trim();
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             showToast(R.string.toast_login_null);
             return;
@@ -73,12 +80,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     // 登录请求
-    public void postLogin(final String userName, String userPwd) {
-        loginProgress.show();
+    private void postLogin(final String userName, String userPwd) {
         OkUtil.post()
                 .url(Api.userLogin)
                 .addParam("username", userName)
                 .addParam("password", userPwd)
+                .setProgressDialog(loginProgress)
                 .execute(new ResultCallback<Result<UserToken>>() {
                     @Override
                     public void onSuccess(Result<UserToken> response) {
@@ -94,7 +101,6 @@ public class LoginActivity extends BaseActivity {
                                 goHome();
                                 break;
                             default:
-                                loginProgress.dismiss();
                                 showToast(R.string.toast_pwd_error);
                                 break;
                         }
@@ -102,13 +108,6 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        loginProgress.dismiss();
-                        showToast(R.string.toast_login_error);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        loginProgress.dismiss();
                         showToast(R.string.toast_login_error);
                     }
                 });
@@ -128,23 +127,27 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void register(View view) {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 
     public void updatePwd(View view) {
-        Intent intent = new Intent(LoginActivity.this, ResetPwdActivity.class);
+        Intent intent = new Intent(this, ResetPwdActivity.class);
         startActivity(intent);
     }
 
     private void goHome() {
-        if (loginProgress.isShowing()) {
-            loginProgress.dismiss();
-        }
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Constants.PASSED_UNREAD_NUM, 0);
         startActivity(intent);
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (loginProgress.isShowing()) {
+            loginProgress.dismiss();
+        }
+        super.onDestroy();
+    }
 }

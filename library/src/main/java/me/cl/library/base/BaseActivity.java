@@ -1,10 +1,12 @@
 package me.cl.library.base;
 
+import android.annotation.TargetApi;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -13,10 +15,15 @@ import me.cl.library.util.ToastUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.library.view.MoeToast;
 
-
 public class BaseActivity extends AppCompatActivity {
 
     public static final String TAG = "lcDev";
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setSystemUiLightStatus();
+    }
 
     // 加载动画开始
     private LoadingDialog mLoading;
@@ -44,44 +51,6 @@ public class BaseActivity extends AppCompatActivity {
         if (mLoading.isShowing()) mLoading.dismiss();
     }
     // 加载动画结束
-
-    /**
-     * setupToolbar
-     * @param toolbar Toolbar
-     * @param titleId TitleId
-     * @param isBack 是否添加返回
-     * @param menuId MenuId
-     * @param listener Menu监听
-     */
-    public void setupToolbar(@NonNull Toolbar toolbar, @StringRes int titleId, boolean isBack, int menuId, Toolbar.OnMenuItemClickListener listener) {
-        setupToolbar(toolbar, getString(titleId), isBack, menuId, listener);
-    }
-
-    /**
-     * setupToolbar
-     * @param toolbar Toolbar
-     * @param title Title
-     * @param isBack 是否添加返回
-     * @param menuId MenuId
-     * @param listener Menu监听
-     */
-    public void setupToolbar(@NonNull Toolbar toolbar, @NonNull String title, boolean isBack, int menuId, Toolbar.OnMenuItemClickListener listener) {
-        toolbar.setTitle(title);
-        toolbar.setTitleTextAppearance(this, R.style.Lib_AppTextAppearance);
-        if (isBack) {
-            toolbar.setNavigationIcon(R.drawable.ic_navigate);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-        }
-        if (listener != null) {
-            toolbar.inflateMenu(menuId);
-            toolbar.setOnMenuItemClickListener(listener);
-        }
-    }
 
     public void showToast(@StringRes int msgId) {
         ToastUtil.showToast(this, msgId);
@@ -119,5 +88,29 @@ public class BaseActivity extends AppCompatActivity {
             // 清除常亮
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+    }
+
+    /**
+     * 设置状态栏文字深色，同时保留之前的flag
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    public void setSystemUiLightStatus() {
+        View decorView = getWindow().getDecorView();
+        int originFlag = decorView.getSystemUiVisibility();
+        originFlag = originFlag | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        decorView.setSystemUiVisibility(originFlag);
+    }
+
+    /**
+     * 清除状态栏文字深色，同时保留之前的flag
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    public void clearSystemUiLightStatus() {
+        View decorView = getWindow().getDecorView();
+        int originFlag = decorView.getSystemUiVisibility();
+        // 使用异或清除SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        originFlag = originFlag ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        decorView.setSystemUiVisibility(originFlag);
+
     }
 }

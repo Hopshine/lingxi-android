@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
@@ -59,21 +60,26 @@ public class FutureActivity extends BaseActivity {
      * 初始化
      */
     private void init() {
-        setupToolbar(mToolbar, R.string.title_bar_future, true, R.menu.future_menu, new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_send:
-                        if (TextUtils.isEmpty(futureInfo)) {
-                            showToast("没有写下任何给未来的话哟~");
-                        } else {
-                            showSendDialog();
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_future)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .setMenu(R.menu.future_menu, new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_send:
+                                if (TextUtils.isEmpty(futureInfo)) {
+                                    showToast("没有写下任何给未来的话哟~");
+                                } else {
+                                    showSendDialog();
+                                }
+                                break;
                         }
-                        break;
-                }
-                return false;
-            }
-        });
+                        return false;
+                    }
+                })
+                .build();
 
         // 输入监听
         mFutureInfo.addTextChangedListener(new TextWatcher() {
@@ -145,11 +151,6 @@ public class FutureActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast("信件偏离预定轨道，请调整重试");
-                    }
-
-                    @Override
-                    public void onFinish() {
                         showToast("信件偏离预定轨道，请调整重试");
                     }
                 });

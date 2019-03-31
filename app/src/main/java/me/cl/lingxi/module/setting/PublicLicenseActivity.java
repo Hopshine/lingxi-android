@@ -14,6 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.PublicLicenseAdapter;
 import me.cl.lingxi.entity.PublicLicense;
@@ -37,7 +38,11 @@ public class PublicLicenseActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "开源相关", true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_public_license)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
 
         getData();
 

@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
@@ -41,10 +42,16 @@ public class AboutActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "关于", true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_about)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
+
+
         int x = (int) (Math.random() * 3) + 1;
         if (x == 1) {
-            MoeToast.makeText(this, "据说这APP隐藏着一个不为人知的秘密！");
+            MoeToast.makeText(this, R.string.egg_hidden_secrets);
         }
 
         String versionName = "V " + Utils.getAppVersionName(this);
@@ -96,11 +103,6 @@ public class AboutActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast("版本信息获取失败");
-                    }
-
-                    @Override
-                    public void onFinish() {
                         showToast("版本信息获取失败");
                     }
                 });

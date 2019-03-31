@@ -77,11 +77,6 @@ public class SplashActivity extends BaseActivity {
                     public void onError(Call call, Exception e) {
                         goHome(0);
                     }
-
-                    @Override
-                    public void onFinish() {
-                        goHome(0);
-                    }
                 });
     }
 

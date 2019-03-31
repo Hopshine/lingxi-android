@@ -9,6 +9,7 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
@@ -45,7 +46,12 @@ public class ResetPwdActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, R.string.title_bar_reset_pwd, true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setTitle(R.string.title_bar_reset_pwd)
+                .setBack()
+                .setTitleCenter(R.style.AppTheme_Toolbar_TextAppearance)
+                .build();
+
         updateProgress = new LoadingDialog(this, R.string.dialog_loading_reset_wd);
     }
 
@@ -69,17 +75,16 @@ public class ResetPwdActivity extends BaseActivity {
     }
 
     public void postUpdatePwd(String userName, String userPwd, String phone) {
-        updateProgress.show();
         OkUtil.post()
                 .url(Api.resetPassword)
                 .addParam("username", userName)
                 .addParam("password", userPwd)
                 .addParam("phone", phone)
+                .setProgressDialog(updateProgress)
                 .execute(new ResultCallback<Result<UserInfo>>() {
 
                     @Override
                     public void onSuccess(Result<UserInfo> response) {
-                        updateProgress.dismiss();
                         String code = response.getCode();
                         switch (code) {
                             case "00000":
@@ -97,16 +102,16 @@ public class ResetPwdActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        updateProgress.dismiss();
-                        showToast(R.string.toast_reset_pwd_error);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        updateProgress.dismiss();
                         showToast(R.string.toast_reset_pwd_error);
                     }
                 });
     }
 
+    @Override
+    protected void onDestroy() {
+        if (updateProgress.isShowing()) {
+            updateProgress.dismiss();
+        }
+        super.onDestroy();
+    }
 }

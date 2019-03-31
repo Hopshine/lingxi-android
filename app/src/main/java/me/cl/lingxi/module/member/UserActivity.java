@@ -25,6 +25,7 @@ import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
 import me.cl.library.recycle.ItemAnimator;
 import me.cl.library.recycle.ItemDecoration;
+import me.cl.library.util.ToolbarUtil;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.common.config.Api;
@@ -90,7 +91,10 @@ public class UserActivity extends BaseActivity {
     }
 
     private void init() {
-        setupToolbar(mToolbar, "", true, 0, null);
+        ToolbarUtil.init(mToolbar, this)
+                .setBack()
+                .build();
+
         saveUserId = SPUtil.build().getString(Constants.SP_USER_ID);
 
         Intent intent = getIntent();
@@ -138,11 +142,6 @@ public class UserActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        initUser(null);
-                    }
-
-                    @Override
-                    public void onFinish() {
                         initUser(null);
                     }
                 });
@@ -317,13 +316,6 @@ public class UserActivity extends BaseActivity {
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
-                        showToast(R.string.toast_get_feed_error);
-                    }
-
-                    @Override
-                    public void onFinish() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.updateLoadStatus(LoadMord.LOAD_NONE);
                         showToast(R.string.toast_get_feed_error);
