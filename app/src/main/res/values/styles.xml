@@ -17,6 +17,8 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <!-- 水波纹 -->
         <item name="colorControlHighlight">@color/transparent</item>
+        <!--引入SearchView的自定义样式-->
+        <item name="searchViewStyle">@style/AppTheme.SearchView</item>
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base">
@@ -33,8 +35,8 @@
     <style name="AppTheme.Toolbar.Base" parent="Widget.AppCompat.Toolbar">
         <!--<item name="contentInsetStart">0dp</item>-->
         <item name="android:background">?attr/colorPrimary</item>
-        <!--<item name="android:textColor">@color/textColorBasic</item>-->
-        <!--<item name="android:textColorPrimary">@color/textColorBasic</item>-->
+        <item name="android:textColor">@color/textColorBasic</item>
+        <item name="android:textColorPrimary">@color/textColorBasic</item>
         <!--<item name="android:gravity">center_vertical</item>-->
         <item name="titleTextAppearance">@style/AppTheme.Toolbar.TextAppearance</item>
         <item name="popupTheme">@style/Theme.AppCompat.Light</item>
@@ -46,7 +48,22 @@
         <item name="android:textSize">@dimen/font_18</item>
         <item name="android:textColor">@color/textColorBasic</item>
     </style>
+
+    <style name="AppTheme.Toolbar.None" parent="AppTheme.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <!-- NavigationIcon和标题之间的距离 -->
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
     <!-- Toolbar end -->
+
+    <style name="AppTheme.SearchView" parent="Widget.AppCompat.SearchView">
+        <!-- 搜索框提示文字 -->
+        <item name="defaultQueryHint">@string/hint_search</item>
+        <!-- 打开搜索框的搜索按钮的图标 -->
+        <item name="searchIcon">@drawable/ic_search</item>
+        <!-- 搜索框左边的搜索按钮图标 -->
+        <item name="searchHintIcon">@null</item>
+    </style>
 
     <style name="AppTheme.TextAppearance">
         <item name="android:textSize">@dimen/font_18</item>

@@ -45,8 +45,8 @@ public class MessageFragment extends Fragment{
     }
 
     private void addFragment(ViewPagerAdapter mPagerAdapter) {
-        HomeFragment futureFragment = HomeFragment.newInstance("很久很久以前没有留下信件\n现在去写给未来");
-        HomeFragment newsFragment = HomeFragment.newInstance("飞鸽传书功能准备当中\n" +
+        MessageChildFragment futureFragment = MessageChildFragment.newInstance("很久很久以前没有留下信件\n现在去写给未来");
+        MessageChildFragment newsFragment = MessageChildFragment.newInstance("飞鸽传书功能准备当中\n" +
                 "有好的建议可点击下方按钮↓");
         mPagerAdapter.addFragment(futureFragment, tabNamArray[0]);
         mPagerAdapter.addFragment(newsFragment, tabNamArray[1]);

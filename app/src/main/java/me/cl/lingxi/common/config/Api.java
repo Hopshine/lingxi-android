@@ -27,8 +27,8 @@ public class Api {
                 rssUrl = "http://47.100.245.128/rss/lingxi-test";
                 break;
             case "local":
-                baseUrl = "http://192.168.26.108:8090/lingxi";
-                rssUrl = "http://192.168.26.108/rss/lingxi-test";
+                baseUrl = "http://192.168.21.103:8090/lingxi";
+                rssUrl = "http://192.168.21.103/rss/lingxi-test";
                 break;
             case "online":
                 baseUrl = "http://47.100.245.128/lingxi";
@@ -125,4 +125,8 @@ public class Api {
      * 保存写给未来
      */
     public static String saveFuture = baseUrl + "/future/save";
+    /**
+     * 资源采集
+     */
+    public static String incApi = baseUrl + "/inc/parse/api";
 }

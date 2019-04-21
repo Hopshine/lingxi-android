@@ -67,17 +67,17 @@ public class OkUtil {
     }
 
     /**
+     * get请求
+     */
+    public static GetRequest get() {
+        return new GetRequest();
+    }
+
+    /**
      * post请求
      */
     public static PostRequest post() {
         return new PostRequest();
-    }
-
-    /**
-     * 番剧请求
-     */
-    public static ArcRequest arc() {
-        return new ArcRequest();
     }
 
     /**

@@ -27,6 +27,7 @@ ext {
     glideVersion = "4.1.1"
     glideTransformations = "3.0.1"
     gsonVersion = "2.8.0"
+    exoPlayerVersion = "r2.5.2"
 
     android = [
             compileSdkVersion: 28,
@@ -37,7 +38,9 @@ ext {
     dependencies = [
             design     : "com.android.support:design:${supportVersion}",
             supportV4  : "com.android.support:support-v4:${supportVersion}",
-            appcompatV7: "com.android.support:appcompat-v7:${supportVersion}"
+            appcompatV7: "com.android.support:appcompat-v7:${supportVersion}",
+            exoplayerCore: "com.google.android.exoplayer:exoplayer-core:${exoPlayerVersion}",
+            exoplayerHls: "com.google.android.exoplayer:exoplayer-hls:${exoPlayerVersion}"
     ]
 }
 

@@ -28,6 +28,7 @@
     <string name="action_give_up">Give Up</string>
     <string name="action_convey">Convey</string>
     <string name="action_settings">Setting</string>
+    <string name="action_search">Search</string>
 
     <!-- Text hint -->
     <string name="hint_username">username</string>
@@ -46,6 +47,8 @@
     <string name="hint_confidential">Confidential</string>
     <string name="hint_future">To the future of me:</string>
     <string name="hint_future_mail">Fill in delivery email</string>
+    <string name="hint_search">Search Videos</string>
+    <string name="hint_playback_source">Playback source </string>
 
     <!-- Nav String -->
     <string name="nav_home">Home</string>

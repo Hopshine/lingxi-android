@@ -5,6 +5,8 @@
 /app/app.iml
 /build
 /captures
+/exoplayer-ui/build
+/exoplayer-ui/exoplayer-ui.iml
 /library/build
 /library/library.iml
 /online

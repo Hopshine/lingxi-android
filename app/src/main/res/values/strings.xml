@@ -28,6 +28,7 @@
     <string name="action_give_up">放弃</string>
     <string name="action_convey">传达</string>
     <string name="action_settings">设置</string>
+    <string name="action_search">搜索</string>
 
     <!-- Text hint -->
     <string name="hint_username">用户名</string>
@@ -46,6 +47,8 @@
     <string name="hint_confidential">保密</string>
     <string name="hint_future">致未来的我：</string>
     <string name="hint_future_mail">填入送达邮箱</string>
+    <string name="hint_search">搜索视频</string>
+    <string name="hint_playback_source">播放源 </string>
 
     <!-- Nav String -->
     <string name="nav_home">首页</string>

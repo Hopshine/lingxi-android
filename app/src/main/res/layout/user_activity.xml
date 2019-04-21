@@ -62,7 +62,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:text="@string/action_attention"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorAccent"/>
 
                 <TextView
                     android:id="@+id/contact"
@@ -73,7 +73,7 @@
                     android:layout_toStartOf="@id/attention"
                     android:padding="@dimen/spacing_8"
                     android:text="@string/action_contact"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorAccent"/>
 
                 <TextView
                     android:id="@+id/user_name"
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
                     android:textSize="@dimen/spacing_24"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/textColorBasic"/>
 
                 <LinearLayout
                     android:id="@+id/action_layout"
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_attention"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/textColorSecondary"/>
 
                     <TextView
                         android:id="@+id/relationship_attention"
@@ -102,14 +102,14 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/spacing_3"
                         android:text="@string/zero_num"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/textColorSecondary"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/spacing_16"
                         android:text="@string/hint_fans"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/textColorSecondary"/>
 
                     <TextView
                         android:id="@+id/relationship_fans"
@@ -117,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/spacing_3"
                         android:text="@string/zero_num"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/textColorSecondary"/>
                 </LinearLayout>
 
                 <TextView
@@ -129,7 +129,7 @@
                     android:text="@string/hint_signature_default"
                     android:minLines="1"
                     android:maxLines="2"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/textColorSecondary"/>
 
             </RelativeLayout>
 
@@ -153,8 +153,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textColor="@color/textColorBasic"
+                        android:textSize="@dimen/font_16"/>
 
                     <TextView
                         android:id="@+id/hint_all_feed"
@@ -162,6 +162,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/title_name"
                         android:text="@string/hint_feed"
+                        android:textColor="@color/textColorSecondary"
                         android:textSize="@dimen/font_12"/>
 
                     <TextView
@@ -172,6 +173,7 @@
                         android:layout_alignBottom="@+id/hint_all_feed"
                         android:paddingLeft="@dimen/spacing_4"
                         android:text="@string/zero_num"
+                        android:textColor="@color/textColorSecondary"
                         android:textSize="@dimen/font_12"/>
                 </RelativeLayout>
 

@@ -11,5 +11,10 @@ public class PhotoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photo_activity);
+        init();
+    }
+
+    private void init() {
+
     }
 }

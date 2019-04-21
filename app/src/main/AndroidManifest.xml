@@ -13,19 +13,22 @@
         android:name=".module.LxApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="${APP_NAME}"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <!-- 全面屏适配 -->
-        <meta-data android:name="android.max_aspect" android:value="2.1" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
 
         <activity
             android:name=".module.splash.SplashActivity"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,7 +43,7 @@
         <activity android:name=".module.mine.PersonalInfoActivity" />
         <activity android:name=".module.mine.RelevantActivity" />
         <activity android:name=".module.setting.AboutActivity" />
-        <activity android:name=".module.future.FutureActivity"/>
+        <activity android:name=".module.future.FutureActivity" />
 
         <!-- 独立的web进程 -->
         <activity
@@ -53,7 +56,9 @@
             android:screenOrientation="unspecified">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.intent.action.SEND" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -64,7 +69,9 @@
             android:label="@string/share_text">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.intent.action.SEND" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -73,12 +80,13 @@
             android:name=".module.member.UserActivity"
             android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity
-            android:name=".module.dd.ArcPlayActivity"
+            android:name=".module.video.IncVideoPlayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="unspecified"
             android:theme="@style/AppTheme.TransparentStatusBar" />
         <activity android:name=".module.feed.PhotoActivity" />
+        <activity android:name=".module.search.SearchActivity"/>
 
         <!-- PhotoPicker start -->
         <activity
@@ -94,6 +102,7 @@
         <meta-data
             android:name="LINGCI_APP_KEY"
             android:value="CqYt2014Xyz" />
+
     </application>
 
 </manifest>

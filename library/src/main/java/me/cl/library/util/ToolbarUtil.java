@@ -73,9 +73,11 @@ public class ToolbarUtil {
          * @param menuId menu资源id
          * @param listener 事件
          */
-        public Builder setMenu(@MenuRes int menuId, @NonNull Toolbar.OnMenuItemClickListener listener) {
+        public Builder setMenu(@MenuRes int menuId, Toolbar.OnMenuItemClickListener listener) {
             mToolbar.inflateMenu(menuId);
-            mToolbar.setOnMenuItemClickListener(listener);
+            if (listener != null) {
+                mToolbar.setOnMenuItemClickListener(listener);
+            }
             return this;
         }
 

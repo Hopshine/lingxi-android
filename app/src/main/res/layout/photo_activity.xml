@@ -6,4 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".module.feed.PhotoActivity">
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="me.cl.lingxi.module.main.DDFragment"/>
 </LinearLayout>

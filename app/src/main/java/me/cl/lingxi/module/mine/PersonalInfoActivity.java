@@ -280,6 +280,7 @@ public class PersonalInfoActivity extends BaseActivity {
      */
     private void notifyUpdateUserImage() {
         Intent intent = new Intent();
+        intent.setPackage(getPackageName());
         intent.setAction(Constants.UPDATE_USER_IMG);
         sendBroadcast(intent);
     }

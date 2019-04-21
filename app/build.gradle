@@ -9,8 +9,8 @@ android {
         applicationId "me.cl.lingxi"
         minSdkVersion configInfo.minSdkVersion
         targetSdkVersion configInfo.targetSdkVersion
-        versionCode 192
-        versionName "1.1.1"
+        versionCode 193
+        versionName "1.2.0"
 
         vectorDrawables.useSupportLibrary = true
         flavorDimensions "versionCode"
@@ -71,4 +71,5 @@ dependencies {
     implementation "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
     implementation project(':library')
+    implementation project(':exoplayer-ui')
 }
