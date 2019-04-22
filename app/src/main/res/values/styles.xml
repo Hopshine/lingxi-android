@@ -9,7 +9,7 @@
         <!-- 背景色 -->
         <item name="android:windowBackground">@color/background</item>
         <!-- 文本颜色，textColor影响全局，不使用 -->
-        <!--<item name="android:textColor">@color/textColorBasic</item>-->
+        <!-- <item name="android:textColor">@color/textColorBasic</item> -->
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="titleTextColor">@color/textColorBasic</item>
@@ -17,7 +17,7 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <!-- 水波纹 -->
         <item name="colorControlHighlight">@color/transparent</item>
-        <!--引入SearchView的自定义样式-->
+        <!-- 引入SearchView的自定义样式 -->
         <item name="searchViewStyle">@style/AppTheme.SearchView</item>
     </style>
 
@@ -31,12 +31,16 @@
 
     <style name="AppTheme.TransparentStatusBar" parent="AppTheme" />
 
+    <style name="AppTheme.Search" parent="AppTheme.Base">
+        <item name="toolbarStyle">@style/AppTheme.Toolbar.None</item>
+    </style>
+
     <!-- Toolbar start-->
     <style name="AppTheme.Toolbar.Base" parent="Widget.AppCompat.Toolbar">
         <!--<item name="contentInsetStart">0dp</item>-->
         <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:textColor">@color/textColorBasic</item>
-        <item name="android:textColorPrimary">@color/textColorBasic</item>
+        <!--<item name="android:textColor">@color/textColorBasic</item>-->
+        <!--<item name="android:textColorPrimary">@color/textColorBasic</item>-->
         <!--<item name="android:gravity">center_vertical</item>-->
         <item name="titleTextAppearance">@style/AppTheme.Toolbar.TextAppearance</item>
         <item name="popupTheme">@style/Theme.AppCompat.Light</item>

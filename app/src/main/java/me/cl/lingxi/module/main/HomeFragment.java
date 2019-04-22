@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,8 @@ import me.cl.lingxi.adapter.IncVideoAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.util.GsonUtil;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.common.widget.GridItemDecoration;
 import me.cl.lingxi.entity.inc.IncResult;
@@ -79,7 +82,7 @@ public class HomeFragment extends BaseFragment {
 
     private void init() {
         ToolbarUtil.init(mToolbar, getActivity())
-                .setTitle("主页")
+                .setTitle(R.string.title_bar_home)
                 .setTitleCenter()
                 .setMenu(R.menu.search_menu, new Toolbar.OnMenuItemClickListener() {
                     @Override
@@ -104,6 +107,10 @@ public class HomeFragment extends BaseFragment {
      */
     private void initRecyclerView() {
         List<IncVideo> incVideos = new ArrayList<>();
+        String videoJson = SPUtil.build().getString(IncVideoPlayActivity.INC_VIDEO);
+        if (!TextUtils.isEmpty(videoJson)) {
+            incVideos = GsonUtil.toList(videoJson, IncVideo[].class);
+        }
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         GridItemDecoration gridItemDecoration = new GridItemDecoration();
@@ -141,6 +148,7 @@ public class HomeFragment extends BaseFragment {
      */
     private void initData() {
         mPage = 0;
+        mSwipeRefreshLayout.setRefreshing(true);
         getData();
     }
 
@@ -178,7 +186,9 @@ public class HomeFragment extends BaseFragment {
     private void setData(List<IncVideo> list) {
         setRefreshFalse();
         mAdapter.setData(list);
+        SPUtil.build().putString(IncVideoPlayActivity.INC_VIDEO, GsonUtil.toJson(list));
     }
+
     /**
      * 更新Adapter数据
      */

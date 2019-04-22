@@ -2,10 +2,12 @@ package me.cl.lingxi.module.search;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +66,10 @@ public class SearchActivity extends BaseActivity {
         mSearchView.onActionViewExpanded();
         // 显示隐藏提交按钮
         mSearchView.setSubmitButtonEnabled(true);
+        // 搜索确认图标
+        AppCompatImageView searchGo = mSearchView.findViewById(R.id.search_go_btn);
+        searchGo.setImageResource(R.drawable.ic_search);
+
         // 事件
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -135,6 +141,17 @@ public class SearchActivity extends BaseActivity {
      */
     private void setError() {
         showToast("没有找到任何内容╮(╯▽╰)╭");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                onBackPressed();
+                return true;
+            default:
+                return super.onKeyDown(keyCode, event);
+        }
     }
 
     private void gotoVideoPlay(IncVideo incVideo) {

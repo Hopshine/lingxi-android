@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
     private void switchFragment(Fragment targetFragment) {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         if (!targetFragment.isAdded()) {
-            //首次currentFragment为null
+            // 首次currentFragment为null
             if (currentFragment != null) {
                 transaction.hide(currentFragment);
             }

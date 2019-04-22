@@ -394,8 +394,6 @@ public final class SimpleExoPlayerView extends FrameLayout {
             }
             // 隐藏状态栏
             window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            // 常亮
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //            setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT);
             if (parentView != null) {
                 tempView = parentView;
@@ -413,8 +411,6 @@ public final class SimpleExoPlayerView extends FrameLayout {
             }
             // 显示状态栏
             window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            // 清除常亮
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //            setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
             contentView.removeView(this);
             if (tempView != null) {

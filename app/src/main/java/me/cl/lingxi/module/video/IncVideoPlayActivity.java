@@ -127,8 +127,7 @@ public class IncVideoPlayActivity extends BaseActivity {
     }
 
     private void initPlayView() {
-        mExoPlayerView.setTitle(videoName);
-        mExoPlayerManager = ExoPlayerManager.getInstance();
+        mExoPlayerManager = new ExoPlayerManager(this);
         mExoPlayerManager.setPlayerView(mExoPlayerView);
         mExoPlayerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
             @Override
@@ -145,6 +144,7 @@ public class IncVideoPlayActivity extends BaseActivity {
         videoName = incVideo.getName();
         mTitleName.setText(videoName);
         mVideoName.setText(videoName);
+        mExoPlayerView.setTitle(videoName);
         mVideoType.setText(incVideo.getType());
         mVideoLabel.setText(incVideo.getLang());
         mVideoDesc.setText(incVideo.getDes());
@@ -250,24 +250,30 @@ public class IncVideoPlayActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mExoPlayerManager.initPlayer(mExoPlayerView, videoUrl);
+        mExoPlayerManager.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mExoPlayerManager.initPlayer(mExoPlayerView, videoUrl);
+        mExoPlayerManager.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mExoPlayerManager.releasePlayer();
+        mExoPlayerManager.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mExoPlayerManager.releasePlayer();
+        mExoPlayerManager.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mExoPlayerManager.onDestroy();
+        super.onDestroy();
     }
 }
