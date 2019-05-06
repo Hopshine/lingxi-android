@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.cl.library.base.BaseActivity;
+import me.cl.library.photo.PhotoBrowser;
 import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
 import me.cl.lingxi.R;
@@ -47,7 +48,6 @@ import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.member.UserActivity;
-import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
 
 public class FeedActivity extends BaseActivity {
@@ -215,10 +215,9 @@ public class FeedActivity extends BaseActivity {
 
                 @Override
                 public void onPhotoClick(ArrayList<String> photos, int position) {
-                    PhotoPreview.builder()
+                    PhotoBrowser.builder()
                             .setPhotos(photos)
                             .setCurrentItem(position)
-                            .setShowDeleteButton(false)
                             .start(FeedActivity.this);
                 }
             });

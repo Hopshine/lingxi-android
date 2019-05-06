@@ -321,7 +321,7 @@ public class PostRequest {
     /**
      * 设置请求成功回调
      */
-    private void setOnSuccess(final Reader reader, final ResultCallback callback) {
+    private void setOnSuccess(final Reader reader, final ResultCallback callback) throws Exception {
         mDelivery.postDelayed(new Runnable() {
             @Override
             public void run() {

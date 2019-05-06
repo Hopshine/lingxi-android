@@ -17,6 +17,17 @@
 
     </style>
 
+    <style name="Lib.PhotoText">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">48dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/photo_text_shape</item>
+    </style>
+
     <style name="Lib.Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -26,6 +37,11 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <!-- exoPlayer start -->
+    <!-- photo browser start -->
+    <string name="photo_index">%1$d/%2$d</string>s
+    <string name="photo_save">保存</string>
+    <string name="photo_save_success">图片保存成功</string>
+    <string name="photo_save_error">图片保存失败</string>
+    <string name="photo_save_exists">图片已保存</string>
 
 </resources>

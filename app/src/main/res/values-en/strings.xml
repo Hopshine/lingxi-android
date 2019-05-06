@@ -47,8 +47,10 @@
     <string name="hint_confidential">Confidential</string>
     <string name="hint_future">To the future of me:</string>
     <string name="hint_future_mail">Fill in delivery email</string>
-    <string name="hint_search">Search Videos</string>
+    <string name="hint_search">Enter to search</string>
+    <string name="hint_search_video">Search Videos</string>
     <string name="hint_playback_source">Playback source </string>
+    <string name="hint_picture_source">Picture source：Tujian</string>
 
     <!-- Nav String -->
     <string name="nav_home">Home</string>
@@ -93,8 +95,8 @@
     <string name="dialog_future_time_month">个月</string>
 
     <!-- Toast String -->
-    <string name="toast_login_null">请输入完整的登陆信息</string>
-    <string name="toast_pwd_error">用户名或密码错误</string>
+    <string name="toast_login_null">Please enter the full login information</string>
+    <string name="toast_pwd_error">User name or password error</string>
     <string name="toast_username_error">User name Error</string>
     <string name="toast_phone_error">Wrong phone number</string>
     <string name="toast_phone_format_error">The phone number is incorrectly formatted</string>
@@ -108,11 +110,15 @@
     <string name="toast_login_success">Sign in success</string>
     <string name="toast_reset_pwd_error">Failed to modify password</string>
     <string name="toast_reset_ped_success">Modified Password succeeded</string>
-    <string name="toast_reset_pwd_user">用户名或手机号不对</string>
-    <string name="toast_get_feed_error">获取动态失败</string>
-    <string name="toast_again_exit">(ಥ _ ಥ)你难道要再按一次离开我么</string>
+    <string name="toast_reset_pwd_user">Wrong username or mobile phone</string>
+    <string name="toast_get_feed_error">Get feed failure</string>
+    <string name="toast_again_exit">Click Exit again</string>
+    <string name="toast_search_none">No content found</string>
+    <string name="toast_feature_dev">Features are being developed</string>
 
     <!-- painted eggshell -->
+    <string name="egg_open_code">666666</string>
+    <string name="egg_video_start">Video Search, Startup</string>
     <string name="egg_hidden_secrets">据说这APP隐藏着一个不为人知的秘密！</string>
     <string name="egg_who_is_there">是谁，是谁在那里？</string>
     <string name="egg_can_you_find">你能找到这个秘密吗</string>

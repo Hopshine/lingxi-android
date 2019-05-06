@@ -70,6 +70,12 @@ public class PublicLicenseActivity extends BaseActivity {
         mData.add(new PublicLicense("gson", "google",
                 "A Java serialization/deserialization library to convert Java Objects into JSON and back",
                 "https://github.com/google/gson"));
+        mData.add(new PublicLicense("ExoPlayer", "google",
+                "An extensible media player for Android",
+                "https://github.com/google/ExoPlayer"));
+        mData.add(new PublicLicense("Tujian", "open.dpic.dev",
+                "无人为孤岛，一图一世界。",
+                "https://open.dpic.dev"));
         mData.add(new PublicLicense("butterknife", "JakeWharton",
                 "Bind Android views and callbacks to fields and methods",
                 "https://github.com/JakeWharton/butterknife"));
@@ -85,9 +91,6 @@ public class PublicLicenseActivity extends BaseActivity {
         mData.add(new PublicLicense("PhotoPicker", "donglua",
                 "Image Picker like Wechat",
                 "https://github.com/donglua/PhotoPicker"));
-        mData.add(new PublicLicense("jsoup", "jhy",
-                "jsoup: Java HTML Parser, with best of DOM, CSS, and jquery",
-                "https://github.com/jhy/jsoup/"));
     }
 
     // 前往web页

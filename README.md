@@ -10,6 +10,10 @@ Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations�
 体验请直接点击下载打包版本[点击下载测试版](http://47.100.245.128/download/lingxi-test.apk)  
 如果不是用于测试，欢迎来正式版一起玩耍[点击下载正式版](http://47.100.245.128/download/lingxi.apk)  
   
+**[19/05/07]**  
+1、引入PhotoView，图片浏览与保存  
+2、首页改版，一图一言  
+  
 **[19/04/22-23]**  
 1、引入exoPlayer播放视频  
 2、移除~~嘀哩嘀哩~~接口的webView的视频播放，并创建了旧版分支[v_dd分支](https://github.com/happycao/lingxi-android/tree/v_dd)  
@@ -31,8 +35,8 @@ Glide版本4.1.1，与之对应PhotoPicker版本0.9.12、glide-transformations�
 - 生无彩凤双飞翼，心有灵犀一点通  
 - 依托于社交群组，好友向社交圈，供用户吐槽交流  
 - [x] 用户注册登陆  
-- [x] 解析网页以瀑布流展示番剧  
-- [x] 网页视频播放支持全屏  
+- [x] ~~解析网页以瀑布流展示番剧~~某分支支持  
+- [x] 视频播放支持全屏  
 - [x] 动态发布点赞评论  
 - [x] 写给未来的信  
 - [x] 分享链接到灵悉  

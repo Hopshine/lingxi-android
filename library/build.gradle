@@ -28,4 +28,5 @@ dependencies {
     implementation library.design
     implementation library.supportV4
     implementation library.appcompatV7
+    implementation library.glide
 }

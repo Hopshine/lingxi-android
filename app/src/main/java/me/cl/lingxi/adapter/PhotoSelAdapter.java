@@ -1,5 +1,6 @@
 package me.cl.lingxi.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,14 +42,15 @@ public class PhotoSelAdapter extends RecyclerView.Adapter<PhotoSelAdapter.PhotoV
         if (mPhotos.size() < 6 && !mPhotos.contains(mPhotoAdd)) mPhotos.add(mPhotoAdd);
     }
 
+    @NonNull
     @Override
-    public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = View.inflate(parent.getContext(), R.layout.publish_photo_recycle_item, null);
         return new PhotoViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final PhotoViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final PhotoViewHolder holder, final int position) {
         holder.bindItem(mPhotos.get(position), position);
     }
 

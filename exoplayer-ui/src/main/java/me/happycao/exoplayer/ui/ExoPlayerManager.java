@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.android.exoplayer2.C;
@@ -182,13 +181,16 @@ public class ExoPlayerManager {
 
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            Window window = activity.getWindow();
             if (playWhenReady) {
                 // 常亮
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             } else {
                 // 清除常亮
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+            if (playbackState == Player.STATE_ENDED) {
+                shouldAutoPlay = false;
+                player.setPlayWhenReady(shouldAutoPlay);
             }
         }
 

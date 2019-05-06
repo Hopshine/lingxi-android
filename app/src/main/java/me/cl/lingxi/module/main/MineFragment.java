@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,13 +34,13 @@ import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.dialog.LogoutDialog;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.member.LoginActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
 import me.cl.lingxi.module.mine.RelevantActivity;
 import me.cl.lingxi.module.setting.AboutActivity;
+import me.cl.lingxi.module.setting.SettingsActivity;
 import okhttp3.Call;
 
 /**
@@ -58,15 +60,15 @@ public class MineFragment extends BaseFragment {
     LinearLayout mUserBody;
     @BindView(R.id.mine_top)
     RelativeLayout mMineTop;
-    @BindView(R.id.mine_reply)
+    @BindView(R.id.action_reply)
     TextView mMineReply;
-    @BindView(R.id.mine_relevant)
+    @BindView(R.id.action_relevant)
     TextView mMineRelevant;
-    @BindView(R.id.mine_setting)
+    @BindView(R.id.action_setting)
     TextView mMineSetting;
-    @BindView(R.id.mine_about)
+    @BindView(R.id.action_about)
     TextView mMineAbout;
-    @BindView(R.id.mine_sign_out)
+    @BindView(R.id.action_sign_out)
     TextView mMineSignOut;
 
     private String mUserId;
@@ -115,7 +117,7 @@ public class MineFragment extends BaseFragment {
         receiver = new OperateBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.UPDATE_USER_IMG);
-        getActivity().registerReceiver(receiver, filter);
+        Objects.requireNonNull(getActivity()).registerReceiver(receiver, filter);
     }
 
     private void postUserInfo(String id) {
@@ -162,28 +164,25 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.user_body, R.id.mine_reply, R.id.mine_relevant, R.id.mine_setting, R.id.mine_about, R.id.mine_sign_out})
+    @OnClick({R.id.user_body, R.id.action_reply, R.id.action_relevant, R.id.action_setting, R.id.action_about, R.id.action_sign_out})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_body:
                 gotoPersonal();
                 break;
-            case R.id.mine_reply:
+            case R.id.action_reply:
                 gotoRelevant(Constants.REPLY_MY);
                 break;
-            case R.id.mine_relevant:
+            case R.id.action_relevant:
                 gotoRelevant(Constants.REPLY_RELEVANT);
                 break;
-            case R.id.mine_setting:
-                boolean isJoin = Utils.joinQQGroup(getContext(), "U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9");
-                if (!isJoin) {
-                    showToast("未安装手Q或安装的版本不支持");
-                }
+            case R.id.action_setting:
+                gotoSettings();
                 break;
-            case R.id.mine_about:
+            case R.id.action_about:
                 gotoAbout();
                 break;
-            case R.id.mine_sign_out:
+            case R.id.action_sign_out:
                 showLogoutDialog();
                 break;
         }
@@ -234,6 +233,11 @@ public class MineFragment extends BaseFragment {
     private void gotoAbout() {
         Intent goAbout = new Intent(getActivity(), AboutActivity.class);
         startActivity(goAbout);
+    }
+
+    private void gotoSettings() {
+        Intent goSettings = new Intent(getActivity(), SettingsActivity.class);
+        startActivity(goSettings);
     }
 
     // 前往与我相关

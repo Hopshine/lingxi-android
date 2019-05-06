@@ -47,8 +47,10 @@
     <string name="hint_confidential">保密</string>
     <string name="hint_future">致未来的我：</string>
     <string name="hint_future_mail">填入送达邮箱</string>
-    <string name="hint_search">搜索视频</string>
+    <string name="hint_search">输入搜索内容</string>
+    <string name="hint_search_video">搜索视频</string>
     <string name="hint_playback_source">播放源 </string>
+    <string name="hint_picture_source">图源：Tujian</string>
 
     <!-- Nav String -->
     <string name="nav_home">首页</string>
@@ -70,7 +72,7 @@
     <string name="title_bar_my_reply">我的回复</string>
     <string name="title_bar_relevant">与我相关</string>
     <string name="title_bar_conversation">会话</string>
-    <string name="title_bar_public_license">开源相关</string>
+    <string name="title_bar_public_license">开源许可</string>
 
     <!-- Dialog String -->
     <string name="dialog_loading">正在加载&#8230;</string>
@@ -111,8 +113,12 @@
     <string name="toast_reset_pwd_user">用户名或手机号不对</string>
     <string name="toast_get_feed_error">获取动态失败</string>
     <string name="toast_again_exit">(ಥ _ ಥ)你难道要再按一次离开我么</string>
+    <string name="toast_search_none">没有找到任何内容╮(╯▽╰)╭</string>
+    <string name="toast_feature_dev">该功能紧张开发中</string>
 
     <!-- Easter eggs -->
+    <string name="egg_open_code">666666</string>
+    <string name="egg_video_start">视频搜索，启动(￣︶￣)↗</string>
     <string name="egg_hidden_secrets">据说这APP隐藏着一个不为人知的秘密！</string>
     <string name="egg_who_is_there">是谁，是谁在那里？</string>
     <string name="egg_can_you_find">你能找到这个秘密吗</string>

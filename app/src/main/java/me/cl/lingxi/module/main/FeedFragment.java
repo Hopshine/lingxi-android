@@ -15,12 +15,14 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.cl.library.base.BaseFragment;
 import me.cl.library.loadmore.LoadMord;
 import me.cl.library.loadmore.OnLoadMoreListener;
+import me.cl.library.photo.PhotoBrowser;
 import me.cl.library.recycle.ItemAnimator;
 import me.cl.library.recycle.ItemDecoration;
 import me.cl.library.util.ToolbarUtil;
@@ -39,7 +41,6 @@ import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.cl.lingxi.module.feed.PublishActivity;
 import me.cl.lingxi.module.member.UserActivity;
-import me.iwf.photopicker.PhotoPreview;
 import okhttp3.Call;
 
 /**
@@ -165,12 +166,10 @@ public class FeedFragment extends BaseFragment {
 
             @Override
             public void onPhotoClick(ArrayList<String> photos, int position) {
-
-                PhotoPreview.builder()
+                PhotoBrowser.builder()
                         .setPhotos(photos)
                         .setCurrentItem(position)
-                        .setShowDeleteButton(false)
-                        .start(getActivity());
+                        .start(Objects.requireNonNull(getActivity()));
             }
         });
 

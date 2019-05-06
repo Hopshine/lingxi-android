@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
+    android:background="@color/background"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -63,37 +63,37 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/mine_reply"
+                android:id="@+id/action_reply"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/AppTheme.MoreEntry"
                 android:drawableLeft="@drawable/ic_favorite"
                 android:drawableRight="@drawable/ic_more"
-                android:text="我的回复"/>
+                android:text="@string/title_bar_my_reply"/>
 
             <TextView
-                android:id="@+id/mine_relevant"
+                android:id="@+id/action_relevant"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
                 style="@style/AppTheme.MoreEntry"
                 android:drawableLeft="@drawable/ic_eit"
                 android:drawableRight="@drawable/ic_more"
-                android:text="与我相关"/>
+                android:text="@string/title_bar_relevant"/>
 
             <TextView
-                android:id="@+id/mine_setting"
+                android:id="@+id/action_setting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/AppTheme.MoreEntry"
                 android:drawableLeft="@drawable/ic_setup"
                 android:drawableRight="@drawable/ic_more"
-                android:text="设置"/>
+                android:text="@string/action_settings"/>
 
             <TextView
-                android:id="@+id/mine_about"
+                android:id="@+id/action_about"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
@@ -103,14 +103,14 @@
                 android:text="@string/title_bar_about"/>
 
             <TextView
-                android:id="@+id/mine_sign_out"
+                android:id="@+id/action_sign_out"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
                 style="@style/AppTheme.MoreEntry"
                 android:drawableLeft="@drawable/ic_delete"
                 android:drawableRight="@drawable/ic_more"
-                android:text="退出登录"/>
+                android:text="@string/action_exit_login"/>
         </LinearLayout>
     </me.cl.lingxi.view.JellyScrollView>
 
